@@ -131,7 +131,9 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
             }
         }
         if (meta != null) {
-            meta.setDisplayName(title);
+            if (auctionConfig.isReplaceTitle()) {
+                meta.setDisplayName(title);
+            }
             meta.setLore(listDescription);
             item.setItemMeta(meta);
         }

@@ -25,6 +25,8 @@ public class PlayerViewConfig extends AbstractGuiWithAuctionsConfig {
 
     private String title = "";
 
+    private boolean replaceTitle = true;
+
     private List<String> description = new ArrayList<>();
 
     private String nameGui = "";
@@ -134,6 +136,7 @@ public class PlayerViewConfig extends AbstractGuiWithAuctionsConfig {
         size = config.getInt("gui.size");
         nameGui = config.getString("gui.name");
         title = config.getString("gui.title");
+        replaceTitle = config.getBoolean("gui.replaceTitle", true);
         description.addAll(config.getStringList("gui.description"));
 
     }
@@ -181,5 +184,9 @@ public class PlayerViewConfig extends AbstractGuiWithAuctionsConfig {
 
     public int getSize() {
         return size;
+    }
+
+    public boolean isReplaceTitle() {
+        return replaceTitle;
     }
 }

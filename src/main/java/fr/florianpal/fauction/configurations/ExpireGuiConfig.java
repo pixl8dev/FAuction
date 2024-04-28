@@ -21,6 +21,8 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig  {
 
     private String title = "";
 
+    private boolean replaceTitle = true;
+
     private List<String> description = new ArrayList<>();
 
     private String nameGui = "";
@@ -102,6 +104,7 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig  {
         size = config.getInt("gui.size");
         nameGui = config.getString("gui.name");
         title = config.getString("gui.title");
+        replaceTitle = config.getBoolean("gui.replaceTitle", true);
         description.addAll(config.getStringList("gui.description"));
 
     }
@@ -146,5 +149,9 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig  {
 
     public List<Barrier> getAuctionGuiBlocks() {
         return auctionGuiBlocks;
+    }
+
+    public boolean isReplaceTitle() {
+        return replaceTitle;
     }
 }

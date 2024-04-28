@@ -2,6 +2,7 @@ gui:
   size: 54
   name: "Auction house {Page}/{TotalPage}"
   title: "&eItem : &6{ItemName}"
+  replaceTitle: true
   description:
     - "&5Sold by : &6{OwnerName}"
     - "&5Price : &6{Price}"
