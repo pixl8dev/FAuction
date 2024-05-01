@@ -22,6 +22,7 @@ fauction:
   auction_expire_drop: "Une de vos vente a expiré et vous n'avez pas d'espace dans votre inventaire. Donc elle a été déposé au sol."
   buy_auction_cancelled: "Vous avez annulé votre achat."
   min_price: "Votre prix est en dessous du prix minimum de {minPrice}."
+  max_price: "Votre prix est au dessus du prix maximum de {maxPrice}."
   auction_reload: "La configuration du plugin a été recharger."
   spam: "&cStop! Vous tentez d'effectuer trop d'actions dans un délai très court! Veuillez patienter quelques secondes..."
 
