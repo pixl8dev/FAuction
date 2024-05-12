@@ -28,6 +28,8 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final ExpireGuiConfig expireGuiConfig;
 
+    private Auction lastAuction = null;
+
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
     public ExpireGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
@@ -206,7 +208,10 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                 if (plugin.getExpireAction().contains(auction.getId())) {
                     return;
                 }
+
+                if (lastAuction != null) plugin.getExpireAction().remove((Integer) auction.getId());
                 plugin.getExpireAction().add((Integer) auction.getId());
+                lastAuction = auction;
 
                 if (e.isLeftClick()) {
                     TaskChain<Auction> chainAuction = FAuction.newChain();

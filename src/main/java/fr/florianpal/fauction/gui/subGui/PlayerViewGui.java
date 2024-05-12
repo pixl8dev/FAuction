@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -27,6 +28,8 @@ import java.util.List;
 public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final PlayerViewConfig playerViewConfig;
+
+    private Auction lastAuction = null;
 
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
@@ -181,6 +184,15 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
     }
 
     @EventHandler
+    public void onInventoryClose(InventoryCloseEvent e) {
+        if (inv.getHolder() != this || e.getInventory() != inv || player != e.getPlayer()) {
+            return;
+        }
+
+        plugin.getAuctionAction().remove((Integer)lastAuction.getId());
+    }
+
+    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (inv.getHolder() != this || e.getInventory() != inv || player != e.getWhoClicked()) {
             return;
@@ -266,7 +278,10 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                 if(plugin.getAuctionAction().contains((Integer)auction.getId())) {
                     return;
                 }
+
+                if (lastAuction != null) plugin.getAuctionAction().remove((Integer) auction.getId());
                 plugin.getAuctionAction().add((Integer)auction.getId());
+                lastAuction = auction;
 
                 if (e.isRightClick()) {
                     TaskChain<Auction> chainAuction = FAuction.newChain();

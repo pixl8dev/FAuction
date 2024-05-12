@@ -27,6 +27,8 @@ public enum MessageKeys implements MessageKeyProvider {
 
     AUCTION_RELOAD,
 
+    CLEAR_CACHE,
+
     REMOVE_EXPIRE_SUCCESS,
 
     TRANSFERT_BDD,

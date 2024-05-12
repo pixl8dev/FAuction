@@ -6,6 +6,7 @@ fauction:
   auction_add_help_description: "Ajouter une nouvelle vente"
   reload_help_description: "Permet de recharger la configuration du plugin."
   transfert_bdd_help_description: "Transfert des données de la bdd vers spigot->paper ou paper->spigot"
+  clear_cache_help_description: "Pour vider le cache"
 
   buy_auction_success: "Vous venez d'acheter un item."
   no_auction: "Il n'y a actuellement aucune vente active."
@@ -25,6 +26,7 @@ fauction:
   max_price: "Votre prix est au dessus du prix maximum de {maxPrice}."
   auction_reload: "La configuration du plugin a été recharger."
   spam: "&cStop! Vous tentez d'effectuer trop d'actions dans un délai très court! Veuillez patienter quelques secondes..."
+  clear_cache: "Vous avez vidé le cache."
 
   remove_expire_success: "Vous avez récupéré un de vos items expiré."
 

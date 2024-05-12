@@ -231,4 +231,8 @@ public class FAuction extends JavaPlugin {
             return null;
         }).execute();
     }
+
+    public void clearCache() {
+        auctionAction.clear();
+    }
 }

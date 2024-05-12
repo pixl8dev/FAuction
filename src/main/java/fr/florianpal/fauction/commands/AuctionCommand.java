@@ -229,6 +229,15 @@ public class AuctionCommand extends BaseCommand {
         issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
     }
 
+    @Subcommand("admin clearCache")
+    @CommandPermission("fauction.admin.clearCache")
+    @Description("{@@fauction.clear_cache_help_description}")
+    public void onClearCache(Player playerSender) {
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.clearCache();
+        issuerTarget.sendInfo(MessageKeys.CLEAR_CACHE);
+    }
+
     @HelpCommand
     @Description("{@@fauction.help_description}")
     public void doHelp(CommandSender sender, CommandHelp help) {
