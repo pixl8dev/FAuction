@@ -183,7 +183,12 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (inv.getHolder() != this || e.getInventory() != inv || player != e.getPlayer()) {
+
+        if (inv == null) {
+            return;
+        }
+
+        if (e.getInventory() != inv || inv.getHolder() != this || player != e.getPlayer()) {
             return;
         }
 
@@ -192,7 +197,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (inv.getHolder() != this || e.getInventory() != inv || player != e.getWhoClicked()) {
+        if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {
             return;
         }
         e.setCancelled(true);

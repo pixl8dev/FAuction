@@ -185,7 +185,11 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
-        if (inv.getHolder() != this || e.getInventory() != inv || player != e.getPlayer()) {
+        if (inv == null) {
+            return;
+        }
+
+        if (e.getInventory() != inv || inv.getHolder() != this ||  player != e.getPlayer()) {
             return;
         }
 
@@ -194,9 +198,11 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
-        if (inv.getHolder() != this || e.getInventory() != inv || player != e.getWhoClicked()) {
+
+        if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {
             return;
         }
+
         e.setCancelled(true);
 
         if (globalConfig.isSecurityForSpammingPacket()) {
