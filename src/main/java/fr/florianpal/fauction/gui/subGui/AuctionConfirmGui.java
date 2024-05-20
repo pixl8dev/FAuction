@@ -136,6 +136,8 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             return;
         }
 
+        if (auction == null) return;
+
         plugin.getAuctionAction().remove((Integer)auction.getId());
     }
 

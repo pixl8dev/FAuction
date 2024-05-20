@@ -35,7 +35,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     public PlayerViewGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
         super(plugin, player, page, auctions, plugin.getConfigurationManager().getPlayerViewConfig());
-        this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
+        this.auctions = auctions.stream().filter(a -> a.getPlayerUuid().equals(player.getUniqueId())).toList();this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
         initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
     }
 
@@ -192,6 +192,8 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         if (e.getInventory() != inv || inv.getHolder() != this ||  player != e.getPlayer()) {
             return;
         }
+
+        if (lastAuction == null) return;
 
         plugin.getAuctionAction().remove((Integer)lastAuction.getId());
     }

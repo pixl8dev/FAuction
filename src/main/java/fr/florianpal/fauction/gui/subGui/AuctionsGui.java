@@ -192,6 +192,8 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
             return;
         }
 
+        if (lastAuction == null) return;
+
         plugin.getAuctionAction().remove((Integer)lastAuction.getId());
     }
 

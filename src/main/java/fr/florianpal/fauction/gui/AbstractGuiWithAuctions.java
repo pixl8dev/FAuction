@@ -25,7 +25,7 @@ import static java.util.UUID.randomUUID;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
-    protected final List<Auction> auctions;
+    protected List<Auction> auctions;
 
     protected AbstractGuiWithAuctionsConfig abstractGuiWithAuctionsConfig;
 
