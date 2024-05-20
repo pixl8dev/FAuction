@@ -175,11 +175,11 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
             desc = FormatUtil.format(desc);
             descriptions.add(desc);
         }
-        if (meta != null) {
-            meta.setDisplayName(name);
-            meta.setLore(descriptions);
-            itemStack.setItemMeta(meta);
-        }
+
+        meta.setDisplayName(name);
+        meta.setLore(descriptions);
+        itemStack.setItemMeta(meta);
+
         return itemStack;
     }
 
