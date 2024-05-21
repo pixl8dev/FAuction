@@ -182,22 +182,6 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
-
-        if (inv == null) {
-            return;
-        }
-
-        if (e.getInventory() != inv || inv.getHolder() != this || player != e.getPlayer()) {
-            return;
-        }
-
-        if (lastAuction == null) return;
-
-        plugin.getAuctionAction().remove((Integer)lastAuction.getId());
-    }
-
-    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {
             return;
@@ -280,25 +264,15 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                 int nb = ((e.getRawSlot() - nb0)) / 9;
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.auctionConfig.getAuctionBlocks().size() * this.page) - this.auctionConfig.getAuctionBlocks().size()) - nb * 2);
 
-                if(plugin.getAuctionAction().contains((Integer)auction.getId())) {
-                    return;
-                }
-
-                if (lastAuction != null) plugin.getAuctionAction().remove((Integer) auction.getId());
-                plugin.getAuctionAction().add((Integer)auction.getId());
-                lastAuction = auction;
-
                 if (e.isRightClick()) {
                     TaskChain<Auction> chainAuction = FAuction.newChain();
                     chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).sync((a) -> {
                         if (a == null) {
-                            plugin.getAuctionAction().remove((Integer)auction.getId());
                             return null;
                         }
 
                         boolean isModCanCancel = (e.isShiftClick() && player.hasPermission("fauction.mod.cancel"));
                         if (!a.getPlayerUuid().equals(player.getUniqueId()) && !isModCanCancel) {
-                            plugin.getAuctionAction().remove((Integer)a.getId());
                             return null;
                         }
 
@@ -321,8 +295,6 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_AUCTION_SUCCESS);
 
-                        plugin.getAuctionAction().remove((Integer)auction.getId());
-
                         player.closeInventory();
 
                         TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
@@ -337,12 +309,10 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                     CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                     if (auction.getPlayerUuid().equals(player.getUniqueId())) {
                         issuerTarget.sendInfo(MessageKeys.BUY_YOUR_ITEM);
-                        plugin.getAuctionAction().remove((Integer)auction.getId());
                         return;
                     }
                     if (!plugin.getVaultIntegrationManager().getEconomy().has(player, auction.getPrice())) {
                         issuerTarget.sendInfo(MessageKeys.NO_HAVE_MONEY);
-                        plugin.getAuctionAction().remove((Integer)auction.getId());
                         return;
                     }
 

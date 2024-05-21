@@ -206,25 +206,15 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                 int nb = ((e.getRawSlot() - nb0)) / 9;
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size()) - nb * 2);
 
-                if (plugin.getExpireAction().contains(auction.getId())) {
-                    return;
-                }
-
-                if (lastAuction != null) plugin.getExpireAction().remove((Integer) auction.getId());
-                plugin.getExpireAction().add((Integer) auction.getId());
-                lastAuction = auction;
-
                 if (e.isLeftClick()) {
                     TaskChain<Auction> chainAuction = FAuction.newChain();
                     chainAuction.asyncFirst(() -> expireCommandManager.auctionExist(auction.getId())).sync(a -> {
 
                         if (a == null) {
-                            plugin.getExpireAction().remove((Integer) auction.getId());
                             return null;
                         }
 
                         if (!a.getPlayerUuid().equals(player.getUniqueId())) {
-                            plugin.getExpireAction().remove((Integer) a.getId());
                             return null;
                         }
 
@@ -238,8 +228,6 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                         auctions.remove(a);
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
-
-                        plugin.getExpireAction().remove((Integer) a.getId());
 
                         TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
                         chain.asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).sync(auctions -> {

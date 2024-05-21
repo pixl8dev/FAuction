@@ -52,8 +52,6 @@ public class FAuction extends JavaPlugin {
         return taskChainFactory;
     }
 
-    private final List<Integer> auctionAction = new ArrayList<>();
-
     @Override
     public void onEnable() {
         PaperLib.suggestPaper(this);
@@ -186,14 +184,6 @@ public class FAuction extends JavaPlugin {
         return expireCommandManager;
     }
 
-    public List<Integer> getAuctionAction() {
-        return auctionAction;
-    }
-
-    public List<Integer> getExpireAction() {
-        return auctionAction;
-    }
-
     public void transfertBDD(boolean toPaper) {
         TaskChain<Map<Integer, byte[]>> chain = FAuction.newChain();
         chain.asyncFirst(() -> getAuctionQueries().getAuctionsBrut()).async(auctions -> {
@@ -230,9 +220,5 @@ public class FAuction extends JavaPlugin {
             }
             return null;
         }).execute();
-    }
-
-    public void clearCache() {
-        auctionAction.clear();
     }
 }

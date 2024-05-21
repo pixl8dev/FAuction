@@ -126,22 +126,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
     }
 
     @EventHandler
-    public void onInventoryClose(InventoryCloseEvent e) {
-
-        if (inv == null) {
-            return;
-        }
-
-        if (e.getInventory() != inv || inv.getHolder() != this || player != e.getPlayer()) {
-            return;
-        }
-
-        if (auction == null) return;
-
-        plugin.getAuctionAction().remove((Integer)auction.getId());
-    }
-
-    @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {
             return;
@@ -184,14 +168,12 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                 chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).sync(a -> {
                     if (a == null) {
                         issuerTarget.sendInfo(MessageKeys.NO_AUCTION);
-                        plugin.getAuctionAction().remove((Integer)auction.getId());
                         return null;
                     }
                     TaskChain<Auction> chainAuction2 = FAuction.newChain();
                     chainAuction2.asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).sync(auctionGood -> {
                         if (auctionGood == null) {
                             issuerTarget.sendInfo(MessageKeys.AUCTION_ALREADY_SELL);
-                            plugin.getAuctionAction().remove((Integer)auction.getId());
                             return null;
                         }
 
@@ -202,13 +184,11 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
                         EconomyResponse economyResponse4 = plugin.getVaultIntegrationManager().getEconomy().depositPlayer(offlinePlayer, auctionGood.getPrice());
                         if (!economyResponse4.transactionSuccess()) {
-                            plugin.getAuctionAction().remove((Integer)auctionGood.getId());
                             return null;
                         }
 
                         EconomyResponse economyResponse5 = plugin.getVaultIntegrationManager().getEconomy().withdrawPlayer(player, auctionGood.getPrice());
                         if (!economyResponse5.transactionSuccess()) {
-                            plugin.getAuctionAction().remove((Integer)auctionGood.getId());
                             return null;
                         }
 
@@ -236,8 +216,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                         }
 
                         plugin.getLogger().info("Player : " + player.getName() + " buy " + auctionGood.getItemStack().getItemMeta().getDisplayName() + " at " + auctionGood.getPlayerName());
-
-                        plugin.getAuctionAction().remove((Integer)auctionGood.getId());
 
                         player.getOpenInventory().close();
                         TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
