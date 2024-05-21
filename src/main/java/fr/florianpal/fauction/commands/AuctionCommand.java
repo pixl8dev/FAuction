@@ -144,8 +144,8 @@ public class AuctionCommand extends BaseCommand {
             if(Tag.SHULKER_BOXES.getValues().contains(playerSender.getInventory().getItemInMainHand().getType())) {
                 ItemStack item = playerSender.getInventory().getItemInMainHand();
                 if (item.getItemMeta() instanceof BlockStateMeta) {
-                    double minPrice = 0;
-                    double maxPrice = 0;
+                    double minPrice = -1;
+                    double maxPrice = -1;
                     BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
                     if (im.getBlockState() instanceof ShulkerBox) {
                         ShulkerBox shulker = (ShulkerBox) im.getBlockState();
@@ -164,12 +164,12 @@ public class AuctionCommand extends BaseCommand {
                                 }
                             }
                         }
-                        if (minPrice > price) {
+                        if (minPrice != -1 && minPrice > price) {
                             issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
                             return null;
                         }
 
-                        if (maxPrice < price) {
+                        if (maxPrice != -1 && maxPrice < price) {
                             issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
                             return null;
                         }
