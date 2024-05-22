@@ -1,11 +1,9 @@
 package fr.florianpal.fauction.gui;
 
-import com.mojang.authlib.GameProfile;
-import com.mojang.authlib.properties.Property;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.AbstractGuiWithAuctionsConfig;
-import fr.florianpal.fauction.configurations.GlobalConfig;
-import fr.florianpal.fauction.managers.commandManagers.CommandManager;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.utils.FormatUtil;
@@ -17,11 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-
-import static java.util.UUID.randomUUID;
+import java.util.UUID;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
@@ -46,53 +42,44 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     @Override
     public ItemStack getItemStack(Barrier barrier, boolean isRemplacement) {
         ItemStack itemStack;
-        try {
-            if (isRemplacement) {
-                itemStack = getItemStack(barrier.getRemplacement(), false);
+        if (isRemplacement) {
+            itemStack = getItemStack(barrier.getRemplacement(), false);
+        } else {
+
+            if (barrier.getMaterial() == Material.PLAYER_HEAD) {
+                itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
+                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                profile.setProperty(new ProfileProperty("textures", barrier.getTexture()));
+                ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+                SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+                skullMeta.setPlayerProfile(profile);
+
+                List<String> descriptions = new ArrayList<>();
+                for (String desc : barrier.getDescription()) {
+                    desc = FormatUtil.format(desc);
+                    descriptions.add(desc);
+                }
+
+                skullMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
+                skullMeta.setLore(descriptions);
+                itemStack.setItemMeta(skullMeta);
+                itemStack.setAmount(1);
+
             } else {
-
-                if (barrier.getMaterial() == Material.PLAYER_HEAD) {
-                    itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
-                    SkullMeta skullMeta = (SkullMeta) itemStack.getItemMeta();
-
-                    GameProfile gameProfile = new GameProfile(randomUUID(), null);
-
-                    Field field = skullMeta.getClass().getDeclaredField("profile");
-
-                    gameProfile.getProperties().put("textures", new Property("textures", barrier.getTexture()));
-
-                    List<String> descriptions = new ArrayList<>();
-                    for (String desc : barrier.getDescription()) {
-                        desc = FormatUtil.format(desc);
-                        descriptions.add(desc);
-                    }
-
-                    field.setAccessible(true); // We set as accessible to modify.
-                    field.set(skullMeta, gameProfile);
-
-                    skullMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
-                    skullMeta.setLore(descriptions);
-                    itemStack.setItemMeta(skullMeta);
-                    itemStack.setAmount(1);
-
-                } else {
-                    itemStack = new ItemStack(barrier.getMaterial(), 1);
-                    ItemMeta meta = itemStack.getItemMeta();
-                    List<String> descriptions = new ArrayList<>();
-                    for (String desc : barrier.getDescription()) {
-                        desc = FormatUtil.format(desc);
-                        descriptions.add(desc);
-                    }
-                    if (meta != null) {
-                        meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
-                        meta.setLore(descriptions);
-                        meta.setCustomModelData(barrier.getCustomModelData());
-                        itemStack.setItemMeta(meta);
-                    }
+                itemStack = new ItemStack(barrier.getMaterial(), 1);
+                ItemMeta meta = itemStack.getItemMeta();
+                List<String> descriptions = new ArrayList<>();
+                for (String desc : barrier.getDescription()) {
+                    desc = FormatUtil.format(desc);
+                    descriptions.add(desc);
+                }
+                if (meta != null) {
+                    meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
+                    meta.setLore(descriptions);
+                    meta.setCustomModelData(barrier.getCustomModelData());
+                    itemStack.setItemMeta(meta);
                 }
             }
-        } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException(e);
         }
         return itemStack;
     }
