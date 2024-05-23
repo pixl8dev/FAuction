@@ -275,26 +275,20 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                             return null;
                         }
 
-                        boolean isModCanCancel = (e.isShiftClick() && player.hasPermission("fauction.mod.cancel"));
-                        if (!a.getPlayerUuid().equals(player.getUniqueId()) && !isModCanCancel) {
+                        if (!a.getPlayerUuid().equals(player.getUniqueId())) {
                             return null;
                         }
 
-                        if (!isModCanCancel) {
-                            if (player.getInventory().firstEmpty() == -1) {
-                                player.getWorld().dropItem(player.getLocation(), a.getItemStack());
-                            } else {
-                                player.getInventory().addItem(a.getItemStack());
-                            }
+
+                        if (player.getInventory().firstEmpty() == -1) {
+                            player.getWorld().dropItem(player.getLocation(), a.getItemStack());
+                        } else {
+                            player.getInventory().addItem(a.getItemStack());
                         }
 
                         auctionCommandManager.deleteAuction(a.getId());
-                        if (isModCanCancel) {
-                            plugin.getExpireCommandManager().addAuction(a);
-                            plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                        } else {
-                            plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                        }
+                        plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
+
                         auctions.remove(a);
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_AUCTION_SUCCESS);
@@ -303,25 +297,12 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
                         TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
                         chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
-                            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions,this.page);
+                            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page);
                             gui.initializeItems();
                             return null;
                         }).execute();
                         return null;
                     }).execute();
-                } else if (e.isLeftClick()) {
-                    CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                    if (auction.getPlayerUuid().equals(player.getUniqueId())) {
-                        issuerTarget.sendInfo(MessageKeys.BUY_YOUR_ITEM);
-                        return;
-                    }
-                    if (!plugin.getVaultIntegrationManager().getEconomy().has(player, auction.getPrice())) {
-                        issuerTarget.sendInfo(MessageKeys.NO_HAVE_MONEY);
-                        return;
-                    }
-
-                    AuctionConfirmGui auctionConfirmGui = new AuctionConfirmGui(plugin, player, page, auction);
-                    auctionConfirmGui.initializeItems();
                 }
                 break;
             }
