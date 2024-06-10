@@ -1,4 +1,4 @@
-package fr.florianpal.fauction.configurations;
+package fr.florianpal.fauction.configurations.gui;
 
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;

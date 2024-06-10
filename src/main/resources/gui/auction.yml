@@ -200,10 +200,12 @@ block:
       title: "-"
       description: {}
   '51':
-    utility: barrier
-    material: AIR
-    title: "-"
-    description: {}
+    utility: category
+    material: BOOK
+    title: "&5Filter."
+    description:
+      - "&eClick here to change filter"
+      - "&eCurrent filter : {categoryDisplayName}"
   '52':
     utility: player
     material: NETHER_STAR

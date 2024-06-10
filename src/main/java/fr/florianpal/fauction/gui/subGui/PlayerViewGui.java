@@ -3,7 +3,7 @@ package fr.florianpal.fauction.gui.subGui;
 import co.aikar.commands.CommandIssuer;
 import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.configurations.PlayerViewConfig;
+import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
@@ -14,7 +14,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -253,7 +252,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
                 TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
                 chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
-                    AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1);
+                    AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1, null);
                     gui.initializeItems();
                     return null;
                 }).execute();

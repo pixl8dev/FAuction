@@ -1,4 +1,4 @@
-package fr.florianpal.fauction.configurations;
+package fr.florianpal.fauction.configurations.gui;
 
 import java.util.List;
 

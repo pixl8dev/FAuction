@@ -1,5 +1,6 @@
-package fr.florianpal.fauction.configurations;
+package fr.florianpal.fauction.configurations.gui;
 
+import fr.florianpal.fauction.configurations.gui.AbstractGuiWithAuctionsConfig;
 import fr.florianpal.fauction.objects.Barrier;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
@@ -7,7 +8,7 @@ import org.bukkit.configuration.Configuration;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
+public class PlayerViewConfig extends AbstractGuiWithAuctionsConfig {
 
     private List<Barrier> barrierBlocks = new ArrayList<>();
 
@@ -31,8 +32,7 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
 
     private String nameGui = "";
 
-    protected int size = 27;
-
+    protected int size;
 
     public void load(Configuration config) {
         barrierBlocks = new ArrayList<>();
@@ -183,7 +183,6 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
         return auctionBlocks;
     }
 
-    @Override
     public int getSize() {
         return size;
     }

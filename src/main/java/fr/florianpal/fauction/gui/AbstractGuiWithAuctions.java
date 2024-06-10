@@ -3,9 +3,10 @@ package fr.florianpal.fauction.gui;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.configurations.AbstractGuiWithAuctionsConfig;
+import fr.florianpal.fauction.configurations.gui.AbstractGuiWithAuctionsConfig;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
+import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.FormatUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -22,6 +23,8 @@ import java.util.UUID;
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
     protected List<Auction> auctions;
+
+    protected Category category;
 
     protected AbstractGuiWithAuctionsConfig abstractGuiWithAuctionsConfig;
 
@@ -56,11 +59,13 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
                 List<String> descriptions = new ArrayList<>();
                 for (String desc : barrier.getDescription()) {
+                    desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
                     desc = FormatUtil.format(desc);
                     descriptions.add(desc);
                 }
 
-                skullMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
+                String name = FormatUtil.format(barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : ""));
+                skullMeta.setDisplayName(name); // We set a displayName to the skull
                 skullMeta.setLore(descriptions);
                 itemStack.setItemMeta(skullMeta);
                 itemStack.setAmount(1);
@@ -71,10 +76,12 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
                 List<String> descriptions = new ArrayList<>();
                 for (String desc : barrier.getDescription()) {
                     desc = FormatUtil.format(desc);
+                    desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
                     descriptions.add(desc);
                 }
                 if (meta != null) {
-                    meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
+                    String name = FormatUtil.format(barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : ""));
+                    meta.setDisplayName(name);
                     meta.setLore(descriptions);
                     meta.setCustomModelData(barrier.getCustomModelData());
                     itemStack.setItemMeta(meta);

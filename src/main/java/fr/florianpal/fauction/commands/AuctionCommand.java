@@ -71,7 +71,7 @@ public class AuctionCommand extends BaseCommand {
 
         TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
         chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
-            AuctionsGui gui = new AuctionsGui(plugin, playerSender, auctions, 1);
+            AuctionsGui gui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
             gui.initializeItems();
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
@@ -207,7 +207,7 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.reload_help_description}")
     public void onReload(Player playerSender) {
         CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-        plugin.reloadConfig();
+        plugin.reloadConfiguration();
         issuerTarget.sendInfo(MessageKeys.AUCTION_RELOAD);
     }
 

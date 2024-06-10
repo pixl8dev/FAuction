@@ -22,8 +22,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 import java.util.jar.JarFile;
 import java.util.zip.ZipEntry;
@@ -163,8 +161,7 @@ public class FAuction extends JavaPlugin {
         }
     }
 
-    @Override
-    public void reloadConfig() {
+    public void reloadConfiguration() {
         configurationManager.reload(this);
     }
 

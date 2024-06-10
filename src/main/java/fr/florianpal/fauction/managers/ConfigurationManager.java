@@ -2,6 +2,10 @@ package fr.florianpal.fauction.managers;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.*;
+import fr.florianpal.fauction.configurations.gui.AuctionConfig;
+import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
+import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
+import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -25,6 +29,10 @@ public class ConfigurationManager {
 
     private final GlobalConfig globalConfig = new GlobalConfig();
     private FileConfiguration globalConfiguration;
+
+
+    private final CategoriesConfig categoriesConfig = new CategoriesConfig();
+    private FileConfiguration categoriesConfiguration;
 
     public ConfigurationManager(FAuction core) {
         File databaseFile = new File(core.getDataFolder(), "database.yml");
@@ -59,7 +67,12 @@ public class ConfigurationManager {
         core.createDefaultConfiguration(globalFile, "config.yml");
         globalConfiguration = YamlConfiguration.loadConfiguration(globalFile);
 
+        File categoriesFile = new File(core.getDataFolder(), "categories.yml");
+        core.createDefaultConfiguration(categoriesFile, "categories.yml");
+        categoriesConfiguration = YamlConfiguration.loadConfiguration(categoriesFile);
+
         globalConfig.load(globalConfiguration);
+        categoriesConfig.load(categoriesConfiguration);
         auctionConfig.load(auctionConfiguration);
         auctionConfirmConfig.load(auctionConfirmConfiguration);
         expireConfig.load(expireConfiguration);
@@ -88,5 +101,9 @@ public class ConfigurationManager {
 
     public PlayerViewConfig getPlayerViewConfig() {
         return playerViewConfig;
+    }
+
+    public CategoriesConfig getCategoriesConfig() {
+        return categoriesConfig;
     }
 }
