@@ -72,31 +72,27 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
                 SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
                 skullMeta.setPlayerProfile(profile);
 
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = FormatUtil.format(desc);
-                    descriptions.add(desc);
-                }
-
-                skullMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
-                skullMeta.setLore(descriptions);
-                itemStack.setItemMeta(skullMeta);
                 itemStack.setAmount(1);
-
+                itemStack.setItemMeta(skullMeta);
             } else {
                 itemStack = new ItemStack(barrier.getMaterial(), 1);
-                ItemMeta meta = itemStack.getItemMeta();
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = FormatUtil.format(desc);
-                    descriptions.add(desc);
-                }
-                if (meta != null) {
-                    meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
-                    meta.setLore(descriptions);
-                    meta.setCustomModelData(barrier.getCustomModelData());
-                    itemStack.setItemMeta(meta);
-                }
+            }
+            ItemMeta meta = itemStack.getItemMeta();
+
+            List<String> descriptions = new ArrayList<>();
+            for (String desc : barrier.getDescription()) {
+                desc = FormatUtil.format(desc);
+                desc = plugin.parsePlaceholder(player, desc);
+                descriptions.add(desc);
+            }
+
+            if (meta != null) {
+                String title = barrier.getTitle();
+                title = plugin.parsePlaceholder(player, title);
+                meta.setDisplayName(FormatUtil.format(title));
+                meta.setLore(descriptions);
+                meta.setCustomModelData(barrier.getCustomModelData());
+                itemStack.setItemMeta(meta);
             }
         }
         return itemStack;

@@ -6,7 +6,7 @@
 
     <groupId>Florianpal</groupId>
     <artifactId>FAuction</artifactId>
-    <version>1.5.6-SNAPSHOT</version>
+    <version>1.5.6.1-SNAPSHOT</version>
     <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -75,6 +75,10 @@
             <id>vault-repo</id>
             <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
+        <repository>
+            <id>placeholderapi</id>
+            <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -98,6 +102,13 @@
             <groupId>co.aikar</groupId>
             <artifactId>acf-paper</artifactId>
             <version>0.5.1-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>me.clip</groupId>
+            <artifactId>placeholderapi</artifactId>
+            <version>2.11.6</version>
+            <scope>provided</scope>
         </dependency>
         <!--Hibernate Core-->
         <dependency>

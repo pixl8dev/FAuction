@@ -57,35 +57,28 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
                 SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
                 skullMeta.setPlayerProfile(profile);
 
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
-                    desc = FormatUtil.format(desc);
-                    descriptions.add(desc);
-                }
-
-                String name = FormatUtil.format(barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : ""));
-                skullMeta.setDisplayName(name); // We set a displayName to the skull
-                skullMeta.setLore(descriptions);
-                itemStack.setItemMeta(skullMeta);
                 itemStack.setAmount(1);
-
+                itemStack.setItemMeta(skullMeta);
             } else {
                 itemStack = new ItemStack(barrier.getMaterial(), 1);
-                ItemMeta meta = itemStack.getItemMeta();
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = FormatUtil.format(desc);
-                    desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
-                    descriptions.add(desc);
-                }
-                if (meta != null) {
-                    String name = FormatUtil.format(barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : ""));
-                    meta.setDisplayName(name);
-                    meta.setLore(descriptions);
-                    meta.setCustomModelData(barrier.getCustomModelData());
-                    itemStack.setItemMeta(meta);
-                }
+            }
+
+            ItemMeta meta = itemStack.getItemMeta();
+            List<String> descriptions = new ArrayList<>();
+            for (String desc : barrier.getDescription()) {
+                desc = FormatUtil.format(desc);
+                desc = plugin.parsePlaceholder(player, desc);
+                desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
+                descriptions.add(desc);
+            }
+
+            if (meta != null) {
+                String name = barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
+                name = plugin.parsePlaceholder(player, name);
+                meta.setDisplayName(FormatUtil.format(name));
+                meta.setLore(descriptions);
+                meta.setCustomModelData(barrier.getCustomModelData());
+                itemStack.setItemMeta(meta);
             }
         }
         return itemStack;

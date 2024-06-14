@@ -84,6 +84,11 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         title = title.replace("{Price}", df.format(confirm.getAuction().getPrice()));
         title = title.replace("{OwnerName}", confirm.getAuction().getPlayerName());
 
+        var offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUuid());
+        if (offlinePlayer != null) {
+            title = plugin.parsePlaceholder(offlinePlayer, title);
+        }
+
         title = FormatUtil.format(title);
         List<String> listDescription = new ArrayList<>();
         for (String desc : auctionConfirmConfig.getDescription()) {
@@ -94,6 +99,10 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                 desc = desc.replace("{Item}", confirm.getAuction().getItemStack().getItemMeta().getDisplayName());
             }
             desc = desc.replace("{OwnerName}", confirm.getAuction().getPlayerName());
+
+            if (offlinePlayer != null) {
+                desc = plugin.parsePlaceholder(offlinePlayer, desc);
+            }
 
             desc = FormatUtil.format(desc);
             listDescription.add(desc);

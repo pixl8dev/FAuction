@@ -11,6 +11,7 @@ import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.FormatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -112,6 +113,12 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
         }
         title = title.replace("{OwnerName}", auction.getPlayerName());
         title = title.replace("{Price}", String.valueOf(auction.getPrice()));
+
+        var offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUuid());
+        if (offlinePlayer != null) {
+            title = plugin.parsePlaceholder(offlinePlayer, title);
+        }
+        
         title = FormatUtil.format(title);
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
@@ -126,6 +133,11 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
             desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
             desc = desc.replace("{OwnerName}", auction.getPlayerName());
+
+            if (offlinePlayer != null) {
+                desc = plugin.parsePlaceholder(offlinePlayer, desc);
+            }
+
             desc = desc.replace("{Price}", String.valueOf(auction.getPrice()));
             Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
             SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());

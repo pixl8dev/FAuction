@@ -4,7 +4,6 @@ import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import fr.florianpal.fauction.commands.AuctionCommand;
-import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.managers.ConfigurationManager;
 import fr.florianpal.fauction.managers.DatabaseManager;
 import fr.florianpal.fauction.managers.VaultIntegrationManager;
@@ -14,9 +13,12 @@ import fr.florianpal.fauction.managers.commandManagers.ExpireCommandManager;
 import fr.florianpal.fauction.managers.commandManagers.LimitationManager;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.queries.ExpireQueries;
+import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.SerializationUtil;
 import io.papermc.lib.PaperLib;
+import me.clip.placeholderapi.PlaceholderAPI;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -41,6 +43,8 @@ public class FAuction extends JavaPlugin {
 
     private AuctionCommandManager auctionCommandManager;
     private ExpireCommandManager expireCommandManager;
+
+    private boolean placeholderAPIEnabled = false;
 
     public static <T> TaskChain<T> newChain() {
         return taskChainFactory.newChain();
@@ -85,6 +89,10 @@ public class FAuction extends JavaPlugin {
         expireCommandManager = new ExpireCommandManager(this);
 
         commandManager.registerCommand(new AuctionCommand(this));
+
+        if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            placeholderAPIEnabled = true;
+        }
 
         ExpireSchedule expireSchedule = new ExpireSchedule(this);
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, expireSchedule, configurationManager.getGlobalConfig().getCheckEvery(), configurationManager.getGlobalConfig().getCheckEvery());
@@ -161,6 +169,13 @@ public class FAuction extends JavaPlugin {
         }
     }
 
+    public String parsePlaceholder(OfflinePlayer player, String text) {
+        if (placeholderAPIEnabled) {
+            return PlaceholderAPI.setPlaceholders(player, text);
+        }
+        return text;
+    }
+
     public void reloadConfiguration() {
         configurationManager.reload(this);
     }
@@ -180,6 +195,8 @@ public class FAuction extends JavaPlugin {
     public ExpireCommandManager getExpireCommandManager() {
         return expireCommandManager;
     }
+
+
 
     public void transfertBDD(boolean toPaper) {
         TaskChain<Map<Integer, byte[]>> chain = FAuction.newChain();

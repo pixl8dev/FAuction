@@ -10,6 +10,7 @@ import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.utils.FormatUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -95,6 +96,12 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
         }
         title = title.replace("{OwnerName}", playerName);
         title = title.replace("{Price}", String.valueOf(auction.getPrice()));
+
+        var offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUuid());
+        if (offlinePlayer != null) {
+            title = plugin.parsePlaceholder(offlinePlayer, title);
+        }
+
         title = FormatUtil.format(title);
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
@@ -111,6 +118,10 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
             desc = desc.replace("{ExpireTime}", formatter.format(expireDate));
             desc = desc.replace("{OwnerName}", playerName);
             desc = desc.replace("{Price}", String.valueOf(auction.getPrice()));
+
+            if (offlinePlayer != null) {
+                desc = plugin.parsePlaceholder(offlinePlayer, desc);
+            }
             if (desc.contains("lore")) {
                 if (item.getItemMeta().getLore() != null) {
                     listDescription.addAll(item.getItemMeta().getLore());
