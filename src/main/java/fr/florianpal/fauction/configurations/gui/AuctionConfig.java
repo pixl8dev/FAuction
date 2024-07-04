@@ -91,14 +91,6 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
                         Material.getMaterial(config.getString("block." + index + ".material")),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
-                        new Barrier(
-                                Integer.parseInt(index),
-                                Material.getMaterial(config.getString("block." + index + ".replacement.material")),
-                                config.getString("block." + index + ".replacement.title"),
-                                config.getStringList("block." + index + ".replacement.description"),
-                                config.getString("block." + index + ".replacement.texture", ""),
-                                config.getInt("block." + index + ".replacement.customModelData", 0)
-                        ),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );

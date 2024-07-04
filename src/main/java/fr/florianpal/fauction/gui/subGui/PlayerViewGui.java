@@ -203,19 +203,6 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
         e.setCancelled(true);
 
-        if (globalConfig.isSecurityForSpammingPacket()) {
-            LocalDateTime clickTest = LocalDateTime.now();
-            boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
-            if (isSpamming) {
-                plugin.getLogger().warning("Warning : Spam gui auction Pseudo : " + player.getName());
-                CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                issuerTarget.sendInfo(MessageKeys.SPAM);
-                return;
-            } else {
-                spamTest.add(clickTest);
-            }
-        }
-
         ItemStack clickedItem = e.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
 
@@ -270,6 +257,19 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                 }).execute();
 
                 return;
+            }
+        }
+
+        if (globalConfig.isSecurityForSpammingPacket()) {
+            LocalDateTime clickTest = LocalDateTime.now();
+            boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
+            if (isSpamming) {
+                plugin.getLogger().warning("Warning : Spam gui auction Pseudo : " + player.getName());
+                CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
+                issuerTarget.sendInfo(MessageKeys.SPAM);
+                return;
+            } else {
+                spamTest.add(clickTest);
             }
         }
 
