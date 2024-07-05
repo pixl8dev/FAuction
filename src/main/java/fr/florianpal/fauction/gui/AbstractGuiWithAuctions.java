@@ -8,6 +8,7 @@ import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.FormatUtil;
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -51,14 +52,17 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
             if (barrier.getMaterial() == Material.PLAYER_HEAD) {
                 itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
-                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-                profile.setProperty(new ProfileProperty("textures", barrier.getTexture()));
-                ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-                SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
-                skullMeta.setPlayerProfile(profile);
+
+                if (PaperLib.isPaper()) {
+                    PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
+                    profile.setProperty(new ProfileProperty("textures", barrier.getTexture()));
+                    ItemStack head = new ItemStack(Material.PLAYER_HEAD);
+                    SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
+                    skullMeta.setPlayerProfile(profile);
+                    itemStack.setItemMeta(skullMeta);
+                }
 
                 itemStack.setAmount(1);
-                itemStack.setItemMeta(skullMeta);
             } else {
                 itemStack = new ItemStack(barrier.getMaterial(), 1);
             }

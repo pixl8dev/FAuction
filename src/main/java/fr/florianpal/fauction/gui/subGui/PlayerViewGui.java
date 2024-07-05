@@ -29,8 +29,6 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     private final PlayerViewConfig playerViewConfig;
 
-    private Auction lastAuction = null;
-
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
     public PlayerViewGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
