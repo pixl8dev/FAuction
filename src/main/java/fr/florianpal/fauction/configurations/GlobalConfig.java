@@ -3,7 +3,9 @@ package fr.florianpal.fauction.configurations;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GlobalConfig {
@@ -22,6 +24,8 @@ public class GlobalConfig {
 
     private Map<Material, Double> maxPrice = new HashMap<>();
 
+    private List<Material> blacklistItem = new ArrayList<>();
+
     private boolean defaultMaxValueEnable = false;
 
     private boolean defaultMinValueEnable = false;
@@ -32,6 +36,8 @@ public class GlobalConfig {
 
     private int time;
     private int checkEvery;
+
+
 
     public void load(Configuration config) {
         lang = config.getString("lang");
@@ -44,6 +50,7 @@ public class GlobalConfig {
         checkEvery = config.getInt("expiration.checkEvery");
         minPrice = new HashMap<>();
         maxPrice = new HashMap<>();
+        blacklistItem = new ArrayList<>();
 
         limitations = new HashMap<>();
         for (String limitationGroup : config.getConfigurationSection("limitations").getKeys(false)) {
@@ -72,6 +79,10 @@ public class GlobalConfig {
             for (String material : config.getConfigurationSection("max-price").getKeys(false)) {
                 maxPrice.put(Material.valueOf(material), config.getDouble("max-price." + material));
             }
+        }
+
+        if (config.contains("item-blacklist")) {
+            blacklistItem = config.getStringList("item-blacklist").stream().map(Material::valueOf).toList();
         }
     }
 
@@ -133,5 +144,9 @@ public class GlobalConfig {
 
     public double getDefaultMaxValue() {
         return defaultMaxValue;
+    }
+
+    public List<Material> getBlacklistItem() {
+        return blacklistItem;
     }
 }

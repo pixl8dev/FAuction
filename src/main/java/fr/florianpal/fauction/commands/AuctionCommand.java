@@ -96,93 +96,100 @@ public class AuctionCommand extends BaseCommand {
                 spamTest.add(clickTest);
             }
         }
-
         CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-        chain.asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).sync(auctions -> {
-            if (plugin.getLimitationManager().getAuctionLimitation(playerSender) <= auctions.size()) {
-                issuerTarget.sendInfo(MessageKeys.MAX_AUCTION);
-                return null;
-            }
-            if (price < 0) {
-                issuerTarget.sendInfo(MessageKeys.NEGATIVE_PRICE);
-                return null;
-            }
-            if (playerSender.getInventory().getItemInMainHand().getType().equals(Material.AIR)) {
-                issuerTarget.sendInfo(MessageKeys.ITEM_AIR);
-                return null;
-            }
+        ItemStack itemToSell = playerSender.getInventory().getItemInMainHand();
 
-            if(globalConfig.getMinPrice().containsKey(playerSender.getInventory().getItemInMainHand().getType())) {
-                double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getMinPrice().get(playerSender.getInventory().getItemInMainHand().getType());
-                if(minPrice > price) {
-                    issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
-                    return null;
-                }
-            } else if (globalConfig.isDefaultMinValueEnable()) {
-                double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getDefaultMinValue();
-                if(minPrice > price) {
-                    issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
-                    return null;
-                }
+        if (price < 0) {
+            issuerTarget.sendInfo(MessageKeys.NEGATIVE_PRICE);
+            return;
+        }
+
+        if (itemToSell.getType().equals(Material.AIR)) {
+            issuerTarget.sendInfo(MessageKeys.ITEM_AIR);
+            return;
+        }
+
+        if (globalConfig.getBlacklistItem().contains(itemToSell.getType())) {
+            issuerTarget.sendInfo(MessageKeys.ITEM_BLACKLIST);
+            return;
+        }
+
+        if(globalConfig.getMinPrice().containsKey(itemToSell.getType())) {
+            double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getMinPrice().get(itemToSell.getType());
+            if(minPrice > price) {
+                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                return;
             }
-
-            if(globalConfig.getMaxPrice().containsKey(playerSender.getInventory().getItemInMainHand().getType())) {
-                double maxPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getMaxPrice().get(playerSender.getInventory().getItemInMainHand().getType());
-                if(maxPrice < price) {
-                    issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
-                    return null;
-                }
-            } else if (globalConfig.isDefaultMaxValueEnable()) {
-                double maxPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getDefaultMaxValue();
-                if(maxPrice < price) {
-                    issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
-                    return null;
-                }
+        } else if (globalConfig.isDefaultMinValueEnable()) {
+            double minPrice = itemToSell.getAmount() *  globalConfig.getDefaultMinValue();
+            if(minPrice > price) {
+                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                return;
             }
+        }
 
-            if(Tag.SHULKER_BOXES.getValues().contains(playerSender.getInventory().getItemInMainHand().getType())) {
-                ItemStack item = playerSender.getInventory().getItemInMainHand();
-                if (item.getItemMeta() instanceof BlockStateMeta) {
-                    double minPrice = -1;
-                    double maxPrice = -1;
-                    BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
-                    if (im.getBlockState() instanceof ShulkerBox) {
-                        ShulkerBox shulker = (ShulkerBox) im.getBlockState();
-                        for (ItemStack itemIn : shulker.getInventory().getContents()) {
-                            if (itemIn != null && (itemIn.getType() != Material.AIR)) {
-                                if (plugin.getConfigurationManager().getGlobalConfig().getMinPrice().containsKey(itemIn.getType())) {
-                                    minPrice = minPrice + itemIn.getAmount() * globalConfig.getMinPrice().get(itemIn.getType());
-                                } else if (plugin.getConfigurationManager().getGlobalConfig().isDefaultMinValueEnable()) {
-                                    minPrice = minPrice + itemIn.getAmount() * globalConfig.getDefaultMinValue();
-                                }
+        if(globalConfig.getMaxPrice().containsKey(itemToSell.getType())) {
+            double maxPrice = itemToSell.getAmount() *  globalConfig.getMaxPrice().get(itemToSell.getType());
+            if(maxPrice < price) {
+                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                return;
+            }
+        } else if (globalConfig.isDefaultMaxValueEnable()) {
+            double maxPrice = itemToSell.getAmount() *  globalConfig.getDefaultMaxValue();
+            if(maxPrice < price) {
+                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                return;
+            }
+        }
 
-                                if (plugin.getConfigurationManager().getGlobalConfig().getMaxPrice().containsKey(itemIn.getType())) {
-                                    maxPrice = maxPrice + itemIn.getAmount() * globalConfig.getMaxPrice().get(itemIn.getType());
-                                } else if (plugin.getConfigurationManager().getGlobalConfig().isDefaultMaxValueEnable()) {
-                                    maxPrice = maxPrice + itemIn.getAmount() * globalConfig.getDefaultMaxValue();
-                                }
+        if(Tag.SHULKER_BOXES.getValues().contains(itemToSell.getType())) {
+            ItemStack item = playerSender.getInventory().getItemInMainHand();
+            if (item.getItemMeta() instanceof BlockStateMeta) {
+                double minPrice = -1;
+                double maxPrice = -1;
+                BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
+                if (im.getBlockState() instanceof ShulkerBox) {
+                    ShulkerBox shulker = (ShulkerBox) im.getBlockState();
+                    for (ItemStack itemIn : shulker.getInventory().getContents()) {
+                        if (itemIn != null && (itemIn.getType() != Material.AIR)) {
+                            if (plugin.getConfigurationManager().getGlobalConfig().getMinPrice().containsKey(itemIn.getType())) {
+                                minPrice = minPrice + itemIn.getAmount() * globalConfig.getMinPrice().get(itemIn.getType());
+                            } else if (plugin.getConfigurationManager().getGlobalConfig().isDefaultMinValueEnable()) {
+                                minPrice = minPrice + itemIn.getAmount() * globalConfig.getDefaultMinValue();
+                            }
+
+                            if (plugin.getConfigurationManager().getGlobalConfig().getMaxPrice().containsKey(itemIn.getType())) {
+                                maxPrice = maxPrice + itemIn.getAmount() * globalConfig.getMaxPrice().get(itemIn.getType());
+                            } else if (plugin.getConfigurationManager().getGlobalConfig().isDefaultMaxValueEnable()) {
+                                maxPrice = maxPrice + itemIn.getAmount() * globalConfig.getDefaultMaxValue();
                             }
                         }
-                        if (minPrice != -1 && minPrice > price) {
-                            issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
-                            return null;
-                        }
+                    }
+                    if (minPrice != -1 && minPrice > price) {
+                        issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                        return;
+                    }
 
-                        if (maxPrice != -1 && maxPrice < price) {
-                            issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
-                            return null;
-                        }
+                    if (maxPrice != -1 && maxPrice < price) {
+                        issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                        return;
                     }
                 }
             }
+        }
 
-            String itemName = playerSender.getInventory().getItemInMainHand().getItemMeta().getDisplayName() == null || playerSender.getInventory().getItemInMainHand().getItemMeta().getDisplayName().isEmpty() ? playerSender.getInventory().getItemInMainHand().getType().toString() : playerSender.getInventory().getItemInMainHand().getItemMeta().getDisplayName();
+        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
+        chain.asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
+            if (plugin.getLimitationManager().getAuctionLimitation(playerSender) <= auctions.size()) {
+                issuerTarget.sendInfo(MessageKeys.MAX_AUCTION);
+                return;
+            }
+
+            String itemName = itemToSell.getItemMeta().getDisplayName() == null || itemToSell.getItemMeta().getDisplayName().isEmpty() ? itemToSell.getType().toString() : itemToSell.getItemMeta().getDisplayName();
             plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
-            auctionCommandManager.addAuction(playerSender, playerSender.getInventory().getItemInMainHand(), price);
+            auctionCommandManager.addAuction(playerSender, itemToSell, price);
             playerSender.getInventory().getItemInMainHand().setAmount(0);
             issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
-            return null;
         }).execute();
     }
 

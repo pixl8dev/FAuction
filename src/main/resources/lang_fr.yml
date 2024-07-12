@@ -29,6 +29,7 @@ fauction:
   clear_cache: "Vous avez vidé le cache."
 
   remove_expire_success: "Vous avez récupéré un de vos items expiré."
+  item_blacklist: "Vous ne pouvez pas vendre cet item !"
 
   transfert_bdd: "Transfert de la base de données terminée."
 acf-minecraft:

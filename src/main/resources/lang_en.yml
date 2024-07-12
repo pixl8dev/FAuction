@@ -29,6 +29,8 @@ fauction:
   clear_cache: "You cleared the cache."
 
   remove_expire_success: "You have recovered one of your expired items."
+  item_blacklist: "You cannot sell this item !"
+
   transfert_bdd: "Transfert of the database finished."
 acf-minecraft:
   invalid_world: "Error: That world does not exist."

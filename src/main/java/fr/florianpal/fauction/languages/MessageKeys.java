@@ -31,6 +31,8 @@ public enum MessageKeys implements MessageKeyProvider {
 
     REMOVE_EXPIRE_SUCCESS,
 
+    ITEM_BLACKLIST,
+
     TRANSFERT_BDD,
 
     DATABASEERROR;
