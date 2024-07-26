@@ -41,17 +41,13 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
         initBarrier();
 
-        if (this.auctions.isEmpty()) {
-            CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-            issuerTarget.sendInfo(MessageKeys.NO_AUCTION);
-            return;
-        }
-
-        int id = (this.playerViewConfig.getAuctionBlocks().size() * this.page) - this.playerViewConfig.getAuctionBlocks().size();
-        for (int index : playerViewConfig.getAuctionBlocks()) {
-            inv.setItem(index, createGuiItem(auctions.get(id)));
-            id++;
-            if (id >= (auctions.size())) break;
+        if (!auctions.isEmpty()) {
+            int id = (this.playerViewConfig.getAuctionBlocks().size() * this.page) - this.playerViewConfig.getAuctionBlocks().size();
+            for (int index : playerViewConfig.getAuctionBlocks()) {
+                inv.setItem(index, createGuiItem(auctions.get(id)));
+                id++;
+                if (id >= (auctions.size())) break;
+            }
         }
         openInventory(player);
     }

@@ -41,13 +41,6 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     public void initializeItems() {
 
-        if (auctions.isEmpty()) {
-            CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-            issuerTarget.sendInfo(MessageKeys.NO_AUCTION);
-            return;
-        }
-
-
         for (Barrier barrier : expireGuiConfig.getBarrierBlocks()) {
             inv.setItem(barrier.getIndex(), createGuiItem(getItemStack(barrier, false)));
         }
@@ -74,12 +67,14 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
         }
 
 
-        int id = (this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size();
-        for (int index : expireGuiConfig.getExpireBlocks()) {
-            String ownerName = auctions.get(id).getPlayerName();
-            inv.setItem(index, createGuiItem(auctions.get(id), ownerName));
-            id++;
-            if (id >= (auctions.size())) break;
+        if (!auctions.isEmpty()) {
+            int id = (this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size();
+            for (int index : expireGuiConfig.getExpireBlocks()) {
+                String ownerName = auctions.get(id).getPlayerName();
+                inv.setItem(index, createGuiItem(auctions.get(id), ownerName));
+                id++;
+                if (id >= (auctions.size())) break;
+            }
         }
         openInventory(player);
 
