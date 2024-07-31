@@ -49,9 +49,8 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         if (isRemplacement) {
             itemStack = getItemStack(barrier.getRemplacement(), false);
         } else {
-
+            itemStack = new ItemStack(barrier.getMaterial(), 1);
             if (barrier.getMaterial() == Material.PLAYER_HEAD) {
-                itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
 
                 if (PaperLib.isPaper()) {
                     PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
@@ -63,8 +62,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
                 }
 
                 itemStack.setAmount(1);
-            } else {
-                itemStack = new ItemStack(barrier.getMaterial(), 1);
             }
 
             ItemMeta meta = itemStack.getItemMeta();
