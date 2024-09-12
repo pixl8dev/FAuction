@@ -40,7 +40,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
     AuctionConfirmGui(FAuction plugin, Player player, int page, Auction auction) {
-        super(plugin, player, page);
+        super(plugin, player, page, plugin.getConfigurationManager().getAuctionConfirmConfig());
         this.auction = auction;
         this.auctionConfirmConfig = plugin.getConfigurationManager().getAuctionConfirmConfig();
         initGui(auctionConfirmConfig.getNameGui(), auctionConfirmConfig.getSize());
