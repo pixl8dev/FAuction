@@ -30,7 +30,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     protected AbstractGuiWithAuctionsConfig abstractGuiWithAuctionsConfig;
 
     protected AbstractGuiWithAuctions(FAuction plugin, Player player, int page, List<Auction> auctions, AbstractGuiWithAuctionsConfig abstractGuiWithAuctionsConfig) {
-        super(plugin, player, page);
+        super(plugin, player, page, abstractGuiWithAuctionsConfig);
         this.auctions = auctions;
         this.abstractGuiWithAuctionsConfig = abstractGuiWithAuctionsConfig;
     }

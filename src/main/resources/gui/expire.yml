@@ -1,5 +1,6 @@
 gui:
   size: 54
+  type: CHEST
   name: "Auction House: Expired Items"
   title: "&eItem : &6{ItemName}"
   replaceTitle: true

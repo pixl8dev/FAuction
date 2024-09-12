@@ -3,6 +3,7 @@ package fr.florianpal.fauction.configurations.gui;
 import fr.florianpal.fauction.objects.Barrier;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,6 +35,8 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
     private String nameGui = "";
 
     protected int size = 27;
+
+    private InventoryType inventoryType;
 
 
     public void load(Configuration config) {
@@ -145,7 +148,7 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
         title = config.getString("gui.title");
         replaceTitle = config.getBoolean("gui.replaceTitle", true);
         description.addAll(config.getStringList("gui.description"));
-
+        inventoryType = InventoryType.valueOf(config.getString("gui.type", "CHEST"));
     }
 
     public String getTitle() {
@@ -200,5 +203,10 @@ public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
 
     public List<Barrier> getCategoriesBlocks() {
         return categoriesBlocks;
+    }
+
+    @Override
+    public InventoryType getType() {
+        return inventoryType;
     }
 }

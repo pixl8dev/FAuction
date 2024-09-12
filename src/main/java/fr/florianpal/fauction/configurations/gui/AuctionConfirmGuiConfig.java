@@ -4,13 +4,14 @@ import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class AuctionConfirmGuiConfig {
+public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
     private String title_true = "";
     private String title_false = "";
     private List<String> description = new ArrayList<>();
@@ -19,12 +20,15 @@ public class AuctionConfirmGuiConfig {
     private List<Barrier> barrierBlocks = new ArrayList<>();
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
+    private InventoryType inventoryType;
+
     public void load(Configuration config) {
         title_true = config.getString("gui.title-true");
         title_false = config.getString("gui.title-false");
         nameGui = config.getString("gui.name");
         description = config.getStringList("gui.description");
         size = config.getInt("gui.size");
+        inventoryType = InventoryType.valueOf(config.getString("gui.type", "CHEST"));
 
         barrierBlocks = new ArrayList<>();
         confirmBlocks = new HashMap<>();
@@ -72,5 +76,10 @@ public class AuctionConfirmGuiConfig {
 
     public String getTitle_false() {
         return title_false;
+    }
+
+    @Override
+    public InventoryType getType() {
+        return inventoryType;
     }
 }

@@ -4,6 +4,7 @@ import fr.florianpal.fauction.configurations.gui.AbstractGuiWithAuctionsConfig;
 import fr.florianpal.fauction.objects.Barrier;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,8 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig {
     private String nameGui = "";
 
     protected int size;
+
+    private InventoryType inventoryType;
 
 
     public void load(Configuration config) {
@@ -107,7 +110,7 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig {
         title = config.getString("gui.title");
         replaceTitle = config.getBoolean("gui.replaceTitle", true);
         description.addAll(config.getStringList("gui.description"));
-
+        inventoryType = InventoryType.valueOf(config.getString("gui.type", "CHEST"));
     }
 
     public String getTitle() {
@@ -142,6 +145,11 @@ public class ExpireGuiConfig extends AbstractGuiWithAuctionsConfig {
     @Override
     public int getSize() {
         return size;
+    }
+
+    @Override
+    public InventoryType getType() {
+        return inventoryType;
     }
 
     public List<Integer> getExpireBlocks() {

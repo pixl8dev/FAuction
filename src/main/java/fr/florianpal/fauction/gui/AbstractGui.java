@@ -4,6 +4,7 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
+import fr.florianpal.fauction.configurations.gui.AbstractGuiConfig;
 import fr.florianpal.fauction.managers.commandManagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandManagers.CommandManager;
 import fr.florianpal.fauction.managers.commandManagers.ExpireCommandManager;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -42,7 +44,9 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
     protected  final ExpireCommandManager expireCommandManager;
 
-    protected AbstractGui(FAuction plugin, Player player, int page) {
+    protected AbstractGuiConfig abstractGuiConfig;
+
+    protected AbstractGui(FAuction plugin, Player player, int page, AbstractGuiConfig abstractGuiConfig) {
         this.plugin = plugin;
         this.player = player;
         this.page = page;
@@ -51,12 +55,17 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         this.auctionCommandManager = plugin.getAuctionCommandManager();
         this.expireCommandManager = plugin.getExpireCommandManager();
+        this.abstractGuiConfig = abstractGuiConfig;
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);
     }
 
     protected void initGui(String title, int size) {
-        inv = Bukkit.createInventory(this, size, FormatUtil.format(title));
+        if (abstractGuiConfig.getType() == InventoryType.CHEST) {
+            inv = Bukkit.createInventory(this, size, FormatUtil.format(title));
+        } else {
+            inv = Bukkit.createInventory(this, abstractGuiConfig.getType(), FormatUtil.format(title));
+        }
     }
 
     public ItemStack getItemStack(Barrier barrier, boolean isRemplacement) {
