@@ -17,19 +17,19 @@ public class ExpireCommandManager {
     }
 
     public List<Auction> getAuctions() {
-        return expireQueries.getAuctions();
+        return expireQueries.getExpires();
     }
 
     public List<Auction> getAuctions(UUID uuid) {
-        return expireQueries.getAuctions(uuid);
+        return expireQueries.getExpires(uuid);
     }
 
     public void addAuction(Auction auction)  {
-        expireQueries.addAuction(auction.getPlayerUuid(), auction.getPlayerName(), SerializationUtil.serialize(auction.getItemStack()), auction.getPrice(), auction.getDate());
+        expireQueries.addExpire(auction.getPlayerUuid(), auction.getPlayerName(), SerializationUtil.serialize(auction.getItemStack()), auction.getPrice(), auction.getDate());
     }
 
     public void deleteAuction(int id) {
-        expireQueries.deleteAuctions(id);
+        expireQueries.deleteExpire(id);
     }
 
     public Auction auctionExist(int id) {

@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import co.aikar.commands.CommandIssuer;
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
@@ -28,8 +27,6 @@ import java.util.List;
 public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final ExpireGuiConfig expireGuiConfig;
-
-    private Auction lastAuction = null;
 
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
@@ -189,41 +186,40 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
         for (Barrier previous : expireGuiConfig.getPreviousBlocks()) {
             if (e.getRawSlot() == previous.getIndex() && this.page > 1) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, this.page - 1);
                     gui.initializeItems();
-                    return null;
                 }).execute();
                 return;
             }
         }
         for (Barrier next : expireGuiConfig.getNextBlocks()) {
             if (e.getRawSlot() == next.getIndex() && ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size() < auctions.size() - this.expireGuiConfig.getExpireBlocks().size()) && next.getMaterial() != next.getRemplacement().getMaterial()) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, this.page + 1);
                     gui.initializeItems();
-                    return null;
                 }).execute();
                 return;
             }
         }
         for (Barrier auctionGui : expireGuiConfig.getAuctionGuiBlocks()) {
             if (e.getRawSlot() == auctionGui.getIndex()) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                     AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
                     gui.initializeItems();
-                    return null;
                 }).execute();
                 return;
             }
         }
 
         if (globalConfig.isSecurityForSpammingPacket()) {
+
             LocalDateTime clickTest = LocalDateTime.now();
             boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
+
             if (isSpamming) {
                 plugin.getLogger().warning("Warning : Spam gui expire Pseudo : " + player.getName());
                 CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
@@ -247,15 +243,14 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size()) - nb * 2);
 
                 if (e.isLeftClick()) {
-                    TaskChain<Auction> chainAuction = FAuction.newChain();
-                    chainAuction.asyncFirst(() -> expireCommandManager.auctionExist(auction.getId())).sync(a -> {
+                    FAuction.newChain().asyncFirst(() -> expireCommandManager.auctionExist(auction.getId())).syncLast(a -> {
 
                         if (a == null) {
-                            return null;
+                            return;
                         }
 
                         if (!a.getPlayerUuid().equals(player.getUniqueId())) {
-                            return null;
+                            return;
                         }
 
                         if (player.getInventory().firstEmpty() == -1) {
@@ -269,13 +264,10 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
 
-                        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                        chain.asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).sync(auctions -> {
+                        FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
                             ExpireGui gui = new ExpireGui(plugin, player, auctions, 1);
                             gui.initializeItems();
-                            return null;
                         }).execute();
-                        return null;
                     }).execute();
                 }
             }

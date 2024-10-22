@@ -31,7 +31,10 @@ public class AuctionQueries implements IDatabaseTable {
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
+    private final FAuction plugin;
+
     public AuctionQueries(FAuction plugin) {
+        this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
 
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
@@ -52,14 +55,14 @@ public class AuctionQueries implements IDatabaseTable {
             statement.setLong(5, date.getTime());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (statement != null) {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
     }
@@ -72,14 +75,14 @@ public class AuctionQueries implements IDatabaseTable {
             statement.setInt(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when update auction. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (statement != null) {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
     }
@@ -91,13 +94,13 @@ public class AuctionQueries implements IDatabaseTable {
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when delete auction. Error {} ", e.getMessage()));
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
                 }
             }
         }
@@ -122,7 +125,7 @@ public class AuctionQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get all auctions. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -132,7 +135,7 @@ public class AuctionQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
@@ -162,7 +165,7 @@ public class AuctionQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get all auction. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -172,7 +175,7 @@ public class AuctionQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
@@ -200,7 +203,7 @@ public class AuctionQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get auction by player uuid. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -210,7 +213,7 @@ public class AuctionQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
@@ -235,7 +238,7 @@ public class AuctionQueries implements IDatabaseTable {
                 return new Auction(id, playerUuid, playerName, price, item, date);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get auction by id. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -245,7 +248,7 @@ public class AuctionQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return null;

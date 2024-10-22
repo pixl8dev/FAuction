@@ -4,7 +4,6 @@ import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.CommandIssuer;
 import co.aikar.commands.annotation.*;
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.gui.subGui.AuctionsGui;
@@ -13,7 +12,6 @@ import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.managers.commandManagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandManagers.CommandManager;
 import fr.florianpal.fauction.managers.commandManagers.ExpireCommandManager;
-import fr.florianpal.fauction.objects.Auction;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
@@ -55,9 +53,12 @@ public class AuctionCommand extends BaseCommand {
     @CommandPermission("fauction.list")
     @Description("{@@fauction.auction_list_help_description}")
     public void onList(Player playerSender) {
+
         if (globalConfig.isSecurityForSpammingPacket()) {
+
             LocalDateTime clickTest = LocalDateTime.now();
             boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
+
             if (isSpamming) {
                 plugin.getLogger().warning("Warning : Spam command list. Pseudo : " + playerSender.getName());
                 CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(playerSender);
@@ -69,13 +70,11 @@ public class AuctionCommand extends BaseCommand {
         }
 
 
-        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-        chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
             AuctionsGui gui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
             gui.initializeItems();
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
-            return null;
         }).execute();
     }
 
@@ -144,12 +143,11 @@ public class AuctionCommand extends BaseCommand {
 
         if(Tag.SHULKER_BOXES.getValues().contains(itemToSell.getType())) {
             ItemStack item = playerSender.getInventory().getItemInMainHand();
-            if (item.getItemMeta() instanceof BlockStateMeta) {
+            if (item.getItemMeta() instanceof BlockStateMeta im) {
+
                 double minPrice = -1;
                 double maxPrice = -1;
-                BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
-                if (im.getBlockState() instanceof ShulkerBox) {
-                    ShulkerBox shulker = (ShulkerBox) im.getBlockState();
+                if (im.getBlockState() instanceof ShulkerBox shulker) {
                     for (ItemStack itemIn : shulker.getInventory().getContents()) {
                         if (itemIn != null && (itemIn.getType() != Material.AIR)) {
                             if (plugin.getConfigurationManager().getGlobalConfig().getMinPrice().containsKey(itemIn.getType())) {
@@ -178,8 +176,7 @@ public class AuctionCommand extends BaseCommand {
             }
         }
 
-        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-        chain.asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
+        FAuction.newChain().asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
             if (plugin.getLimitationManager().getAuctionLimitation(playerSender) <= auctions.size()) {
                 issuerTarget.sendInfo(MessageKeys.MAX_AUCTION);
                 return;
@@ -198,13 +195,11 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.expire_add_help_description}")
     public void onExpire(Player playerSender) {
 
-        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-        chain.asyncFirst(() -> expireCommandManager.getAuctions(playerSender.getUniqueId())).sync(auctions -> {
+        FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
             ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1);
             gui.initializeItems();
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
-            return null;
         }).execute();
 
     }

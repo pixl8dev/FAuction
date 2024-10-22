@@ -33,15 +33,21 @@ public class FAuction extends JavaPlugin {
     private static TaskChainFactory taskChainFactory;
 
     private ConfigurationManager configurationManager;
+
     private AuctionQueries auctionQueries;
+
     private ExpireQueries expireQueries;
 
     private CommandManager commandManager;
+
     private VaultIntegrationManager vaultIntegrationManager;
+
     private DatabaseManager databaseManager;
+
     private LimitationManager limitationManager;
 
     private AuctionCommandManager auctionCommandManager;
+
     private ExpireCommandManager expireCommandManager;
 
     private boolean placeholderAPIEnabled = false;
@@ -199,8 +205,8 @@ public class FAuction extends JavaPlugin {
 
 
     public void transfertBDD(boolean toPaper) {
-        TaskChain<Map<Integer, byte[]>> chain = FAuction.newChain();
-        chain.asyncFirst(() -> getAuctionQueries().getAuctionsBrut()).async(auctions -> {
+
+        FAuction.newChain().asyncFirst(() -> getAuctionQueries().getAuctionsBrut()).asyncLast(auctions -> {
             try {
                 for (Map.Entry<Integer, byte[]> entry : auctions.entrySet()) {
                     if (toPaper) {
@@ -214,11 +220,9 @@ public class FAuction extends JavaPlugin {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return null;
         }).execute();
 
-        TaskChain<Map<Integer, byte[]>> chainExpires = FAuction.newChain();
-        chainExpires.asyncFirst(() -> getExpireQueries().getExpiresBrut()).async(expires -> {
+        FAuction.newChain().asyncFirst(() -> getExpireQueries().getExpiresBrut()).asyncLast(expires -> {
             try {
                 for (Map.Entry<Integer, byte[]> entry : expires.entrySet()) {
                     if (toPaper) {
@@ -232,7 +236,6 @@ public class FAuction extends JavaPlugin {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            return null;
         }).execute();
     }
 }

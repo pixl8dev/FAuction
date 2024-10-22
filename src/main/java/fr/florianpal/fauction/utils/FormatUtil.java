@@ -14,8 +14,6 @@ public class FormatUtil {
         while (match.find()) {
             String color = msg.substring(match.start(), match.end());
             String replace = color;
-            color = color.replace("{", "");
-            color = color.replace("}", "");
             msg = msg.replace(replace, ChatColor.of(color) + "");
             match = pattern.matcher(msg);
         }

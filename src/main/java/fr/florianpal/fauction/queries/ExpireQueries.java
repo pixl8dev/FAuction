@@ -27,7 +27,10 @@ public class ExpireQueries implements IDatabaseTable {
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
+    private final FAuction plugin;
+
     public ExpireQueries(FAuction plugin) {
+        this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
         if (plugin.getConfigurationManager().getDatabase().getSqlType() == SQLType.SQLite) {
             autoIncrement = "AUTOINCREMENT";
@@ -35,7 +38,7 @@ public class ExpireQueries implements IDatabaseTable {
         }
     }
 
-    public void addAuction(UUID playerUUID, String playerName, byte[] item, double price, Date date) {
+    public void addExpire(UUID playerUUID, String playerName, byte[] item, double price, Date date) {
         PreparedStatement statement = null;
         try (Connection connection = databaseManager.getConnection()) {
             statement = connection.prepareStatement(ADD_AUCTION);
@@ -46,14 +49,14 @@ public class ExpireQueries implements IDatabaseTable {
             statement.setLong(5, date.getTime());
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when add expired auction to database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (statement != null) {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
 
@@ -69,33 +72,33 @@ public class ExpireQueries implements IDatabaseTable {
             statement.setInt(2, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when update expired auction to database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (statement != null) {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
 
     }
 
-    public void deleteAuctions(int id) {
+    public void deleteExpire(int id) {
         PreparedStatement statement = null;
         try (Connection connection = databaseManager.getConnection()) {
             statement = connection.prepareStatement(DELETE_AUCTION);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when delete expired auction to database. Error {} ", e.getMessage()));
         } finally {
             if (statement != null) {
                 try {
                     statement.close();
                 } catch (SQLException e) {
-                    e.printStackTrace();
+                    plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
                 }
             }
         }
@@ -119,7 +122,7 @@ public class ExpireQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get expired auction from database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -129,13 +132,13 @@ public class ExpireQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
     }
 
-    public List<Auction> getAuctions() {
+    public List<Auction> getExpires() {
         List<Auction> auctions = new ArrayList<>();
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -157,7 +160,7 @@ public class ExpireQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get expired auctions from database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -167,13 +170,13 @@ public class ExpireQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
     }
 
-    public List<Auction> getAuctions(UUID playerUuid) {
+    public List<Auction> getExpires(UUID playerUuid) {
 
         PreparedStatement statement = null;
         ResultSet result = null;
@@ -195,7 +198,7 @@ public class ExpireQueries implements IDatabaseTable {
             }
             return auctions;
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get expired auctions by uuid from database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -205,7 +208,7 @@ public class ExpireQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return auctions;
@@ -230,7 +233,7 @@ public class ExpireQueries implements IDatabaseTable {
                 return new Auction(id, playerUuid, playerName, price, item, date);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            plugin.getLogger().severe(String.join("Error when get auction by id for database. Error {} ", e.getMessage()));
         } finally {
             try {
                 if (result != null) {
@@ -240,7 +243,7 @@ public class ExpireQueries implements IDatabaseTable {
                     statement.close();
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
         return null;

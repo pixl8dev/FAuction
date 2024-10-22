@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.schedules;
 
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Auction;
 
@@ -20,8 +19,7 @@ public class ExpireSchedule implements Runnable {
 
     @Override
     public void run() {
-        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-        chain.asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions()).sync(auctionList -> {
+        FAuction.newChain().asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions()).syncLast(auctionList -> {
             this.auctions = auctionList;
             for (Auction auction : this.auctions) {
                 Calendar cal = Calendar.getInstance();
@@ -32,8 +30,6 @@ public class ExpireSchedule implements Runnable {
                     plugin.getAuctionCommandManager().deleteAuction(auction.getId());
                 }
             }
-            return null;
         }).execute();
-
     }
 }

@@ -202,11 +202,10 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
         for (Barrier previous : playerViewConfig.getPreviousBlocks()) {
             if (e.getRawSlot() == previous.getIndex() && this.page > 1) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                     PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions,this.page - 1);
                     gui.initializeItems();
-                    return null;
                 }).execute();
 
                 return;
@@ -214,27 +213,27 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         }
         for (Barrier next : playerViewConfig.getNextBlocks()) {
             if (e.getRawSlot() == next.getIndex() && ((this.playerViewConfig.getAuctionBlocks().size() * this.page) - this.playerViewConfig.getAuctionBlocks().size() < auctions.size() - this.playerViewConfig.getAuctionBlocks().size()) && next.getMaterial() != next.getRemplacement().getMaterial()) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                     PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions,this.page + 1);
                     gui.initializeItems();
-                    return null;
                 }).execute();
                 return;
             }
         }
         for (Barrier expire : playerViewConfig.getExpireBlocks()) {
             if (e.getRawSlot() == expire.getIndex()) {
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).sync(auctions -> {
+
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, 1);
                     gui.initializeItems();
-                    return null;
                 }).execute();
+                return;
             }
         }
         for (Barrier close : playerViewConfig.getCloseBlocks()) {
             if (e.getRawSlot() == close.getIndex()) {
+
                 player.closeInventory();
                 return;
             }
@@ -243,13 +242,10 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         for (Barrier expire : playerViewConfig.getPlayerBlocks()) {
             if (e.getRawSlot() == expire.getIndex()) {
 
-                TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                     AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1, null);
                     gui.initializeItems();
-                    return null;
                 }).execute();
-
                 return;
             }
         }
@@ -270,18 +266,18 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         for (int index : playerViewConfig.getAuctionBlocks()) {
             if (index == e.getRawSlot()) {
                 int nb0 = playerViewConfig.getAuctionBlocks().get(0);
-                int nb = ((e.getRawSlot() - nb0)) / 9;
+                int nb = (e.getRawSlot() - nb0) / 9;
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.playerViewConfig.getAuctionBlocks().size() * this.page) - this.playerViewConfig.getAuctionBlocks().size()) - nb * 2);
 
                 if (e.isRightClick()) {
                     TaskChain<Auction> chainAuction = FAuction.newChain();
-                    chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).sync(a -> {
+                    chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).syncLast(a -> {
                         if (a == null) {
-                            return null;
+                            return;
                         }
 
                         if (!a.getPlayerUuid().equals(player.getUniqueId())) {
-                            return null;
+                            return;
                         }
 
 
@@ -300,13 +296,10 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
                         player.closeInventory();
 
-                        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                        chain.asyncFirst(auctionCommandManager::getAuctions).sync(auctions -> {
+                        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                             PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page);
                             gui.initializeItems();
-                            return null;
                         }).execute();
-                        return null;
                     }).execute();
                 }
                 break;
