@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>Florianpal</groupId>
+    <groupId>fr.florianpal</groupId>
     <artifactId>FAuction</artifactId>
-    <version>1.5.6.8</version>
+    <version>1.5.6.9</version>
     <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>

@@ -195,7 +195,7 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.expire_add_help_description}")
     public void onExpire(Player playerSender) {
 
-        FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
+        FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(auctions -> {
             ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1);
             gui.initializeItems();
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);

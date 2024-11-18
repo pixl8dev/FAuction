@@ -16,23 +16,23 @@ public class ExpireCommandManager {
         this.expireQueries = plugin.getExpireQueries();
     }
 
-    public List<Auction> getAuctions() {
+    public List<Auction> getExpires() {
         return expireQueries.getExpires();
     }
 
-    public List<Auction> getAuctions(UUID uuid) {
+    public List<Auction> getExpires(UUID uuid) {
         return expireQueries.getExpires(uuid);
     }
 
-    public void addAuction(Auction auction)  {
+    public void addExpire(Auction auction)  {
         expireQueries.addExpire(auction.getPlayerUuid(), auction.getPlayerName(), SerializationUtil.serialize(auction.getItemStack()), auction.getPrice(), auction.getDate());
     }
 
-    public void deleteAuction(int id) {
+    public void deleteExpire(int id) {
         expireQueries.deleteExpire(id);
     }
 
-    public Auction auctionExist(int id) {
-        return expireQueries.getAuction(id);
+    public Auction expireExist(int id) {
+        return expireQueries.getExpire(id);
     }
 }

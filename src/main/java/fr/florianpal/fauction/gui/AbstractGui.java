@@ -51,7 +51,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.player = player;
         this.page = page;
         this.commandManager = plugin.getCommandManager();
-        inv = null;
+        this.inv = null;
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         this.auctionCommandManager = plugin.getAuctionCommandManager();
         this.expireCommandManager = plugin.getExpireCommandManager();

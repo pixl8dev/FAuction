@@ -187,7 +187,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
         for (Barrier previous : expireGuiConfig.getPreviousBlocks()) {
             if (e.getRawSlot() == previous.getIndex() && this.page > 1) {
 
-                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, this.page - 1);
                     gui.initializeItems();
                 }).execute();
@@ -197,7 +197,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
         for (Barrier next : expireGuiConfig.getNextBlocks()) {
             if (e.getRawSlot() == next.getIndex() && ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size() < auctions.size() - this.expireGuiConfig.getExpireBlocks().size()) && next.getMaterial() != next.getRemplacement().getMaterial()) {
 
-                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, this.page + 1);
                     gui.initializeItems();
                 }).execute();
@@ -243,7 +243,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size()) - nb * 2);
 
                 if (e.isLeftClick()) {
-                    FAuction.newChain().asyncFirst(() -> expireCommandManager.auctionExist(auction.getId())).syncLast(a -> {
+                    FAuction.newChain().asyncFirst(() -> expireCommandManager.expireExist(auction.getId())).syncLast(a -> {
 
                         if (a == null) {
                             return;
@@ -259,12 +259,12 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                             player.getInventory().addItem(a.getItemStack());
                         }
 
-                        expireCommandManager.deleteAuction(a.getId());
+                        expireCommandManager.deleteExpire(a.getId());
                         auctions.remove(a);
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
 
-                        FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+                        FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                             ExpireGui gui = new ExpireGui(plugin, player, auctions, 1);
                             gui.initializeItems();
                         }).execute();

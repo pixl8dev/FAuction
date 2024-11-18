@@ -26,7 +26,7 @@ public class ExpireSchedule implements Runnable {
                 cal.setTime(auction.getDate());
                 cal.add(Calendar.SECOND, plugin.getConfigurationManager().getGlobalConfig().getTime());
                 if (cal.getTime().getTime() <= Calendar.getInstance().getTime().getTime()) {
-                    plugin.getExpireCommandManager().addAuction(auction);
+                    plugin.getExpireCommandManager().addExpire(auction);
                     plugin.getAuctionCommandManager().deleteAuction(auction.getId());
                 }
             }

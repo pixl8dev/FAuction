@@ -163,23 +163,21 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                 if (!confirm.isValue()) {
                     issuerTarget.sendInfo(MessageKeys.BUY_AUCTION_CANCELLED);
                     player.getOpenInventory().close();
-                    TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
 
-                    chain.asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+                    FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                         AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
                         gui.initializeItems();
                     }).execute();
                     return;
                 }
 
-                TaskChain<Auction> chainAuction = FAuction.newChain();
-                chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(a -> {
+                FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(a -> {
                     if (a == null) {
                         issuerTarget.sendInfo(MessageKeys.NO_AUCTION);
                         return;
                     }
-                    TaskChain<Auction> chainAuction2 = FAuction.newChain();
-                    chainAuction2.asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(auctionGood -> {
+
+                    FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(auctionGood -> {
                         if (auctionGood == null) {
                             issuerTarget.sendInfo(MessageKeys.AUCTION_ALREADY_SELL);
                             return;
@@ -226,8 +224,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                         plugin.getLogger().info("Player : " + player.getName() + " buy " + auctionGood.getItemStack().getItemMeta().getDisplayName() + " at " + auctionGood.getPlayerName());
 
                         player.getOpenInventory().close();
-                        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                        chain.asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+                        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                             AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
                             gui.initializeItems();
                         }).execute();

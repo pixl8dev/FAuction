@@ -13,13 +13,13 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class ExpireQueries implements IDatabaseTable {
-    private static final String GET_AUCTIONS = "SELECT * FROM expires";
-    private static final String GET_AUCTION_WITH_ID = "SELECT * FROM expires WHERE id=?";
-    private static final String GET_AUCTIONS_BY_UUID = "SELECT * FROM expires WHERE playerUuid=?";
-    private static final String ADD_AUCTION = "INSERT INTO expires (playerUuid, playerName, item, price, date) VALUES(?,?,?,?,?)";
+    private static final String GET_EXPIRES = "SELECT * FROM expires";
+    private static final String GET_EXPIRE_WITH_ID = "SELECT * FROM expires WHERE id=?";
+    private static final String GET_EXPIRE_BY_UUID = "SELECT * FROM expires WHERE playerUuid=?";
+    private static final String ADD_EXPIRE = "INSERT INTO expires (playerUuid, playerName, item, price, date) VALUES(?,?,?,?,?)";
 
     private static final String UPDATE_ITEM = "UPDATE expires set item=? where id=?";
-    private static final String DELETE_AUCTION = "DELETE FROM expires WHERE id=?";
+    private static final String DELETE_EXPIRE = "DELETE FROM expires WHERE id=?";
 
     private final DatabaseManager databaseManager;
 
@@ -41,7 +41,7 @@ public class ExpireQueries implements IDatabaseTable {
     public void addExpire(UUID playerUUID, String playerName, byte[] item, double price, Date date) {
         PreparedStatement statement = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(ADD_AUCTION);
+            statement = connection.prepareStatement(ADD_EXPIRE);
             statement.setString(1, playerUUID.toString());
             statement.setString(2, playerName);
             statement.setBytes(3, item);
@@ -88,7 +88,7 @@ public class ExpireQueries implements IDatabaseTable {
     public void deleteExpire(int id) {
         PreparedStatement statement = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(DELETE_AUCTION);
+            statement = connection.prepareStatement(DELETE_EXPIRE);
             statement.setInt(1, id);
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -110,7 +110,7 @@ public class ExpireQueries implements IDatabaseTable {
         ResultSet result = null;
         Map<Integer, byte[]> auctions = new HashMap<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_AUCTIONS);
+            statement = connection.prepareStatement(GET_EXPIRES);
 
             result = statement.executeQuery();
 
@@ -143,7 +143,7 @@ public class ExpireQueries implements IDatabaseTable {
         PreparedStatement statement = null;
         ResultSet result = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_AUCTIONS);
+            statement = connection.prepareStatement(GET_EXPIRES);
 
             result = statement.executeQuery();
 
@@ -182,7 +182,7 @@ public class ExpireQueries implements IDatabaseTable {
         ResultSet result = null;
         ArrayList<Auction> auctions = new ArrayList<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_AUCTIONS_BY_UUID);
+            statement = connection.prepareStatement(GET_EXPIRE_BY_UUID);
             statement.setString(1, playerUuid.toString());
             result = statement.executeQuery();
 
@@ -214,11 +214,11 @@ public class ExpireQueries implements IDatabaseTable {
         return auctions;
     }
 
-    public Auction getAuction(int id) {
+    public Auction getExpire(int id) {
         PreparedStatement statement = null;
         ResultSet result = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_AUCTION_WITH_ID);
+            statement = connection.prepareStatement(GET_EXPIRE_WITH_ID);
             statement.setInt(1, id);
             result = statement.executeQuery();
 

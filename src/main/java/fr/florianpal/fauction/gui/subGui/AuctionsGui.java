@@ -216,6 +216,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                     AuctionsGui gui = new AuctionsGui(plugin, player, auctions, this.page - 1, category);
                     gui.initializeItems();
                 }).execute();
+                return;
             }
         }
         for (Barrier next : auctionConfig.getNextBlocks()) {
@@ -231,7 +232,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
         for (Barrier expire : auctionConfig.getExpireBlocks()) {
             if (e.getRawSlot() == expire.getIndex()) {
 
-                FAuction.newChain().asyncFirst(() -> expireCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                     ExpireGui gui = new ExpireGui(plugin, player, auctions, 1);
                     gui.initializeItems();
                 }).execute();
@@ -292,8 +293,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.auctionConfig.getAuctionBlocks().size() * this.page) - this.auctionConfig.getAuctionBlocks().size()) - nb * 2);
 
                 if (e.isRightClick()) {
-                    TaskChain<Auction> chainAuction = FAuction.newChain();
-                    chainAuction.asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).syncLast(a -> {
+                    FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).syncLast(a -> {
 
                         if (a == null) {
                             return;
@@ -314,7 +314,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
                         auctionCommandManager.deleteAuction(a.getId());
                         if (isModCanCancel) {
-                            plugin.getExpireCommandManager().addAuction(a);
+                            plugin.getExpireCommandManager().addExpire(a);
                             plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
                         } else {
                             plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
@@ -325,8 +325,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
                         player.closeInventory();
 
-                        TaskChain<ArrayList<Auction>> chain = FAuction.newChain();
-                        chain.asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+                        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                             AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, category);
                             gui.initializeItems();
                         }).execute();
