@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import co.aikar.commands.CommandIssuer;
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
@@ -25,6 +24,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface {
 
@@ -40,7 +40,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
         this.category = category;
 
         if (!category.containsAll()) {
-            this.auctions = auctions.stream().filter(a -> this.category.getMaterials().contains(a.getItemStack().getType())).toList();
+            this.auctions = auctions.stream().filter(a -> this.category.getMaterials().contains(a.getItemStack().getType())).collect(Collectors.toList());
         }
 
         initGui(auctionConfig.getNameGui(), auctionConfig.getSize());

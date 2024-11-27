@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import co.aikar.commands.CommandIssuer;
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
 import fr.florianpal.fauction.gui.AbstractGui;
@@ -20,6 +19,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
@@ -117,14 +117,17 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
     }
 
     public ItemStack createGuiItem(Material material, String name, List<String> description) {
+
         ItemStack item = new ItemStack(material, 1);
         ItemMeta meta = item.getItemMeta();
         name = FormatUtil.format(name);
+
         List<String> descriptions = new ArrayList<>();
         for (String desc : description) {
             desc = FormatUtil.format(desc);
             descriptions.add(desc);
         }
+
         if (meta != null) {
             meta.setDisplayName(name);
             meta.setLore(descriptions);
@@ -208,16 +211,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                         }
 
                         if (plugin.getConfigurationManager().getGlobalConfig().isOnBuyCommandUse()) {
-                            String command = plugin.getConfigurationManager().getGlobalConfig().getOnBuyCommand();
-                            command = command.replace("{OwnerName}", auctionGood.getPlayerName());
-                            command = command.replace("{Amount}", String.valueOf(auctionGood.getItemStack().getAmount()));
-                            if (!auctionGood.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("")) {
-                                command = command.replace("{ItemName}", auctionGood.getItemStack().getItemMeta().getDisplayName());
-                            } else {
-                                command = command.replace("{ItemName}", auctionGood.getItemStack().getType().name().replace('_', ' ').toLowerCase());
-                            }
-                            command = command.replace("{BuyerName}", player.getName());
-                            command = command.replace("{ItemPrice}", String.valueOf(auctionGood.getPrice()));
+                            String command = getCommand(auctionGood);
                             getServer().dispatchCommand(getServer().getConsoleSender(), command);
                         }
 
@@ -233,5 +227,20 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                 break;
             }
         }
+    }
+
+    @NotNull
+    private String getCommand(Auction auctionGood) {
+        String command = plugin.getConfigurationManager().getGlobalConfig().getOnBuyCommand();
+        command = command.replace("{OwnerName}", auctionGood.getPlayerName());
+        command = command.replace("{Amount}", String.valueOf(auctionGood.getItemStack().getAmount()));
+        if (!auctionGood.getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+            command = command.replace("{ItemName}", auctionGood.getItemStack().getItemMeta().getDisplayName());
+        } else {
+            command = command.replace("{ItemName}", auctionGood.getItemStack().getType().name().replace('_', ' ').toLowerCase());
+        }
+        command = command.replace("{BuyerName}", player.getName());
+        command = command.replace("{ItemPrice}", String.valueOf(auctionGood.getPrice()));
+        return command;
     }
 }

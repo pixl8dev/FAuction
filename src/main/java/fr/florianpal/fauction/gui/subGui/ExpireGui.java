@@ -239,7 +239,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                 }
 
                 int nb0 = expireGuiConfig.getExpireBlocks().get(0);
-                int nb = ((e.getRawSlot() - nb0)) / 9;
+                int nb = (e.getRawSlot() - nb0) / 9;
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.expireGuiConfig.getExpireBlocks().size() * this.page) - this.expireGuiConfig.getExpireBlocks().size()) - nb * 2);
 
                 if (e.isLeftClick()) {

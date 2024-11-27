@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import co.aikar.commands.CommandIssuer;
-import co.aikar.taskchain.TaskChain;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
@@ -24,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterface {
 
@@ -33,7 +33,8 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     public PlayerViewGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
         super(plugin, player, page, auctions, plugin.getConfigurationManager().getPlayerViewConfig());
-        this.auctions = auctions.stream().filter(a -> a.getPlayerUuid().equals(player.getUniqueId())).toList();this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
+        this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
+        this.auctions = auctions.stream().filter(a -> a.getPlayerUuid().equals(player.getUniqueId())).collect(Collectors.toList());
         initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
     }
 
@@ -142,6 +143,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
             if (playerViewConfig.isReplaceTitle()) {
                 meta.setDisplayName(title);
             }
+
             meta.setLore(listDescription);
             item.setItemMeta(meta);
         }
