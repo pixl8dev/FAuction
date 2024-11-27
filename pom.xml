@@ -6,7 +6,7 @@
 
     <groupId>fr.florianpal</groupId>
     <artifactId>FAuction</artifactId>
-    <version>1.5.6.9</version>
+    <version>1.5.7.0</version>
     <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -40,6 +40,11 @@
                         <relocation>
                             <pattern>co.aikar.commands</pattern>
                             <shadedPattern>fr.florianpal.fauction.acf</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>org.bstats</pattern>
+                            <!-- Replace this with your package! -->
+                            <shadedPattern>fr.florianpal.fauction.bstats</shadedPattern>
                         </relocation>
                     </relocations>
 
@@ -143,6 +148,13 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bstats</groupId>
+            <artifactId>bstats-bukkit</artifactId>
+            <version>3.0.2</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 

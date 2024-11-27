@@ -17,6 +17,7 @@ import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.SerializationUtil;
 import io.papermc.lib.PaperLib;
 import me.clip.placeholderapi.PlaceholderAPI;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.ItemStack;
@@ -52,6 +53,8 @@ public class FAuction extends JavaPlugin {
 
     private boolean placeholderAPIEnabled = false;
 
+    private Metrics metrics;
+
     public static <T> TaskChain<T> newChain() {
         return taskChainFactory.newChain();
     }
@@ -62,6 +65,8 @@ public class FAuction extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        metrics = new Metrics(this, 24018);
         PaperLib.suggestPaper(this);
 
         taskChainFactory = BukkitTaskChainFactory.create(this);
