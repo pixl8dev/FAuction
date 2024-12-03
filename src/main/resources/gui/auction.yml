@@ -1,7 +1,7 @@
 gui:
   size: 54
   type: CHEST
-  name: "Auction house {Page}/{TotalPage}"
+  name: "Auction House {Page}/{TotalPage}"
   title: "&eItem : &6{ItemName}"
   replaceTitle: true
   description:
@@ -213,11 +213,6 @@ block:
     title: "&5My Items"
     description:
       - "&eClick here to see your items for sale"
-    replacement:
-      material: NETHER_STAR
-      title: "&5Back to the auction house"
-      description:
-        - "&eClick here to return to the auction house"
   '53':
     utility: close
     material: BARRIER

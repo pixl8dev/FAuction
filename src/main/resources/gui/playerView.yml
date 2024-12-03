@@ -195,7 +195,7 @@ block:
     material: ARROW
     title: "&5Next Page"
     description:
-      - "&e Click here to go to the next page"
+      - "&eClick here to go to the next page"
     replacement:
       material: AIR
       title: "-"
@@ -208,7 +208,7 @@ block:
   '52':
     utility: player
     material: NETHER_STAR
-    title: "&5Back to the auction house"
+    title: "&cBack to the auction house"
     description:
       - "&eClick here to return to the auction house"
   '53':
