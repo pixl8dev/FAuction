@@ -7,10 +7,7 @@ import fr.florianpal.fauction.commands.AuctionCommand;
 import fr.florianpal.fauction.managers.ConfigurationManager;
 import fr.florianpal.fauction.managers.DatabaseManager;
 import fr.florianpal.fauction.managers.VaultIntegrationManager;
-import fr.florianpal.fauction.managers.commandManagers.AuctionCommandManager;
-import fr.florianpal.fauction.managers.commandManagers.CommandManager;
-import fr.florianpal.fauction.managers.commandManagers.ExpireCommandManager;
-import fr.florianpal.fauction.managers.commandManagers.LimitationManager;
+import fr.florianpal.fauction.managers.commandManagers.*;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.schedules.ExpireSchedule;
@@ -53,6 +50,8 @@ public class FAuction extends JavaPlugin {
 
     private boolean placeholderAPIEnabled = false;
 
+    private LuckPermsImplementation luckPermsImplementation;
+
     private Metrics metrics;
 
     public static <T> TaskChain<T> newChain() {
@@ -73,6 +72,9 @@ public class FAuction extends JavaPlugin {
 
         configurationManager = new ConfigurationManager(this);
 
+        if (configurationManager.getGlobalConfig().isLimitationsUseMetaLuckperms()) {
+            luckPermsImplementation = new LuckPermsImplementation();
+        }
 
         File languageFile = new File(getDataFolder(), "lang_" + configurationManager.getGlobalConfig().getLang() + ".yml");
         createDefaultConfiguration(languageFile, "lang_" + configurationManager.getGlobalConfig().getLang() + ".yml");
@@ -242,5 +244,9 @@ public class FAuction extends JavaPlugin {
                 throw new RuntimeException(e);
             }
         }).execute();
+    }
+
+    public LuckPermsImplementation getLuckPermsImplementation() {
+        return luckPermsImplementation;
     }
 }

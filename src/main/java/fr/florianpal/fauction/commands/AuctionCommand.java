@@ -177,7 +177,16 @@ public class AuctionCommand extends BaseCommand {
         }
 
         FAuction.newChain().asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
-            if (plugin.getLimitationManager().getAuctionLimitation(playerSender) <= auctions.size()) {
+
+            int limitations = -1;
+            if (plugin.getConfigurationManager().getGlobalConfig().isLimitationsUseMetaLuckperms()) {
+                limitations = plugin.getLimitationManager().getAuctionLimitationByMeta(playerSender);
+            } else {
+                plugin.getLimitationManager().getAuctionLimitationByConfig(playerSender);
+            }
+
+
+            if (limitations != -1 && limitations <= auctions.size()) {
                 issuerTarget.sendInfo(MessageKeys.MAX_AUCTION);
                 return;
             }

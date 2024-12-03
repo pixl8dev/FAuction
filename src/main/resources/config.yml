@@ -9,6 +9,8 @@ onBuy:
 expiration:
   time: 3600 #In seconds
   checkEvery: 72000 #In ticks
+
+limitations-use-meta-luckperms: false
 limitations: # Number of auction per rank
   default: 5
 min-price-default:

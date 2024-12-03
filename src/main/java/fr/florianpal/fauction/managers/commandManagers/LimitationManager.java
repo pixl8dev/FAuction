@@ -2,6 +2,7 @@ package fr.florianpal.fauction.managers.commandManagers;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Auction;
+import net.luckperms.api.cacheddata.CachedMetaData;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 
@@ -16,7 +17,7 @@ public class LimitationManager {
         this.plugin = plugin;
     }
 
-    public int getAuctionLimitation(Player player) {
+    public int getAuctionLimitationByConfig(Player player) {
         Permission perms = plugin.getVaultIntegrationManager().getPerms();
         Map<String, Integer> limitations = plugin.getConfigurationManager().getGlobalConfig().getLimitations();
         String[] playerGroup;
@@ -35,4 +36,9 @@ public class LimitationManager {
         }
         return limit;
     }
+
+    public int getAuctionLimitationByMeta(Player player) {
+        return plugin.getLuckPermsImplementation().getMetaData(player);
+    }
+
 }

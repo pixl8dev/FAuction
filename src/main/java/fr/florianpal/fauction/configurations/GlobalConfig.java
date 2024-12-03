@@ -19,6 +19,8 @@ public class GlobalConfig {
     private String dateFormat;
 
     private String onBuyCommand;
+
+    private boolean limitationsUseMetaLuckperms = false;
     private Map<String, Integer> limitations = new HashMap<>();
     private Map<Material, Double> minPrice = new HashMap<>();
 
@@ -52,6 +54,7 @@ public class GlobalConfig {
         maxPrice = new HashMap<>();
         blacklistItem = new ArrayList<>();
 
+        limitationsUseMetaLuckperms = config.getBoolean("limitations-use-meta-luckperms", false);
         limitations = new HashMap<>();
         for (String limitationGroup : config.getConfigurationSection("limitations").getKeys(false)) {
             limitations.put(limitationGroup, config.getInt("limitations." + limitationGroup));
@@ -148,5 +151,9 @@ public class GlobalConfig {
 
     public List<Material> getBlacklistItem() {
         return blacklistItem;
+    }
+
+    public boolean isLimitationsUseMetaLuckperms() {
+        return limitationsUseMetaLuckperms;
     }
 }
