@@ -1,4 +1,4 @@
-package fr.florianpal.fauction.managers.commandManagers;
+package fr.florianpal.fauction.managers.commandmanagers;
 
 import co.aikar.commands.MessageType;
 import co.aikar.commands.PaperCommandManager;

@@ -1,4 +1,4 @@
-package fr.florianpal.fauction.managers.commandManagers;
+package fr.florianpal.fauction.managers.implementations;
 
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.cacheddata.CachedMetaData;

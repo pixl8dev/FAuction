@@ -1,12 +1,9 @@
-package fr.florianpal.fauction.managers.commandManagers;
+package fr.florianpal.fauction.managers.commandmanagers;
 
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.objects.Auction;
-import net.luckperms.api.cacheddata.CachedMetaData;
 import net.milkbowl.vault.permission.Permission;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.Map;
 
 public class LimitationManager {

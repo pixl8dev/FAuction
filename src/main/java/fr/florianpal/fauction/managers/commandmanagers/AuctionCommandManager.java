@@ -1,4 +1,4 @@
-package fr.florianpal.fauction.managers.commandManagers;
+package fr.florianpal.fauction.managers.commandmanagers;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Auction;
