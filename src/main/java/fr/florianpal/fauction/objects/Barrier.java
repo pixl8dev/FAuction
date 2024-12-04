@@ -1,17 +1,13 @@
 package fr.florianpal.fauction.objects;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import fr.florianpal.fauction.utils.FormatUtil;
-import org.bukkit.Bukkit;
+import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class Barrier {
 
@@ -55,12 +51,6 @@ public class Barrier {
         } else {
 
             if (barrier.getMaterial() == Material.PLAYER_HEAD) {
-                itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
-                PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-                profile.setProperty(new ProfileProperty("textures", barrier.getTexture()));
-                ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-                SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
-                skullMeta.setPlayerProfile(profile);
 
                 List<String> descriptions = new ArrayList<>();
                 for (String desc : barrier.getDescription()) {
@@ -68,18 +58,24 @@ public class Barrier {
                     descriptions.add(desc);
                 }
 
-                skullMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
-                skullMeta.setLore(descriptions);
-                itemStack.setItemMeta(skullMeta);
+                itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
+                PlayerHeadUtil.addTexture(itemStack, barrier.getTexture());
+
+                ItemMeta itemMeta = itemStack.getItemMeta();
+                itemMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
+                itemMeta.setLore(descriptions);
+                itemStack.setItemMeta(itemMeta);
                 itemStack.setAmount(1);
             } else {
-                itemStack = new ItemStack(barrier.getMaterial(), 1);
-                ItemMeta meta = itemStack.getItemMeta();
+
                 List<String> descriptions = new ArrayList<>();
                 for (String desc : barrier.getDescription()) {
                     desc = FormatUtil.format(desc);
                     descriptions.add(desc);
                 }
+
+                itemStack = new ItemStack(barrier.getMaterial(), 1);
+                ItemMeta meta = itemStack.getItemMeta();
                 if (meta != null) {
                     meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
                     meta.setLore(descriptions);

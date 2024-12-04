@@ -11,6 +11,7 @@ import fr.florianpal.fauction.managers.commandmanagers.*;
 import fr.florianpal.fauction.managers.implementations.LuckPermsImplementation;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.queries.ExpireQueries;
+import fr.florianpal.fauction.queries.HistoricQueries;
 import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.SerializationUtil;
 import io.papermc.lib.PaperLib;
@@ -37,6 +38,8 @@ public class FAuction extends JavaPlugin {
 
     private ExpireQueries expireQueries;
 
+    private HistoricQueries historicQueries;
+
     private CommandManager commandManager;
 
     private VaultIntegrationManager vaultIntegrationManager;
@@ -48,6 +51,8 @@ public class FAuction extends JavaPlugin {
     private AuctionCommandManager auctionCommandManager;
 
     private ExpireCommandManager expireCommandManager;
+
+    private HistoricCommandManager historicCommandManager;
 
     private boolean placeholderAPIEnabled = false;
 
@@ -94,13 +99,16 @@ public class FAuction extends JavaPlugin {
         }
         auctionQueries = new AuctionQueries(this);
         expireQueries = new ExpireQueries(this);
+        historicQueries = new HistoricQueries(this);
 
         databaseManager.addRepository(expireQueries);
         databaseManager.addRepository(auctionQueries);
+        databaseManager.addRepository(historicQueries);
         databaseManager.initializeTables();
 
         auctionCommandManager = new AuctionCommandManager(this);
         expireCommandManager = new ExpireCommandManager(this);
+        historicCommandManager = new HistoricCommandManager(this);
 
         commandManager.registerCommand(new AuctionCommand(this));
 
@@ -249,5 +257,13 @@ public class FAuction extends JavaPlugin {
 
     public LuckPermsImplementation getLuckPermsImplementation() {
         return luckPermsImplementation;
+    }
+
+    public HistoricQueries getHistoricQueries() {
+        return historicQueries;
+    }
+
+    public HistoricCommandManager getHistoricCommandManager() {
+        return historicCommandManager;
     }
 }

@@ -1,16 +1,15 @@
 package fr.florianpal.fauction.gui;
 
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.AbstractGuiConfig;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.CommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
+import fr.florianpal.fauction.managers.commandmanagers.HistoricCommandManager;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.utils.FormatUtil;
-import io.papermc.lib.PaperLib;
+import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -20,11 +19,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class AbstractGui implements InventoryHolder, Listener {
 
@@ -42,7 +39,9 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
     protected final AuctionCommandManager auctionCommandManager;
 
-    protected  final ExpireCommandManager expireCommandManager;
+    protected final ExpireCommandManager expireCommandManager;
+
+    protected final HistoricCommandManager historicCommandManager;
 
     protected AbstractGuiConfig abstractGuiConfig;
 
@@ -55,6 +54,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         this.auctionCommandManager = plugin.getAuctionCommandManager();
         this.expireCommandManager = plugin.getExpireCommandManager();
+        this.historicCommandManager = plugin.getHistoricCommandManager();
         this.abstractGuiConfig = abstractGuiConfig;
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);
@@ -76,20 +76,9 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
             itemStack = new ItemStack(barrier.getMaterial(), 1);
             if (barrier.getMaterial() == Material.PLAYER_HEAD) {
-
-                if (PaperLib.isPaper()) {
-                    PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
-                    profile.setProperty(new ProfileProperty("textures", barrier.getTexture()));
-                    ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-                    SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
-                    skullMeta.setPlayerProfile(profile);
-                    itemStack.setItemMeta(skullMeta);
-                }
-
+                PlayerHeadUtil.addTexture(itemStack, barrier.getTexture());
                 itemStack.setAmount(1);
             }
-
-            ItemMeta meta = itemStack.getItemMeta();
 
             List<String> descriptions = new ArrayList<>();
             for (String desc : barrier.getDescription()) {
@@ -98,6 +87,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
                 descriptions.add(desc);
             }
 
+            ItemMeta meta = itemStack.getItemMeta();
             if (meta != null) {
                 String title = barrier.getTitle();
                 title = plugin.parsePlaceholder(player, title);

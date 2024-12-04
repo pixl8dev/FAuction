@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.objects;
 
 import fr.florianpal.fauction.utils.SerializationUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.IOException;
@@ -10,15 +9,15 @@ import java.util.UUID;
 
 public class Auction {
     private final int id;
-    private final UUID playerUuid;
+    private final UUID playerUUID;
     private final String playerName;
     private double price;
     private final ItemStack itemStack;
     private final Date date;
 
-    public Auction(int id, UUID playerUuid, String playerName, double price, byte[] item, long date) {
+    public Auction(int id, UUID playerUUID, String playerName, double price, byte[] item, long date) {
         this.id = id;
-        this.playerUuid = playerUuid;
+        this.playerUUID = playerUUID;
         this.playerName = playerName;
         this.price = price;
         try {
@@ -33,8 +32,8 @@ public class Auction {
         return id;
     }
 
-    public UUID getPlayerUuid() {
-        return playerUuid;
+    public UUID getPlayerUUID() {
+        return playerUUID;
     }
 
     public double getPrice() {
