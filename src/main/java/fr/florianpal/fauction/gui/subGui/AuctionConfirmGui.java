@@ -203,6 +203,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
                         issuerTarget.sendInfo(MessageKeys.BUY_AUCTION_SUCCESS);
                         auctionCommandManager.deleteAuction(auctionGood.getId());
+                        historicCommandManager.addHistoric(a, player.getUniqueId(), player.getName());
 
                         if (player.getInventory().firstEmpty() == -1) {
                             player.getWorld().dropItem(player.getLocation(), auctionGood.getItemStack());

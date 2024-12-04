@@ -92,7 +92,6 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                             }
                         }
 
-                        historicCommandManager.addHistoric(a, player.getUniqueId(), player.getName());
                         auctionCommandManager.deleteAuction(a.getId());
                         if (isModCanCancel) {
                             plugin.getExpireCommandManager().addExpire(a);
