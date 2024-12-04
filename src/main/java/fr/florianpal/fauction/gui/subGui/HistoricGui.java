@@ -16,9 +16,9 @@ import java.util.List;
 public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     public HistoricGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
-        super(plugin, player, page, auctions, plugin.getConfigurationManager().getPlayerViewConfig());
-        HistoricConfig playerViewConfig = plugin.getConfigurationManager().getHistoricConfig();
-        initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
+        super(plugin, player, page, auctions, plugin.getConfigurationManager().getHistoricConfig());
+        HistoricConfig historicConfig = plugin.getConfigurationManager().getHistoricConfig();
+        initGui(historicConfig.getNameGui(), historicConfig.getSize());
     }
 
     @EventHandler

@@ -115,7 +115,7 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                 );
                 expireBlocks.add(barrier);
 
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("historic")) {
+            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("historicGui")) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
                         Material.getMaterial(config.getString("block." + index + ".material")),

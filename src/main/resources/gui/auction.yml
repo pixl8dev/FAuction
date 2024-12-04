@@ -158,7 +158,7 @@ block:
     title: "&cCollect your expired items"
     description: {}
   '46':
-    utility: historic
+    utility: historicGui
     material: WRITABLE_BOOK
     title: "&cSee our item historic"
     description: { }
