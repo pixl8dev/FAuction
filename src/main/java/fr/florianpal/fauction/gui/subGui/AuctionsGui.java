@@ -5,14 +5,20 @@ import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
+import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import fr.florianpal.fauction.utils.ItemUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Barrel;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -81,6 +87,24 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
                         boolean isModCanCancel = (e.isShiftClick() && player.hasPermission("fauction.mod.cancel"));
                         if (!a.getPlayerUUID().equals(player.getUniqueId()) && !isModCanCancel) {
+
+                            InventoryVisualization inventoryVisualization = null;
+                            if (ItemUtil.isShulker(a.getItemStack())) {
+
+                                BlockStateMeta blockStateMeta = (BlockStateMeta) a.getItemStack().getItemMeta();
+                                ShulkerBox shulkerBox = (ShulkerBox) blockStateMeta.getBlockState();
+                                inventoryVisualization = new InventoryVisualization(plugin, player, shulkerBox);
+                            } else if (ItemUtil.isBarrel(a.getItemStack())) {
+
+                                BlockStateMeta blockStateMeta = (BlockStateMeta) a.getItemStack().getItemMeta();
+                                Barrel barrel = (Barrel) blockStateMeta.getBlockState();
+                                inventoryVisualization = new InventoryVisualization(plugin, player, barrel);
+                            }
+
+                            if (inventoryVisualization != null) {
+                                Bukkit.getPluginManager().registerEvents(inventoryVisualization, plugin);
+                                inventoryVisualization.open();
+                            }
                             return;
                         }
 
