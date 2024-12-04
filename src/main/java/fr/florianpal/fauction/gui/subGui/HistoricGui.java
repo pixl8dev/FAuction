@@ -1,6 +1,7 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import fr.florianpal.fauction.FAuction;
+import fr.florianpal.fauction.configurations.gui.HistoricConfig;
 import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
@@ -19,13 +20,13 @@ import java.util.stream.Collectors;
 
 public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface {
 
-    private final PlayerViewConfig playerViewConfig;
+    private final HistoricConfig playerViewConfig;
 
     private final List<LocalDateTime> spamTest = new ArrayList<>();
 
     public HistoricGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
         super(plugin, player, page, auctions, plugin.getConfigurationManager().getPlayerViewConfig());
-        this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
+        this.playerViewConfig = plugin.getConfigurationManager().getHistoricConfig();
         initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
     }
 

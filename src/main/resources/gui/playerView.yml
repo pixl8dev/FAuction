@@ -1,7 +1,7 @@
 gui:
   size: 54
   type: CHEST
-  name: "Auction house {Page}/{TotalPage}"
+  name: "Auction House {Page}/{TotalPage}"
   title: "&eItem : &6{ItemName}"
   replaceTitle: true
   description:

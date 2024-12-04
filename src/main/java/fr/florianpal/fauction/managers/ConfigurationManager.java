@@ -2,10 +2,7 @@ package fr.florianpal.fauction.managers;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.*;
-import fr.florianpal.fauction.configurations.gui.AuctionConfig;
-import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
-import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
-import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
+import fr.florianpal.fauction.configurations.gui.*;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -17,6 +14,9 @@ public class ConfigurationManager {
 
     private final AuctionConfig auctionConfig = new AuctionConfig();
     private FileConfiguration auctionConfiguration;
+
+    private final HistoricConfig historicConfig = new HistoricConfig();
+    private FileConfiguration historicConfiguration;
 
     private final PlayerViewConfig playerViewConfig = new PlayerViewConfig();
     private FileConfiguration playerViewConfiguration;
@@ -51,6 +51,10 @@ public class ConfigurationManager {
         core.createDefaultConfiguration(auctionFile, "gui/auction.yml");
         auctionConfiguration = YamlConfiguration.loadConfiguration(auctionFile);
 
+        File historicFile = new File(core.getDataFolder(), "gui/historic.yml");
+        core.createDefaultConfiguration(historicFile, "gui/historic.yml");
+        historicConfiguration = YamlConfiguration.loadConfiguration(historicFile);
+
         File myItemsFile = new File(core.getDataFolder(), "gui/playerView.yml");
         core.createDefaultConfiguration(myItemsFile, "gui/playerView.yml");
         playerViewConfiguration = YamlConfiguration.loadConfiguration(myItemsFile);
@@ -74,6 +78,7 @@ public class ConfigurationManager {
         globalConfig.load(globalConfiguration);
         categoriesConfig.load(categoriesConfiguration);
         auctionConfig.load(auctionConfiguration);
+        historicConfig.load(historicConfiguration);
         auctionConfirmConfig.load(auctionConfirmConfiguration);
         expireConfig.load(expireConfiguration);
         playerViewConfig.load(playerViewConfiguration);
@@ -105,5 +110,9 @@ public class ConfigurationManager {
 
     public CategoriesConfig getCategoriesConfig() {
         return categoriesConfig;
+    }
+
+    public HistoricConfig getHistoricConfig() {
+        return historicConfig;
     }
 }
