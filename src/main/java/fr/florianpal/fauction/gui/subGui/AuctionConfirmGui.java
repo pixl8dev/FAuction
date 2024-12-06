@@ -84,7 +84,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         title = title.replace("{Price}", df.format(confirm.getAuction().getPrice()));
         title = title.replace("{OwnerName}", confirm.getAuction().getPlayerName());
 
-        var offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
         if (offlinePlayer != null) {
             title = plugin.parsePlaceholder(offlinePlayer, title);
         }

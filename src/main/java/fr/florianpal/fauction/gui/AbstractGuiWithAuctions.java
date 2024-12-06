@@ -15,6 +15,7 @@ import fr.florianpal.fauction.utils.ListUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -161,11 +162,12 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         title = title.replace("{OwnerName}", auction.getPlayerName());
         title = title.replace("{Price}", String.valueOf(auction.getPrice()));
 
-        if (auction instanceof Historic historic) {
+        if (auction instanceof Historic) {
+            Historic historic = (Historic) auction;
             title = title.replace("{BuyerName}", historic.getPlayerBuyerName());
         }
 
-        var offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
         if (offlinePlayer != null) {
             title = plugin.parsePlaceholder(offlinePlayer, title);
         }
@@ -185,7 +187,8 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
             desc = desc.replace("{OwnerName}", auction.getPlayerName());
 
-            if (auction instanceof Historic historic) {
+            if (auction instanceof Historic) {
+                Historic historic = (Historic) auction;
                 desc = desc.replace("{BuyerName}", historic.getPlayerBuyerName());
             }
 

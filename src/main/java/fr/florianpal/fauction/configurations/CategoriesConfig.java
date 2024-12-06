@@ -32,7 +32,7 @@ public class CategoriesConfig {
 
     public Category getNext(Category category) {
         boolean next = false;
-        for (var entry : categories.entrySet()) {
+        for (Map.Entry<String, Category> entry : categories.entrySet()) {
 
             if (next) {
                 return entry.getValue();
