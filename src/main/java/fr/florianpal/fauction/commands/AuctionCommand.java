@@ -185,7 +185,7 @@ public class AuctionCommand extends BaseCommand {
             if (plugin.getConfigurationManager().getGlobalConfig().isLimitationsUseMetaLuckperms()) {
                 limitations = plugin.getLimitationManager().getAuctionLimitationByMeta(playerSender);
             } else {
-                plugin.getLimitationManager().getAuctionLimitationByConfig(playerSender);
+                limitations = plugin.getLimitationManager().getAuctionLimitationByConfig(playerSender);
             }
 
 
