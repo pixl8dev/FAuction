@@ -68,6 +68,8 @@ public class FAuction extends JavaPlugin {
         return taskChainFactory;
     }
 
+    private static FAuction api;
+
     @Override
     public void onEnable() {
 
@@ -118,6 +120,12 @@ public class FAuction extends JavaPlugin {
 
         ExpireSchedule expireSchedule = new ExpireSchedule(this);
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, expireSchedule, configurationManager.getGlobalConfig().getCheckEvery(), configurationManager.getGlobalConfig().getCheckEvery());
+
+        api = this;
+    }
+
+    public static FAuction getApi() {
+        return api;
     }
 
     public ConfigurationManager getConfigurationManager() {
