@@ -125,23 +125,23 @@
         </dependency>
         <!--Hibernate Core-->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>5.4.24.final</version>
+            <version>6.6.3.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--Hibernate HikariCP-->
         <dependency>
-            <groupId>org.hibernate</groupId>
+            <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
-            <version>5.4.2.Final</version>
+            <version>6.6.3.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--HikariCP-->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>3.3.1</version>
+            <version>4.0.3</version>
             <scope>compile</scope>
         </dependency>
         <!--TaskChain-->
