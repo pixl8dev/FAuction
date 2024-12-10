@@ -10,8 +10,6 @@ import java.util.List;
 
 public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
 
-
-
     protected List<Integer> baseBlocks = new ArrayList<>();
 
     protected List<Barrier> barrierBlocks = new ArrayList<>();

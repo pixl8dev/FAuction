@@ -9,10 +9,10 @@ import java.util.*;
 
 
 public class ExpireCommandManager {
+
     private final ExpireQueries expireQueries;
 
     private final Map<UUID, List<Auction>> cache = new HashMap<>();
-
 
     public ExpireCommandManager(FAuction plugin) {
         this.expireQueries = plugin.getExpireQueries();

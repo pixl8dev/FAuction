@@ -17,19 +17,20 @@ import java.util.*;
 
 public class HistoricQueries implements IDatabaseTable {
 
+    private final FAuction plugin;
+
+    private final DatabaseManager databaseManager;
+
+    private final GlobalConfig globalConfig;
+
     private static final String GET_HISTORICS = "SELECT * FROM fa_auctions_historic ORDER BY id ";
     private static final String GET_HISTORIC_WITH_ID = "SELECT * FROM fa_auctions_historic WHERE id=?";
     private static final String GET_HISTORICS_BY_UUID = "SELECT * FROM fa_auctions_historic WHERE playerUuid=?";
     private static final String ADD_HISTORIC = "INSERT INTO fa_auctions_historic (playerUuid, playerName, playerBuyerUuid, playerBuyerName, item, price, date) VALUES(?,?,?,?,?,?,?)";
 
-    private final DatabaseManager databaseManager;
-    private final GlobalConfig globalConfig;
-
     private String autoIncrement = "AUTO_INCREMENT";
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
-
-    private final FAuction plugin;
 
     public HistoricQueries(FAuction plugin) {
         this.plugin = plugin;

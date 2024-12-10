@@ -44,50 +44,6 @@ public class Barrier {
         this.customModelData = customModelData;
     }
 
-    public ItemStack getItemStack(Barrier barrier, boolean isRemplacement) {
-        ItemStack itemStack;
-        if (isRemplacement) {
-            itemStack = getItemStack(barrier.getRemplacement(), false);
-        } else {
-
-            if (barrier.getMaterial() == Material.PLAYER_HEAD) {
-
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = FormatUtil.format(desc);
-                    descriptions.add(desc);
-                }
-
-                itemStack = new ItemStack(Material.PLAYER_HEAD, 1);
-                PlayerHeadUtil.addTexture(itemStack, barrier.getTexture());
-
-                ItemMeta itemMeta = itemStack.getItemMeta();
-                itemMeta.setDisplayName(FormatUtil.format(barrier.getTitle())); // We set a displayName to the skull
-                itemMeta.setLore(descriptions);
-                itemStack.setItemMeta(itemMeta);
-                itemStack.setAmount(1);
-            } else {
-
-                List<String> descriptions = new ArrayList<>();
-                for (String desc : barrier.getDescription()) {
-                    desc = FormatUtil.format(desc);
-                    descriptions.add(desc);
-                }
-
-                itemStack = new ItemStack(barrier.getMaterial(), 1);
-                ItemMeta meta = itemStack.getItemMeta();
-                if (meta != null) {
-                    meta.setDisplayName(FormatUtil.format(barrier.getTitle()));
-                    meta.setLore(descriptions);
-                    itemStack.setItemMeta(meta);
-                }
-            }
-
-
-        }
-        return itemStack;
-    }
-
     public int getIndex() {
         return index;
     }

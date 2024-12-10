@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class CommandManager extends PaperCommandManager {
+
     public CommandManager(FAuction plugin) {
         super(plugin);
         this.enableUnstableAPI("help");

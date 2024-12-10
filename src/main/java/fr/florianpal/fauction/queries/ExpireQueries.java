@@ -2,6 +2,7 @@ package fr.florianpal.fauction.queries;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.IDatabaseTable;
+import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.enums.SQLType;
 import fr.florianpal.fauction.managers.DatabaseManager;
 import fr.florianpal.fauction.objects.Auction;
@@ -13,25 +14,33 @@ import java.sql.SQLException;
 import java.util.*;
 
 public class ExpireQueries implements IDatabaseTable {
+
+    private final FAuction plugin;
+
+    private final DatabaseManager databaseManager;
+
+    private final GlobalConfig globalConfig;
+
     private static final String GET_EXPIRES = "SELECT * FROM expires";
+
     private static final String GET_EXPIRE_WITH_ID = "SELECT * FROM expires WHERE id=?";
+
     private static final String GET_EXPIRE_BY_UUID = "SELECT * FROM expires WHERE playerUuid=?";
+
     private static final String ADD_EXPIRE = "INSERT INTO expires (playerUuid, playerName, item, price, date) VALUES(?,?,?,?,?)";
 
     private static final String UPDATE_ITEM = "UPDATE expires set item=? where id=?";
-    private static final String DELETE_EXPIRE = "DELETE FROM expires WHERE id=?";
 
-    private final DatabaseManager databaseManager;
+    private static final String DELETE_EXPIRE = "DELETE FROM expires WHERE id=?";
 
     private String autoIncrement = "AUTO_INCREMENT";
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
-    private final FAuction plugin;
-
     public ExpireQueries(FAuction plugin) {
         this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
+        this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         if (plugin.getConfigurationManager().getDatabase().getSqlType() == SQLType.SQLite) {
             autoIncrement = "AUTOINCREMENT";
             parameters = "";
@@ -110,7 +119,7 @@ public class ExpireQueries implements IDatabaseTable {
         ResultSet result = null;
         Map<Integer, byte[]> auctions = new HashMap<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_EXPIRES);
+            statement = connection.prepareStatement(GET_EXPIRES + globalConfig.getOrderBy());
 
             result = statement.executeQuery();
 
@@ -143,7 +152,7 @@ public class ExpireQueries implements IDatabaseTable {
         PreparedStatement statement = null;
         ResultSet result = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_EXPIRES);
+            statement = connection.prepareStatement(GET_EXPIRES + globalConfig.getOrderBy());
 
             result = statement.executeQuery();
 

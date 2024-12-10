@@ -15,28 +15,31 @@ import java.util.*;
 
 public class AuctionQueries implements IDatabaseTable {
 
+    private final FAuction plugin;
+
+    private final DatabaseManager databaseManager;
+
+    private final GlobalConfig globalConfig;
+
     private static final String GET_AUCTIONS = "SELECT * FROM auctions ORDER BY id ";
+
     private static final String GET_AUCTION_WITH_ID = "SELECT * FROM auctions WHERE id=?";
+
     private static final String GET_AUCTIONS_BY_UUID = "SELECT * FROM auctions WHERE playerUuid=?";
+
     private static final String ADD_AUCTION = "INSERT INTO auctions (playerUuid, playerName, item, price, date) VALUES(?,?,?,?,?)";
 
     private static final String UPDATE_ITEM = "UPDATE auctions set item=? where id=?";
 
     private static final String DELETE_AUCTION = "DELETE FROM auctions WHERE id=?";
 
-    private final DatabaseManager databaseManager;
-    private final GlobalConfig globalConfig;
-
     private String autoIncrement = "AUTO_INCREMENT";
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
 
-    private final FAuction plugin;
-
     public AuctionQueries(FAuction plugin) {
         this.plugin = plugin;
         this.databaseManager = plugin.getDatabaseManager();
-
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         if (plugin.getConfigurationManager().getDatabase().getSqlType() == SQLType.SQLite) {
             autoIncrement = "AUTOINCREMENT";

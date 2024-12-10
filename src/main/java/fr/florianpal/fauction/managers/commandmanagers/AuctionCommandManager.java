@@ -11,6 +11,7 @@ import java.util.*;
 
 
 public class AuctionCommandManager {
+
     private final AuctionQueries auctionQueries;
 
     private final Map<UUID, List<Auction>> cache = new HashMap<>();

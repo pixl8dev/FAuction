@@ -33,6 +33,7 @@ import static org.bukkit.Bukkit.getServer;
 public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
     private final Auction auction;
+
     protected final AuctionConfirmGuiConfig auctionConfirmConfig;
 
     private final Map<Integer, Confirm> confirmList = new HashMap<>();

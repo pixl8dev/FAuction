@@ -38,7 +38,9 @@ public class VaultIntegrationManager {
 
     private boolean setupPermissions() {
         RegisteredServiceProvider<Permission> rsp = Bukkit.getServer().getServicesManager().getRegistration(Permission.class);
-        perms = rsp.getProvider();
+        if (rsp != null) {
+            perms = rsp.getProvider();
+        }
         return perms != null;
     }
 

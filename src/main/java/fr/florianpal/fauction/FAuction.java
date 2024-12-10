@@ -33,6 +33,8 @@ import java.util.zip.ZipEntry;
 
 public class FAuction extends JavaPlugin {
 
+    private static FAuction api;
+
     private static TaskChainFactory taskChainFactory;
 
     private ConfigurationManager configurationManager;
@@ -59,12 +61,11 @@ public class FAuction extends JavaPlugin {
 
     private SpamManager spamManager;
 
-
-    private boolean placeholderAPIEnabled = false;
+    private Metrics metrics;
 
     private LuckPermsImplementation luckPermsImplementation;
 
-    private Metrics metrics;
+    private boolean placeholderAPIEnabled = false;
 
     public static <T> TaskChain<T> newChain() {
         return taskChainFactory.newChain();
@@ -73,8 +74,6 @@ public class FAuction extends JavaPlugin {
     public static TaskChainFactory getTaskChainFactory() {
         return taskChainFactory;
     }
-
-    private static FAuction api;
 
     @Override
     public void onEnable() {

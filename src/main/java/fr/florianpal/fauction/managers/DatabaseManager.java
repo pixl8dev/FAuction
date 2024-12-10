@@ -9,13 +9,17 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DatabaseManager {
+
     private final HikariConfig config = new HikariConfig();
+
     private final HikariDataSource ds;
 
     private Connection connection;
 
     private final FAuction plugin;
+
     private final ArrayList<IDatabaseTable> repositories = new ArrayList<>();
+
     public DatabaseManager(FAuction plugin) throws SQLException {
         this.plugin = plugin;
         config.setJdbcUrl(  plugin.getConfigurationManager().getDatabase().getUrl() );
@@ -27,7 +31,6 @@ public class DatabaseManager {
         ds = new HikariDataSource( config );
         this.connection = ds.getConnection();
     }
-
 
     public Connection getConnection() throws SQLException {
         if (connection.isClosed()) {

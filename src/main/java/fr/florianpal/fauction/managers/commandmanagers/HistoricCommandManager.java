@@ -17,6 +17,7 @@ public class HistoricCommandManager {
 
     public HistoricCommandManager(FAuction plugin) {
         this.historicQueries = plugin.getHistoricQueries();
+        updateCache();
     }
 
     public List<Historic> getHistorics() {

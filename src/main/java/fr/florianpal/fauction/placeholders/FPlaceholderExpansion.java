@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.placeholders;
 
-import com.sun.tools.javac.util.List;
 import fr.florianpal.fauction.FAuction;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;

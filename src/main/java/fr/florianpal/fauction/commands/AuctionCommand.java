@@ -21,23 +21,20 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 import static java.lang.Math.ceil;
 
 @CommandAlias("ah|hdv")
 public class AuctionCommand extends BaseCommand {
 
+    private final FAuction plugin;
+
     private final CommandManager commandManager;
+
     private final AuctionCommandManager auctionCommandManager;
 
     private final ExpireCommandManager expireCommandManager;
 
     private final SpamManager spamManager;
-
-    private final FAuction plugin;
 
     private final GlobalConfig globalConfig;
 

@@ -12,12 +12,19 @@ import java.util.List;
 import java.util.Map;
 
 public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
+
     private String title_true = "";
+
     private String title_false = "";
+
     private List<String> description = new ArrayList<>();
+
     private String nameGui = "";
+
     private Integer size = 27;
+
     private List<Barrier> barrierBlocks = new ArrayList<>();
+
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
     private InventoryType inventoryType;

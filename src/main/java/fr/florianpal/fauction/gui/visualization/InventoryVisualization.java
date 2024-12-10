@@ -2,11 +2,9 @@ package fr.florianpal.fauction.gui.visualization;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.gui.subGui.AuctionsGui;
-import fr.florianpal.fauction.objects.Category;
 import org.bukkit.Bukkit;
 import org.bukkit.block.Barrel;
 import org.bukkit.block.ShulkerBox;
-import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

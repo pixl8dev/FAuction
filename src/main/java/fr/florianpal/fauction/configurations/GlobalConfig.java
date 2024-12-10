@@ -41,8 +41,6 @@ public class GlobalConfig {
 
     private int updateCacheEvery;
 
-
-
     public void load(Configuration config) {
         lang = config.getString("lang");
         orderBy = config.getString("orderBy");

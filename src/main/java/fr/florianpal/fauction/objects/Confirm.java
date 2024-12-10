@@ -3,8 +3,11 @@ package fr.florianpal.fauction.objects;
 import org.bukkit.Material;
 
 public class Confirm {
+
     private Auction auction;
+
     private Material material;
+
     private final boolean value;
 
     public Confirm(Auction auction, Material material, boolean value) {

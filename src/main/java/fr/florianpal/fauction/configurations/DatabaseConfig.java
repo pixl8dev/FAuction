@@ -7,8 +7,11 @@ import org.bukkit.configuration.Configuration;
 public class DatabaseConfig {
 
     private SQLType sqlType;
+
     private String url;
+
     private String user;
+
     private String password;
 
     public void load(Configuration config) {
