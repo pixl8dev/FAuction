@@ -192,7 +192,6 @@ public class AuctionCommand extends BaseCommand {
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
         }).execute();
-
     }
 
     @Subcommand("admin reload")
