@@ -5,15 +5,18 @@ import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.utils.SerializationUtil;
 
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class ExpireCommandManager {
     private final ExpireQueries expireQueries;
 
+    private final Map<UUID, List<Auction>> cache = new HashMap<>();
+
+
     public ExpireCommandManager(FAuction plugin) {
         this.expireQueries = plugin.getExpireQueries();
+        updateCache();
     }
 
     public List<Auction> getExpires() {
@@ -34,5 +37,20 @@ public class ExpireCommandManager {
 
     public Auction expireExist(int id) {
         return expireQueries.getExpire(id);
+    }
+
+    public void updateCache() {
+        List<Auction> expires = expireQueries.getExpires();
+
+        for (Auction expire : expires) {
+            if (!cache.containsKey(expire.getPlayerUUID())) {
+                cache.put(expire.getPlayerUUID(), new ArrayList<>());
+            }
+            cache.get(expire.getPlayerUUID()).add(expire);
+        }
+    }
+
+    public Map<UUID, List<Auction>> getCache() {
+        return cache;
     }
 }

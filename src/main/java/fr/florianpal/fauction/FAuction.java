@@ -9,9 +9,11 @@ import fr.florianpal.fauction.managers.DatabaseManager;
 import fr.florianpal.fauction.managers.VaultIntegrationManager;
 import fr.florianpal.fauction.managers.commandmanagers.*;
 import fr.florianpal.fauction.managers.implementations.LuckPermsImplementation;
+import fr.florianpal.fauction.placeholders.FPlaceholderExpansion;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.queries.HistoricQueries;
+import fr.florianpal.fauction.schedules.CacheSchedule;
 import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.SerializationUtil;
 import io.papermc.lib.PaperLib;
@@ -115,11 +117,12 @@ public class FAuction extends JavaPlugin {
         commandManager.registerCommand(new AuctionCommand(this));
 
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new FPlaceholderExpansion(this).register();
             placeholderAPIEnabled = true;
         }
 
-        ExpireSchedule expireSchedule = new ExpireSchedule(this);
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, expireSchedule, configurationManager.getGlobalConfig().getCheckEvery(), configurationManager.getGlobalConfig().getCheckEvery());
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new ExpireSchedule(this), configurationManager.getGlobalConfig().getCheckEvery(), configurationManager.getGlobalConfig().getCheckEvery());
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new CacheSchedule(this), configurationManager.getGlobalConfig().getUpdateCacheEvery(), configurationManager.getGlobalConfig().getUpdateCacheEvery());
 
         api = this;
     }

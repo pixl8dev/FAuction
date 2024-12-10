@@ -7,16 +7,17 @@ import fr.florianpal.fauction.utils.SerializationUtil;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 
 public class AuctionCommandManager {
     private final AuctionQueries auctionQueries;
 
+    private final Map<UUID, List<Auction>> cache = new HashMap<>();
+
     public AuctionCommandManager(FAuction plugin) {
         this.auctionQueries = plugin.getAuctionQueries();
+        updateCache();
     }
 
     public List<Auction> getAuctions() {
@@ -38,5 +39,20 @@ public class AuctionCommandManager {
 
     public Auction auctionExist(int id) {
         return auctionQueries.getAuction(id);
+    }
+
+    public void updateCache() {
+        List<Auction> auctions = auctionQueries.getAuctions();
+
+        for (Auction auction : auctions) {
+            if (!cache.containsKey(auction.getPlayerUUID())) {
+                cache.put(auction.getPlayerUUID(), new ArrayList<>());
+            }
+            cache.get(auction.getPlayerUUID()).add(auction);
+        }
+    }
+
+    public Map<UUID, List<Auction>> getCache() {
+        return cache;
     }
 }

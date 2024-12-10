@@ -39,6 +39,8 @@ public class GlobalConfig {
     private int time;
     private int checkEvery;
 
+    private int updateCacheEvery;
+
 
 
     public void load(Configuration config) {
@@ -50,6 +52,7 @@ public class GlobalConfig {
         securityForSpammingPacket = config.getBoolean("securityForSpammingPacket", true);
         time = config.getInt("expiration.time");
         checkEvery = config.getInt("expiration.checkEvery");
+        updateCacheEvery = config.getInt("cacheUpdate", 72000);
         minPrice = new HashMap<>();
         maxPrice = new HashMap<>();
         blacklistItem = new ArrayList<>();
@@ -155,5 +158,9 @@ public class GlobalConfig {
 
     public boolean isLimitationsUseMetaLuckperms() {
         return limitationsUseMetaLuckperms;
+    }
+
+    public int getUpdateCacheEvery() {
+        return updateCacheEvery;
     }
 }
