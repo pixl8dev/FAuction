@@ -21,8 +21,6 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final ExpireGuiConfig expireGuiConfig;
 
-    private final List<LocalDateTime> spamTest = new ArrayList<>();
-
     public ExpireGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
         super(plugin, player, page, auctions, plugin.getConfigurationManager().getExpireConfig());
         this.expireGuiConfig = plugin.getConfigurationManager().getExpireConfig();
@@ -44,19 +42,8 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
             return;
         }
 
-        if (globalConfig.isSecurityForSpammingPacket()) {
-
-            LocalDateTime clickTest = LocalDateTime.now();
-            boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
-
-            if (isSpamming) {
-                plugin.getLogger().warning("Warning : Spam gui expire Pseudo : " + player.getName());
-                CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                issuerTarget.sendInfo(MessageKeys.SPAM);
-                return;
-            } else {
-                spamTest.add(clickTest);
-            }
+        if (spamManager.spamTest(player)) {
+            return;
         }
 
         for (int index : expireGuiConfig.getBaseBlocks()) {

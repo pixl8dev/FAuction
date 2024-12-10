@@ -3,6 +3,7 @@ package fr.florianpal.fauction.gui;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.AbstractGuiConfig;
+import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.CommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
@@ -43,6 +44,8 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
     protected final HistoricCommandManager historicCommandManager;
 
+    protected final SpamManager spamManager;
+
     protected AbstractGuiConfig abstractGuiConfig;
 
     protected AbstractGui(FAuction plugin, Player player, int page, AbstractGuiConfig abstractGuiConfig) {
@@ -55,6 +58,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.auctionCommandManager = plugin.getAuctionCommandManager();
         this.expireCommandManager = plugin.getExpireCommandManager();
         this.historicCommandManager = plugin.getHistoricCommandManager();
+        this.spamManager = plugin.getSpamManager();
         this.abstractGuiConfig = abstractGuiConfig;
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);

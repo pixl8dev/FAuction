@@ -6,6 +6,7 @@ import co.aikar.taskchain.TaskChainFactory;
 import fr.florianpal.fauction.commands.AuctionCommand;
 import fr.florianpal.fauction.managers.ConfigurationManager;
 import fr.florianpal.fauction.managers.DatabaseManager;
+import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.VaultIntegrationManager;
 import fr.florianpal.fauction.managers.commandmanagers.*;
 import fr.florianpal.fauction.managers.implementations.LuckPermsImplementation;
@@ -55,6 +56,9 @@ public class FAuction extends JavaPlugin {
     private ExpireCommandManager expireCommandManager;
 
     private HistoricCommandManager historicCommandManager;
+
+    private SpamManager spamManager;
+
 
     private boolean placeholderAPIEnabled = false;
 
@@ -113,6 +117,8 @@ public class FAuction extends JavaPlugin {
         auctionCommandManager = new AuctionCommandManager(this);
         expireCommandManager = new ExpireCommandManager(this);
         historicCommandManager = new HistoricCommandManager(this);
+
+        spamManager = new SpamManager(this);
 
         commandManager.registerCommand(new AuctionCommand(this));
 
@@ -276,5 +282,9 @@ public class FAuction extends JavaPlugin {
 
     public HistoricCommandManager getHistoricCommandManager() {
         return historicCommandManager;
+    }
+
+    public SpamManager getSpamManager() {
+        return spamManager;
     }
 }

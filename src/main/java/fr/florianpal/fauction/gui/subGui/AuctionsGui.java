@@ -29,8 +29,6 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
 
     private final AuctionConfig auctionConfig;
 
-    private final List<LocalDateTime> spamTest = new ArrayList<>();
-
     public AuctionsGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
         super(plugin, player, page, auctions, plugin.getConfigurationManager().getAuctionConfig());
         this.auctionConfig = plugin.getConfigurationManager().getAuctionConfig();
@@ -59,17 +57,8 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
             return;
         }
 
-        if (globalConfig.isSecurityForSpammingPacket()) {
-            LocalDateTime clickTest = LocalDateTime.now();
-            boolean isSpamming = spamTest.stream().anyMatch(d -> d.getHour() == clickTest.getHour() && d.getMinute() == clickTest.getMinute() && (d.getSecond() == clickTest.getSecond() || d.getSecond() == clickTest.getSecond() + 1 || d.getSecond() == clickTest.getSecond() - 1));
-            if (isSpamming) {
-                plugin.getLogger().warning("Warning : Spam gui auction Pseudo : " + player.getName());
-                CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                issuerTarget.sendInfo(MessageKeys.SPAM);
-                return;
-            } else {
-                spamTest.add(clickTest);
-            }
+        if (spamManager.spamTest(player)) {
+            return;
         }
 
         for (int index : auctionConfig.getBaseBlocks()) {
