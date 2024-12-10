@@ -1,12 +1,7 @@
 package fr.florianpal.fauction.objects;
 
-import fr.florianpal.fauction.utils.FormatUtil;
-import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Barrier {

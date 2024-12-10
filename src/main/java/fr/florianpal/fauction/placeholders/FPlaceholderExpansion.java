@@ -9,7 +9,6 @@ import java.util.ArrayList;
 
 public class FPlaceholderExpansion extends PlaceholderExpansion {
 
-
     private final FAuction plugin;
 
     public FPlaceholderExpansion(FAuction plugin) {

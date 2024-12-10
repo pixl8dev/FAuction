@@ -13,9 +13,9 @@ import java.util.Map;
 
 public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
-    private String title_true = "";
+    private String titleTrue = "";
 
-    private String title_false = "";
+    private String titleFalse = "";
 
     private List<String> description = new ArrayList<>();
 
@@ -27,11 +27,9 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
-    private InventoryType inventoryType;
-
     public void load(Configuration config) {
-        title_true = config.getString("gui.title-true");
-        title_false = config.getString("gui.title-false");
+        titleTrue = config.getString("gui.title-true");
+        titleFalse = config.getString("gui.title-false");
         nameGui = config.getString("gui.name");
         description = config.getStringList("gui.description");
         size = config.getInt("gui.size");
@@ -77,16 +75,11 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
         return confirmBlocks;
     }
 
-    public String getTitle_true() {
-        return title_true;
+    public String getTitleTrue() {
+        return titleTrue;
     }
 
-    public String getTitle_false() {
-        return title_false;
-    }
-
-    @Override
-    public InventoryType getType() {
-        return inventoryType;
+    public String getTitleFalse() {
+        return titleFalse;
     }
 }

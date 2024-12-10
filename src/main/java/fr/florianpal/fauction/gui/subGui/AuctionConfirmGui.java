@@ -69,9 +69,9 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         ItemMeta meta = item.getItemMeta();
         String title = "";
         if (confirm.isValue()) {
-            title = auctionConfirmConfig.getTitle_true();
+            title = auctionConfirmConfig.getTitleTrue();
         } else {
-            title = auctionConfirmConfig.getTitle_false();
+            title = auctionConfirmConfig.getTitleFalse();
         }
 
         DecimalFormat df = new DecimalFormat();
