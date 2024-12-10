@@ -160,7 +160,7 @@ public class AuctionCommand extends BaseCommand {
 
         FAuction.newChain().asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
 
-            int limitations = -1;
+            int limitations;
             if (plugin.getConfigurationManager().getGlobalConfig().isLimitationsUseMetaLuckperms()) {
                 limitations = plugin.getLimitationManager().getAuctionLimitationByMeta(playerSender);
             } else {

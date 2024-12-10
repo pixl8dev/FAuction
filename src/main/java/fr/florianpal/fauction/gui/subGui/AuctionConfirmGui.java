@@ -67,7 +67,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
     private ItemStack createGuiItem(Confirm confirm) {
         ItemStack item = new ItemStack(confirm.getMaterial(), 1);
         ItemMeta meta = item.getItemMeta();
-        String title = "";
+        String title;
         if (confirm.isValue()) {
             title = auctionConfirmConfig.getTitleTrue();
         } else {

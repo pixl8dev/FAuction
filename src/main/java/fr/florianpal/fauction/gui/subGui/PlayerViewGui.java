@@ -27,6 +27,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
     }
 
+    @Override
     public void initializeItems() {
 
         initBarrier();

@@ -62,7 +62,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
         for (int index : auctionConfig.getBaseBlocks()) {
             if (index == e.getRawSlot()) {
                 int nb0 = auctionConfig.getBaseBlocks().get(0);
-                int nb = ((e.getRawSlot() - nb0)) / 9;
+                int nb = (e.getRawSlot() - nb0) / 9;
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.auctionConfig.getBaseBlocks().size() * this.page) - this.auctionConfig.getBaseBlocks().size()) - nb * 2);
 
                 if (e.isRightClick()) {

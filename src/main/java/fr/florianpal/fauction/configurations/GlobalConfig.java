@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GlobalConfig {
 
@@ -86,7 +87,7 @@ public class GlobalConfig {
         }
 
         if (config.contains("item-blacklist")) {
-            blacklistItem = config.getStringList("item-blacklist").stream().map(Material::valueOf).toList();
+            blacklistItem = config.getStringList("item-blacklist").stream().map(Material::valueOf).collect(Collectors.toList());
         }
     }
 
