@@ -8,11 +8,17 @@ public class Confirm {
 
     private Material material;
 
+    private final String texture;
+
+    private final int customModelData;
+
     private final boolean value;
 
-    public Confirm(Auction auction, Material material, boolean value) {
+    public Confirm(Auction auction, Material material, boolean value, String texture, int customModelData) {
         this.auction = auction;
         this.material = material;
+        this.texture = texture;
+        this.customModelData = customModelData;
         this.value = value;
     }
 
@@ -34,5 +40,13 @@ public class Confirm {
 
     public boolean isValue() {
         return value;
+    }
+
+    public String getTexture() {
+        return texture;
+    }
+
+    public int getCustomModelData() {
+        return customModelData;
     }
 }
