@@ -12,6 +12,7 @@ import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.objects.Historic;
 import fr.florianpal.fauction.utils.FormatUtil;
 import fr.florianpal.fauction.utils.ListUtil;
+import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -169,7 +170,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
         if (offlinePlayer != null) {
-            title = plugin.parsePlaceholder(offlinePlayer, title);
+            title = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, title);
         }
 
         title = FormatUtil.format(title);
@@ -193,7 +194,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             }
 
             if (offlinePlayer != null) {
-                desc = plugin.parsePlaceholder(offlinePlayer, desc);
+                desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, desc);
             }
 
             desc = desc.replace("{Price}", String.valueOf(auction.getPrice()));
@@ -238,7 +239,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             List<String> descriptions = new ArrayList<>();
             for (String desc : barrier.getDescription()) {
                 desc = FormatUtil.format(desc);
-                desc = plugin.parsePlaceholder(player, desc);
+                desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), player, desc);
                 desc = desc.replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
                 descriptions.add(desc);
             }
@@ -246,7 +247,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             ItemMeta meta = itemStack.getItemMeta();
             if (meta != null) {
                 String name = barrier.getTitle().replace("{categoryDisplayName}", category != null ? category.getDisplayName() : "");
-                name = plugin.parsePlaceholder(player, name);
+                name = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), player, name);
                 meta.setDisplayName(FormatUtil.format(name));
                 meta.setLore(descriptions);
                 meta.setCustomModelData(barrier.getCustomModelData());

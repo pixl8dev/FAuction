@@ -163,7 +163,6 @@ public class AuctionQueries implements IDatabaseTable {
                 double price = result.getDouble(5);
                 long date = result.getLong(6);
 
-
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }
             return auctions;
@@ -200,7 +199,6 @@ public class AuctionQueries implements IDatabaseTable {
                 byte[] item = result.getBytes(4);
                 double price = result.getDouble(5);
                 long date = result.getLong(6);
-
 
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }

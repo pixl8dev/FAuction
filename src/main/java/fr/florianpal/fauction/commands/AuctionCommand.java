@@ -198,6 +198,7 @@ public class AuctionCommand extends BaseCommand {
     @CommandPermission("fauction.admin.reload")
     @Description("{@@fauction.reload_help_description}")
     public void onReload(Player playerSender) {
+
         CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         plugin.reloadConfiguration();
         issuerTarget.sendInfo(MessageKeys.AUCTION_RELOAD);
@@ -207,8 +208,9 @@ public class AuctionCommand extends BaseCommand {
     @CommandPermission("fauction.admin.transfertBddToPaper")
     @Description("{@@fauction.transfert_bdd_help_description}")
     public void onTransferBddPaper(Player playerSender) {
+
         CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-        plugin.transfertBDD(true);
+        plugin.getTransfertManager().transfertBDD(true);
         issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
     }
 
@@ -216,8 +218,9 @@ public class AuctionCommand extends BaseCommand {
     @CommandPermission("fauction.admin.transfertBddToPaper")
     @Description("{@@fauction.transfert_bdd_help_description}")
     public void onTransferBddSpigot(Player playerSender) {
+
         CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-        plugin.transfertBDD(false);
+        plugin.getTransfertManager().transfertBDD(false);
         issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
     }
 

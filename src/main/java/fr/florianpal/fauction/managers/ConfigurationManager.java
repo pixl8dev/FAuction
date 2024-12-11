@@ -1,8 +1,11 @@
 package fr.florianpal.fauction.managers;
 
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.configurations.*;
+import fr.florianpal.fauction.configurations.CategoriesConfig;
+import fr.florianpal.fauction.configurations.DatabaseConfig;
+import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.*;
+import fr.florianpal.fauction.utils.FileUtil;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -34,45 +37,45 @@ public class ConfigurationManager {
     private final CategoriesConfig categoriesConfig = new CategoriesConfig();
     private FileConfiguration categoriesConfiguration;
 
-    public ConfigurationManager(FAuction core) {
-        File databaseFile = new File(core.getDataFolder(), "database.yml");
-        core.createDefaultConfiguration(databaseFile, "database.yml");
+    public ConfigurationManager(FAuction plugin, File pluginFile) {
+        File databaseFile = new File(plugin.getDataFolder(), "database.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, databaseFile, "database.yml");
         databaseConfig = YamlConfiguration.loadConfiguration(databaseFile);
         database.load(databaseConfig);
-        loadAllConfiguration(core);
+        loadAllConfiguration(plugin, pluginFile);
     }
 
-    public void reload(FAuction core) {
-        loadAllConfiguration(core);
+    public void reload(FAuction plugin, File pluginFile) {
+        loadAllConfiguration(plugin, pluginFile);
     }
 
-    private void loadAllConfiguration(FAuction core) {
-        File auctionFile = new File(core.getDataFolder(), "gui/auction.yml");
-        core.createDefaultConfiguration(auctionFile, "gui/auction.yml");
+    private void loadAllConfiguration(FAuction plugin, File pluginFile) {
+        File auctionFile = new File(plugin.getDataFolder(), "gui/auction.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, auctionFile, "gui/auction.yml");
         auctionConfiguration = YamlConfiguration.loadConfiguration(auctionFile);
 
-        File historicFile = new File(core.getDataFolder(), "gui/historic.yml");
-        core.createDefaultConfiguration(historicFile, "gui/historic.yml");
+        File historicFile = new File(plugin.getDataFolder(), "gui/historic.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile,historicFile, "gui/historic.yml");
         historicConfiguration = YamlConfiguration.loadConfiguration(historicFile);
 
-        File myItemsFile = new File(core.getDataFolder(), "gui/playerView.yml");
-        core.createDefaultConfiguration(myItemsFile, "gui/playerView.yml");
-        playerViewConfiguration = YamlConfiguration.loadConfiguration(myItemsFile);
+        File playerViewFile = new File(plugin.getDataFolder(), "gui/playerView.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, playerViewFile, "gui/playerView.yml");
+        playerViewConfiguration = YamlConfiguration.loadConfiguration(playerViewFile);
 
-        File expireFile = new File(core.getDataFolder(), "gui/expire.yml");
-        core.createDefaultConfiguration(expireFile, "gui/expire.yml");
+        File expireFile = new File(plugin.getDataFolder(), "gui/expire.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, expireFile, "gui/expire.yml");
         expireConfiguration = YamlConfiguration.loadConfiguration(expireFile);
 
-        File auctionConfirmFile = new File(core.getDataFolder(), "gui/auctionConfirm.yml");
-        core.createDefaultConfiguration(auctionConfirmFile, "gui/auctionConfirm.yml");
+        File auctionConfirmFile = new File(plugin.getDataFolder(), "gui/auctionConfirm.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, auctionConfirmFile, "gui/auctionConfirm.yml");
         auctionConfirmConfiguration = YamlConfiguration.loadConfiguration(auctionConfirmFile);
 
-        File globalFile = new File(core.getDataFolder(), "config.yml");
-        core.createDefaultConfiguration(globalFile, "config.yml");
+        File globalFile = new File(plugin.getDataFolder(), "config.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, globalFile, "config.yml");
         globalConfiguration = YamlConfiguration.loadConfiguration(globalFile);
 
-        File categoriesFile = new File(core.getDataFolder(), "categories.yml");
-        core.createDefaultConfiguration(categoriesFile, "categories.yml");
+        File categoriesFile = new File(plugin.getDataFolder(), "categories.yml");
+        FileUtil.createDefaultConfiguration(plugin, pluginFile, categoriesFile, "categories.yml");
         categoriesConfiguration = YamlConfiguration.loadConfiguration(categoriesFile);
 
         globalConfig.load(globalConfiguration);

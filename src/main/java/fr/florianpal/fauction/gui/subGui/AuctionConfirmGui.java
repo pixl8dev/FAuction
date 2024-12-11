@@ -10,6 +10,7 @@ import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import fr.florianpal.fauction.utils.FormatUtil;
+import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
@@ -79,7 +80,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             title = auctionConfirmConfig.getTitleFalse();
         }
 
-
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
         ItemStack itemStack = confirm.getAuction().getItemStack().clone();
@@ -93,7 +93,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
         if (offlinePlayer != null) {
-            title = plugin.parsePlaceholder(offlinePlayer, title);
+            title = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, title);
         }
 
         title = FormatUtil.format(title);
@@ -108,7 +108,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             desc = desc.replace("{OwnerName}", confirm.getAuction().getPlayerName());
 
             if (offlinePlayer != null) {
-                desc = plugin.parsePlaceholder(offlinePlayer, desc);
+                desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, desc);
             }
 
             desc = FormatUtil.format(desc);

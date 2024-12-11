@@ -10,6 +10,7 @@ import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.HistoricCommandManager;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.utils.FormatUtil;
+import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -87,14 +88,14 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
             List<String> descriptions = new ArrayList<>();
             for (String desc : barrier.getDescription()) {
                 desc = FormatUtil.format(desc);
-                desc = plugin.parsePlaceholder(player, desc);
+                desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), player, desc);
                 descriptions.add(desc);
             }
 
             ItemMeta meta = itemStack.getItemMeta();
             if (meta != null) {
                 String title = barrier.getTitle();
-                title = plugin.parsePlaceholder(player, title);
+                title = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), player, title);
                 meta.setDisplayName(FormatUtil.format(title));
                 meta.setLore(descriptions);
                 meta.setCustomModelData(barrier.getCustomModelData());
