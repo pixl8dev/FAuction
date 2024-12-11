@@ -50,7 +50,11 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
                 );
                 barrierBlocks.add(barrier);
             } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("confirm")) {
-                confirmBlocks.put(Integer.valueOf(index), new Confirm(null,  Material.getMaterial(config.getString("block." + index + ".material")), config.getBoolean("block." + index + ".value")));
+                confirmBlocks.put(Integer.valueOf(index), new Confirm(null,
+                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        config.getBoolean("block." + index + ".value"),
+                        config.getString("block." + index + ".texture", ""),
+                        config.getInt("block." + index + ".customModelData", 0)));
             }
         }
     }

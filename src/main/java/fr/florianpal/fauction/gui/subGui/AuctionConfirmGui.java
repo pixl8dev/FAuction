@@ -10,6 +10,7 @@ import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import fr.florianpal.fauction.utils.FormatUtil;
+import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import net.milkbowl.vault.economy.EconomyResponse;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -55,7 +56,11 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
         int id = 0;
         for (Map.Entry<Integer, Confirm> entry : auctionConfirmConfig.getConfirmBlocks().entrySet()) {
-            Confirm confirm = new Confirm(this.auction, entry.getValue().getMaterial(), entry.getValue().isValue());
+            Confirm confirm = new Confirm(this.auction,
+                    entry.getValue().getMaterial(),
+                    entry.getValue().isValue(),
+                    entry.getValue().getTexture(),
+                    entry.getValue().getCustomModelData());
             confirmList.put(entry.getKey(), confirm);
             inv.setItem(entry.getKey(), createGuiItem(confirm));
             id++;
@@ -73,6 +78,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         } else {
             title = auctionConfirmConfig.getTitleFalse();
         }
+
 
         DecimalFormat df = new DecimalFormat();
         df.setMaximumFractionDigits(2);
@@ -112,7 +118,12 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         if (meta != null) {
             meta.setDisplayName(title);
             meta.setLore(listDescription);
+            meta.setCustomModelData(confirm.getCustomModelData());
             item.setItemMeta(meta);
+        }
+        if (confirm.getMaterial() == Material.PLAYER_HEAD) {
+            PlayerHeadUtil.addTexture(itemStack, confirm.getTexture());
+            itemStack.setAmount(1);
         }
         return item;
     }
