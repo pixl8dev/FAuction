@@ -3,6 +3,7 @@ package fr.florianpal.fauction.objects;
 import org.bukkit.Material;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Category {
 
@@ -31,7 +32,7 @@ public class Category {
     }
 
     public List<Material> getMaterials() {
-        return materials.stream().map(Material::getMaterial).toList();
+        return materials.stream().map(Material::getMaterial).collect(Collectors.toList());
     }
 
     public boolean containsAll() {
