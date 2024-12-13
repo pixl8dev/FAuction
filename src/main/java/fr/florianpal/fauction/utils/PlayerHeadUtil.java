@@ -12,7 +12,7 @@ import java.util.UUID;
 
 public class PlayerHeadUtil {
 
-    public static ItemStack addTexture(ItemStack itemStack, String texture) {
+    public static void addTexture(ItemStack itemStack, String texture) {
         if (PaperLib.isPaper()) {
             PlayerProfile profile = Bukkit.createProfile(UUID.randomUUID());
             profile.setProperty(new ProfileProperty("textures", texture));
@@ -21,6 +21,5 @@ public class PlayerHeadUtil {
             skullMeta.setPlayerProfile(profile);
             itemStack.setItemMeta(skullMeta);
         }
-        return itemStack;
     }
 }
