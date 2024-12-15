@@ -58,7 +58,8 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                     entry.getValue().getMaterial(),
                     entry.getValue().isValue(),
                     entry.getValue().getTexture(),
-                    entry.getValue().getCustomModelData());
+                    entry.getValue().getCustomModelData()
+            );
             confirmList.put(entry.getKey(), confirm);
             inv.setItem(entry.getKey(), createGuiItem(confirm));
             id++;
@@ -121,26 +122,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         if (confirm.getMaterial() == Material.PLAYER_HEAD) {
             PlayerHeadUtil.addTexture(itemStack, confirm.getTexture());
             itemStack.setAmount(1);
-        }
-        return item;
-    }
-
-    public ItemStack createGuiItem(Material material, String name, List<String> description) {
-
-        ItemStack item = new ItemStack(material, 1);
-        ItemMeta meta = item.getItemMeta();
-        name = FormatUtil.format(name);
-
-        List<String> descriptions = new ArrayList<>();
-        for (String desc : description) {
-            desc = FormatUtil.format(desc);
-            descriptions.add(desc);
-        }
-
-        if (meta != null) {
-            meta.setDisplayName(name);
-            meta.setLore(descriptions);
-            item.setItemMeta(meta);
         }
         return item;
     }
