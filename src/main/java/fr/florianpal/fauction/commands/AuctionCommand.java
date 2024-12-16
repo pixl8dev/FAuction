@@ -6,6 +6,7 @@ import co.aikar.commands.CommandIssuer;
 import co.aikar.commands.annotation.*;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
+import fr.florianpal.fauction.events.AuctionAddEvent;
 import fr.florianpal.fauction.gui.subGui.AuctionsGui;
 import fr.florianpal.fauction.gui.subGui.ExpireGui;
 import fr.florianpal.fauction.languages.MessageKeys;
@@ -176,6 +177,7 @@ public class AuctionCommand extends BaseCommand {
             String itemName = itemToSell.getItemMeta().getDisplayName() == null || itemToSell.getItemMeta().getDisplayName().isEmpty() ? itemToSell.getType().toString() : itemToSell.getItemMeta().getDisplayName();
             plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
             auctionCommandManager.addAuction(playerSender, itemToSell, price);
+            new AuctionAddEvent(playerSender, itemToSell, price).callEvent();
             playerSender.getInventory().getItemInMainHand().setAmount(0);
             issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
         }).execute();

@@ -3,6 +3,7 @@ package fr.florianpal.fauction.gui.subGui;
 import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
+import fr.florianpal.fauction.events.ExpireRemoveEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
@@ -76,6 +77,8 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
                         expireCommandManager.deleteExpire(a.getId());
                         auctions.remove(a);
+                        new ExpireRemoveEvent(player, a).callEvent();
+
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
 

@@ -1,6 +1,7 @@
 package fr.florianpal.fauction.schedules;
 
 import fr.florianpal.fauction.FAuction;
+import fr.florianpal.fauction.events.ExpireAddEvent;
 import fr.florianpal.fauction.objects.Auction;
 
 import java.util.ArrayList;
@@ -27,6 +28,7 @@ public class ExpireSchedule implements Runnable {
                 cal.add(Calendar.SECOND, plugin.getConfigurationManager().getGlobalConfig().getTime());
                 if (cal.getTime().getTime() <= Calendar.getInstance().getTime().getTime()) {
                     plugin.getExpireCommandManager().addExpire(auction);
+                    new ExpireAddEvent(auction.getPlayerUUID(), auction).callEvent();
                     plugin.getAuctionCommandManager().deleteAuction(auction.getId());
                 }
             }

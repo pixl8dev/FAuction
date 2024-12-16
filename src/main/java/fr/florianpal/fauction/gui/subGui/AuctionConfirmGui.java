@@ -3,6 +3,7 @@ package fr.florianpal.fauction.gui.subGui;
 import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
+import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.gui.AbstractGui;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
@@ -192,6 +193,8 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                         } else {
                             player.getInventory().addItem(auctionGood.getItemStack());
                         }
+
+                        new AuctionBuyEvent(player, a).callEvent();
 
                         if (plugin.getConfigurationManager().getGlobalConfig().isOnBuyCommandUse()) {
                             String command = getCommand(auctionGood);

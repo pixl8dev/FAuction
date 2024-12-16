@@ -3,6 +3,8 @@ package fr.florianpal.fauction.gui.subGui;
 import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
+import fr.florianpal.fauction.enums.CancelReason;
+import fr.florianpal.fauction.events.AuctionCancelEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
@@ -91,6 +93,8 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                         plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
 
                         auctions.remove(a);
+                        new AuctionCancelEvent(player, a, CancelReason.PLAYER).callEvent();
+
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_AUCTION_SUCCESS);
 

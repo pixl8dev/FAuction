@@ -3,6 +3,9 @@ package fr.florianpal.fauction.gui.subGui;
 import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
+import fr.florianpal.fauction.enums.CancelReason;
+import fr.florianpal.fauction.events.AuctionBuyEvent;
+import fr.florianpal.fauction.events.AuctionCancelEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
@@ -98,8 +101,10 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                         if (isModCanCancel) {
                             plugin.getExpireCommandManager().addExpire(a);
                             plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
+                            new AuctionCancelEvent(player, a, CancelReason.MODERATOR).callEvent();
                         } else {
                             plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
+                            new AuctionCancelEvent(player, a, CancelReason.PLAYER).callEvent();
                         }
                         auctions.remove(a);
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);

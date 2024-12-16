@@ -1,6 +1,8 @@
 package fr.florianpal.fauction.managers.commandmanagers;
 
 import fr.florianpal.fauction.FAuction;
+import fr.florianpal.fauction.enums.CacheType;
+import fr.florianpal.fauction.events.CacheReloadEvent;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.utils.SerializationUtil;
@@ -48,6 +50,7 @@ public class ExpireCommandManager {
             }
             cache.get(expire.getPlayerUUID()).add(expire);
         }
+        new CacheReloadEvent(cache, CacheType.EXPIRE).callEvent();
     }
 
     public Map<UUID, List<Auction>> getCache() {
