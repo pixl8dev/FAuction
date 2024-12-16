@@ -187,7 +187,7 @@ public class AuctionCommand extends BaseCommand {
     public void onExpire(Player playerSender) {
 
         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(auctions -> {
-            ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1);
+            ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1, null);
             gui.initializeItems();
             CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);

@@ -21,23 +21,14 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final AuctionConfig auctionConfig;
 
     public AuctionsGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
-        super(plugin, player, page, auctions, plugin.getConfigurationManager().getAuctionConfig());
+        super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getAuctionConfig());
         this.auctionConfig = plugin.getConfigurationManager().getAuctionConfig();
-
-        if (category == null) category = plugin.getConfigurationManager().getCategoriesConfig().getDefault();
-        this.category = category;
-
-        if (!category.containsAll()) {
-            this.auctions = auctions.stream().filter(a -> this.category.getMaterials().contains(a.getItemStack().getType())).collect(Collectors.toList());
-        }
-
         initGui(auctionConfig.getNameGui(), auctionConfig.getSize());
     }
 

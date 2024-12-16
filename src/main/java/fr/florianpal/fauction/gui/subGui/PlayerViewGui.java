@@ -7,6 +7,7 @@ import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
+import fr.florianpal.fauction.objects.Category;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,8 +21,8 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
 
     private final PlayerViewConfig playerViewConfig;
 
-    public PlayerViewGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
-        super(plugin, player, page, auctions, plugin.getConfigurationManager().getPlayerViewConfig());
+    public PlayerViewGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
+        super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getPlayerViewConfig());
         this.playerViewConfig = plugin.getConfigurationManager().getPlayerViewConfig();
         this.auctions = auctions.stream().filter(a -> a.getPlayerUUID().equals(player.getUniqueId())).collect(Collectors.toList());
         initGui(playerViewConfig.getNameGui(), playerViewConfig.getSize());
@@ -96,7 +97,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                         player.closeInventory();
 
                         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page);
+                            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page, category);
                             gui.initializeItems();
                         }).execute();
                     }).execute();

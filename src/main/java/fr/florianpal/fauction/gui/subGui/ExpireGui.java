@@ -7,6 +7,7 @@ import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
+import fr.florianpal.fauction.objects.Category;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,8 +20,8 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final ExpireGuiConfig expireGuiConfig;
 
-    public ExpireGui(FAuction plugin, Player player, List<Auction> auctions, int page) {
-        super(plugin, player, page, auctions, plugin.getConfigurationManager().getExpireConfig());
+    public ExpireGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
+        super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getExpireConfig());
         this.expireGuiConfig = plugin.getConfigurationManager().getExpireConfig();
         initGui(expireGuiConfig.getNameGui(), expireGuiConfig.getSize());
     }
@@ -79,7 +80,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
 
                         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
-                            ExpireGui gui = new ExpireGui(plugin, player, auctions, 1);
+                            ExpireGui gui = new ExpireGui(plugin, player, auctions, 1, category);
                             gui.initializeItems();
                         }).execute();
                     }).execute();
