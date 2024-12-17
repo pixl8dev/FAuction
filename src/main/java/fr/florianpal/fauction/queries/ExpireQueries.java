@@ -21,7 +21,7 @@ public class ExpireQueries implements IDatabaseTable {
 
     private final GlobalConfig globalConfig;
 
-    private static final String GET_EXPIRES = "SELECT * FROM expires";
+    private static final String GET_EXPIRES = "SELECT * FROM expires ORDER BY id ";
 
     private static final String GET_EXPIRE_WITH_ID = "SELECT * FROM expires WHERE id=?";
 
