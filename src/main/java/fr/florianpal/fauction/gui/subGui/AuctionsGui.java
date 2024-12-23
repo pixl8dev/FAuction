@@ -101,10 +101,10 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                         if (isModCanCancel) {
                             plugin.getExpireCommandManager().addExpire(a);
                             plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                            new AuctionCancelEvent(player, a, CancelReason.MODERATOR).callEvent();
+                            Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.MODERATOR));
                         } else {
                             plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                            new AuctionCancelEvent(player, a, CancelReason.PLAYER).callEvent();
+                            Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.PLAYER));
                         }
                         auctions.remove(a);
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);

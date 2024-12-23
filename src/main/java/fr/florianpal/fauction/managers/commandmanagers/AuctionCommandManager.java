@@ -6,6 +6,7 @@ import fr.florianpal.fauction.events.CacheReloadEvent;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.utils.SerializationUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -54,7 +55,7 @@ public class AuctionCommandManager {
             cache.get(auction.getPlayerUUID()).add(auction);
         }
 
-        new CacheReloadEvent(cache, CacheType.AUCTION).callEvent();
+        Bukkit.getPluginManager().callEvent(new CacheReloadEvent(cache, CacheType.AUCTION));
     }
 
     public Map<UUID, List<Auction>> getCache() {

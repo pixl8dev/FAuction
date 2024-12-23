@@ -1,5 +1,6 @@
 package fr.florianpal.fauction.configurations.gui;
 
+import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Barrier;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
@@ -7,6 +8,8 @@ import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static fr.florianpal.fauction.enums.BlockType.*;
 
 public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
 
@@ -41,7 +44,7 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
     protected int size;
 
 
-    public void load(Configuration config, String baseBlock) {
+    public void load(FAuction plugin, Configuration config, String baseBlock) {
         barrierBlocks = new ArrayList<>();
         previousBlocks = new ArrayList<>();
         nextBlocks = new ArrayList<>();
@@ -55,16 +58,19 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
         auctionGuiBlocks = new ArrayList<>();
 
         for (String index : config.getConfigurationSection("block").getKeys(false)) {
-            if (config.getString("block." + index + ".utility").equalsIgnoreCase("previous")) {
+
+            String currentUtility = config.getString("block." + index + ".utility");
+
+            if (PREVIOUS.equalsIgnoreCase(currentUtility)) {
 
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         new Barrier(
                                 Integer.parseInt(index),
-                                Material.getMaterial(config.getString("block." + index + ".replacement.material")),
+                                Material.getMaterial(config.getString("block." + index + ".replacement.material", Material.BARRIER.toString())),
                                 config.getString("block." + index + ".replacement.title"),
                                 config.getStringList("block." + index + ".replacement.description"),
                                 config.getString("block." + index + ".replacement.texture", ""),
@@ -74,15 +80,15 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 previousBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("next")) {
+            } else if (NEXT.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         new Barrier(
                                 Integer.parseInt(index),
-                                Material.getMaterial(config.getString("block." + index + ".replacement.material")),
+                                Material.getMaterial(config.getString("block." + index + ".replacement.material", Material.BARRIER.toString())),
                                 config.getString("block." + index + ".replacement.title"),
                                 config.getStringList("block." + index + ".replacement.description"),
                                 config.getString("block." + index + ".replacement.texture", ""),
@@ -92,20 +98,20 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 nextBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("player")) {
+            } else if (PLAYER.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 playerBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("expireGui")) {
+            } else if (EXPIREGUI.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
@@ -113,10 +119,10 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                 );
                 expireBlocks.add(barrier);
 
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("historicGui")) {
+            } else if (HISTORICGUI.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
@@ -124,48 +130,50 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                 );
                 historicBlocks.add(barrier);
 
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("category")) {
+            } else if (CATEGORY.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 categoriesBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("barrier")) {
+            } else if (BARRIER.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 barrierBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase(baseBlock)) {
+            } else if (baseBlock.equalsIgnoreCase(currentUtility)) {
                 baseBlocks.add(Integer.valueOf(index));
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("close")) {
+            } else if (CLOSE.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 closeBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("auctionGui")) {
+            } else if (AUCTIONGUI.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 auctionGuiBlocks.add(barrier);
+            } else {
+                plugin.getLogger().severe("Error : unknown block type " + currentUtility);
             }
         }
         size = config.getInt("gui.size");

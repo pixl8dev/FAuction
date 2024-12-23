@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.queries;
 
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.IDatabaseTable;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.enums.SQLType;
 import fr.florianpal.fauction.managers.DatabaseManager;

@@ -9,6 +9,7 @@ import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -77,7 +78,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
                         expireCommandManager.deleteExpire(a.getId());
                         auctions.remove(a);
-                        new ExpireRemoveEvent(player, a).callEvent();
+                        Bukkit.getPluginManager().callEvent(new ExpireRemoveEvent(player, a));
 
                         CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                         issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);

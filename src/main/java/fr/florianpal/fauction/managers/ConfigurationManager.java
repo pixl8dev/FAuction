@@ -80,11 +80,11 @@ public class ConfigurationManager {
 
         globalConfig.load(globalConfiguration);
         categoriesConfig.load(categoriesConfiguration);
-        auctionConfig.load(auctionConfiguration);
-        historicConfig.load(historicConfiguration);
-        auctionConfirmConfig.load(auctionConfirmConfiguration);
-        expireConfig.load(expireConfiguration);
-        playerViewConfig.load(playerViewConfiguration);
+        auctionConfig.load(plugin, auctionConfiguration);
+        historicConfig.load(plugin, historicConfiguration);
+        auctionConfirmConfig.load(plugin, auctionConfirmConfiguration);
+        expireConfig.load(plugin, expireConfiguration);
+        playerViewConfig.load(plugin, playerViewConfiguration);
     }
 
     public DatabaseConfig getDatabase() {

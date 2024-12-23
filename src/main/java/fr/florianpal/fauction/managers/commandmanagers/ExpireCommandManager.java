@@ -6,6 +6,7 @@ import fr.florianpal.fauction.events.CacheReloadEvent;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.utils.SerializationUtil;
+import org.bukkit.Bukkit;
 
 import java.util.*;
 
@@ -50,7 +51,7 @@ public class ExpireCommandManager {
             }
             cache.get(expire.getPlayerUUID()).add(expire);
         }
-        new CacheReloadEvent(cache, CacheType.EXPIRE).callEvent();
+        Bukkit.getPluginManager().callEvent(new CacheReloadEvent(cache, CacheType.EXPIRE));
     }
 
     public Map<UUID, List<Auction>> getCache() {

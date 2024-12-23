@@ -14,6 +14,7 @@ import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.CommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
@@ -177,7 +178,7 @@ public class AuctionCommand extends BaseCommand {
             String itemName = itemToSell.getItemMeta().getDisplayName() == null || itemToSell.getItemMeta().getDisplayName().isEmpty() ? itemToSell.getType().toString() : itemToSell.getItemMeta().getDisplayName();
             plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
             auctionCommandManager.addAuction(playerSender, itemToSell, price);
-            new AuctionAddEvent(playerSender, itemToSell, price).callEvent();
+            Bukkit.getPluginManager().callEvent(new AuctionAddEvent(playerSender, itemToSell, price));
             playerSender.getInventory().getItemInMainHand().setAmount(0);
             issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
         }).execute();

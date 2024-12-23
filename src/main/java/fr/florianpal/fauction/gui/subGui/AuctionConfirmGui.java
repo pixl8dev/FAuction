@@ -194,7 +194,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                             player.getInventory().addItem(auctionGood.getItemStack());
                         }
 
-                        new AuctionBuyEvent(player, a).callEvent();
+                        Bukkit.getPluginManager().callEvent(new AuctionBuyEvent(player, a));
 
                         if (plugin.getConfigurationManager().getGlobalConfig().isOnBuyCommandUse()) {
                             String command = getCommand(auctionGood);

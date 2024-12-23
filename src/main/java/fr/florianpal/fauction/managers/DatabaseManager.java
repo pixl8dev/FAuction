@@ -3,7 +3,7 @@ package fr.florianpal.fauction.managers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.IDatabaseTable;
+import fr.florianpal.fauction.queries.IDatabaseTable;
 
 import java.sql.*;
 import java.util.ArrayList;

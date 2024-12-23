@@ -3,6 +3,7 @@ package fr.florianpal.fauction.schedules;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.events.ExpireAddEvent;
 import fr.florianpal.fauction.objects.Auction;
+import org.bukkit.Bukkit;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,7 +29,7 @@ public class ExpireSchedule implements Runnable {
                 cal.add(Calendar.SECOND, plugin.getConfigurationManager().getGlobalConfig().getTime());
                 if (cal.getTime().getTime() <= Calendar.getInstance().getTime().getTime()) {
                     plugin.getExpireCommandManager().addExpire(auction);
-                    new ExpireAddEvent(auction.getPlayerUUID(), auction).callEvent();
+                    Bukkit.getPluginManager().callEvent(new ExpireAddEvent(auction.getPlayerUUID(), auction));
                     plugin.getAuctionCommandManager().deleteAuction(auction.getId());
                 }
             }

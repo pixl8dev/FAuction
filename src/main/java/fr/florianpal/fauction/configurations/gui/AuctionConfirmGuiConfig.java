@@ -1,5 +1,6 @@
 package fr.florianpal.fauction.configurations.gui;
 
+import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import org.bukkit.Material;
@@ -10,6 +11,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static fr.florianpal.fauction.enums.BlockType.BARRIER;
+import static fr.florianpal.fauction.enums.BlockType.CONFIRM;
 
 public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
@@ -27,7 +31,7 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
-    public void load(Configuration config) {
+    public void load(FAuction plugin, Configuration config) {
         titleTrue = config.getString("gui.title-true");
         titleFalse = config.getString("gui.title-false");
         nameGui = config.getString("gui.name");
@@ -39,22 +43,27 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
         confirmBlocks = new HashMap<>();
 
         for (String index : config.getConfigurationSection("block").getKeys(false)) {
-            if (config.getString("block." + index + ".utility").equalsIgnoreCase("barrier")) {
+
+            String currentUtility = config.getString("block." + index + ".utility");
+
+            if (BARRIER.equalsIgnoreCase(currentUtility)) {
                 Barrier barrier = new Barrier(
                         Integer.parseInt(index),
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 barrierBlocks.add(barrier);
-            } else if (config.getString("block." + index + ".utility").equalsIgnoreCase("confirm")) {
+            } else if (CONFIRM.equalsIgnoreCase(currentUtility)) {
                 confirmBlocks.put(Integer.valueOf(index), new Confirm(null,
-                        Material.getMaterial(config.getString("block." + index + ".material")),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getBoolean("block." + index + ".value"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)));
+            } else {
+                plugin.getLogger().severe("Error : unknown block type " + currentUtility);
             }
         }
     }
