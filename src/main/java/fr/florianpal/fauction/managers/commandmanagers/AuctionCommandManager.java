@@ -54,8 +54,6 @@ public class AuctionCommandManager {
             }
             cache.get(auction.getPlayerUUID()).add(auction);
         }
-
-        Bukkit.getPluginManager().callEvent(new CacheReloadEvent(cache, CacheType.AUCTION));
     }
 
     public Map<UUID, List<Auction>> getCache() {

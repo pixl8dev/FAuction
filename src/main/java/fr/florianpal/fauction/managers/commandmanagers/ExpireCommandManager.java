@@ -51,7 +51,6 @@ public class ExpireCommandManager {
             }
             cache.get(expire.getPlayerUUID()).add(expire);
         }
-        Bukkit.getPluginManager().callEvent(new CacheReloadEvent(cache, CacheType.EXPIRE));
     }
 
     public Map<UUID, List<Auction>> getCache() {
