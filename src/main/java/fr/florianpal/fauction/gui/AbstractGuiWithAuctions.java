@@ -121,25 +121,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         openInventory(player);
     }
 
-    public ItemStack createGuiItem(Material material, String name, List<String> description) {
-        ItemStack item = new ItemStack(material, 1);
-        ItemMeta meta = item.getItemMeta();
-        name = FormatUtil.format(name);
-        List<String> descriptions = new ArrayList<>();
-        for (String desc : description) {
-
-            desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
-            desc = FormatUtil.format(desc);
-            descriptions.add(desc);
-        }
-        if (meta != null) {
-            meta.setDisplayName(name);
-            meta.setLore(descriptions);
-            item.setItemMeta(meta);
-        }
-        return item;
-    }
-
     public ItemStack createGuiItem(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null || meta.getDisplayName() == null || meta.getLore() == null) {
@@ -275,55 +256,14 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         boolean isPrevious = abstractGuiWithAuctionsConfig.getPreviousBlocks().stream().anyMatch(b -> b.getIndex() == e.getRawSlot() && this.page > 1);
         if (isPrevious) {
 
-            if (this instanceof AuctionsGui) {
-                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                    AuctionsGui gui = new AuctionsGui(plugin, player, auctions, this.page - 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof ExpireGui) {
-                FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
-                    ExpireGui gui = new ExpireGui(plugin, player, expires, this.page - 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof PlayerViewGui) {
-                FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
-                    PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page - 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof HistoricGui) {
-                FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
-                    HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page - 1, category);
-                    gui.initializeItems();
-                }).execute();
-            }
+            previousAction();
             return true;
         }
 
         boolean isNext = abstractGuiWithAuctionsConfig.getNextBlocks().stream().anyMatch(next -> e.getRawSlot() == next.getIndex() && ((this.abstractGuiWithAuctionsConfig.getBaseBlocks().size() * this.page) - this.abstractGuiWithAuctionsConfig.getBaseBlocks().size() < auctions.size() - this.abstractGuiWithAuctionsConfig.getBaseBlocks().size()) && next.getMaterial() != next.getRemplacement().getMaterial());
         if (isNext) {
 
-            if (this instanceof AuctionsGui) {
-                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                    AuctionsGui gui = new AuctionsGui(plugin, player, auctions, this.page + 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof ExpireGui) {
-                FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
-                    ExpireGui gui = new ExpireGui(plugin, player, expires, this.page + 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof PlayerViewGui) {
-                FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
-                    PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page + 1, category);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof HistoricGui) {
-                FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
-                    HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page + 1, category);
-                    gui.initializeItems();
-                }).execute();
-            }
-
+            nextAction();
             return true;
         }
 
@@ -351,28 +291,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         if (isCategory) {
 
             Category nextCategory = plugin.getConfigurationManager().getCategoriesConfig().getNext(category);
-
-            if (this instanceof AuctionsGui) {
-                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                    AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1 , nextCategory);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof ExpireGui) {
-                FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
-                    ExpireGui gui = new ExpireGui(plugin, player, auctions,1 , nextCategory);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof PlayerViewGui) {
-                FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
-                    PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions,1 , nextCategory);
-                    gui.initializeItems();
-                }).execute();
-            } else if (this instanceof HistoricGui) {
-                FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
-                    HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1 , nextCategory);
-                    gui.initializeItems();
-                }).execute();
-            }
+            categoryAction(nextCategory);
             return true;
         }
 
@@ -404,6 +323,12 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
         return false;
     }
+
+    protected abstract void previousAction();
+
+    protected abstract void nextAction();
+
+    protected abstract void categoryAction(Category nextCategory);
 
     @Override
     public Inventory getInventory() {

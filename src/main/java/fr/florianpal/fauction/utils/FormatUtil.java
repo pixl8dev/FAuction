@@ -13,8 +13,7 @@ public class FormatUtil {
         Matcher match = pattern.matcher(msg);
         while (match.find()) {
             String color = msg.substring(match.start(), match.end());
-            String replace = color;
-            msg = msg.replace(replace, ChatColor.of(color) + "");
+            msg = msg.replace(color, ChatColor.of(color) + "");
             match = pattern.matcher(msg);
         }
 

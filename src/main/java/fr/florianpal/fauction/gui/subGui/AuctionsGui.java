@@ -35,6 +35,30 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
         initGui(auctionConfig.getNameGui(), auctionConfig.getSize());
     }
 
+    @Override
+    protected void previousAction() {
+        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+            AuctionsGui gui = new AuctionsGui(plugin, player, auctions, this.page - 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void nextAction() {
+        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+            AuctionsGui gui = new AuctionsGui(plugin, player, auctions, this.page + 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void categoryAction(Category nextCategory) {
+        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+            AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1, nextCategory);
+            gui.initializeItems();
+        }).execute();
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {

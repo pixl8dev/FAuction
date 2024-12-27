@@ -6,6 +6,7 @@ import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import fr.florianpal.fauction.utils.ListUtil;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,6 +21,30 @@ public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface
         super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getHistoricConfig());
         HistoricConfig historicConfig = plugin.getConfigurationManager().getHistoricConfig();
         initGui(historicConfig.getNameGui(), historicConfig.getSize());
+    }
+
+    @Override
+    protected void previousAction() {
+        FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
+            HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page - 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void nextAction() {
+        FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
+            HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page + 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void categoryAction(Category nextCategory) {
+        FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
+            HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1 , nextCategory);
+            gui.initializeItems();
+        }).execute();
     }
 
     @EventHandler

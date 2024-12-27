@@ -47,6 +47,30 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
         openInventory(player);
     }
 
+    @Override
+    protected void previousAction() {
+        FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page - 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void nextAction() {
+        FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page + 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void categoryAction(Category nextCategory) {
+        FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
+            PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions,1 , nextCategory);
+            gui.initializeItems();
+        }).execute();
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
 

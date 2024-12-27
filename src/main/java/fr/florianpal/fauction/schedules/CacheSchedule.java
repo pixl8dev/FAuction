@@ -2,6 +2,7 @@ package fr.florianpal.fauction.schedules;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.enums.CacheType;
+import fr.florianpal.fauction.events.CacheHistoricReloadEvent;
 import fr.florianpal.fauction.events.CacheReloadEvent;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
@@ -31,6 +32,7 @@ public class CacheSchedule implements Runnable {
         }).sync(() -> {
             Bukkit.getPluginManager().callEvent(new CacheReloadEvent(expireCommandManager.getCache(), CacheType.EXPIRE));
             Bukkit.getPluginManager().callEvent(new CacheReloadEvent(auctionCommandManager.getCache(), CacheType.AUCTION));
+            Bukkit.getPluginManager().callEvent(new CacheHistoricReloadEvent(historicCommandManager.getCache()));
         }).execute();
     }
 }

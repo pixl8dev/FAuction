@@ -28,6 +28,30 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
         initGui(expireGuiConfig.getNameGui(), expireGuiConfig.getSize());
     }
 
+    @Override
+    protected void previousAction() {
+        FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
+            ExpireGui gui = new ExpireGui(plugin, player, expires, this.page - 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void nextAction() {
+        FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
+            ExpireGui gui = new ExpireGui(plugin, player, expires, this.page + 1, category);
+            gui.initializeItems();
+        }).execute();
+    }
+
+    @Override
+    protected void categoryAction(Category nextCategory) {
+        FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
+            ExpireGui gui = new ExpireGui(plugin, player, auctions,1 , nextCategory);
+            gui.initializeItems();
+        }).execute();
+    }
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
 
