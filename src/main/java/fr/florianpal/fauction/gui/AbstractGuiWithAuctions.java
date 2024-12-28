@@ -28,7 +28,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
@@ -43,12 +42,10 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         this.auctions = auctions;
         this.abstractGuiWithAuctionsConfig = abstractGuiWithAuctionsConfig;
 
-        if (category == null) category = plugin.getConfigurationManager().getCategoriesConfig().getDefault();
+          if (category == null) category = plugin.getConfigurationManager().getCategoriesConfig().getDefault();
         this.category = category;
 
-        if (!category.containsAll()) {
-            this.auctions = auctions.stream().filter(a -> this.category.getMaterials().contains(a.getItemStack().getType())).collect(Collectors.toList());
-        }
+        this.auctions = ListUtil.getAuctionByCategory(auctions, category);
     }
 
     @Override

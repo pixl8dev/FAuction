@@ -38,4 +38,8 @@ public class Category {
     public boolean containsAll() {
         return materials.stream().anyMatch(s -> s.equals("ALL"));
     }
+
+    public boolean containsEnchanted() {
+        return materials.stream().anyMatch(s -> s.equals("ENCHANTED"));
+    }
 }
