@@ -4,3 +4,10 @@ author: florianpal
 version: 1.6.11
 api-version: 1.13
 softdepend: [Vault]
+permissions:
+  fauction.user:
+    default: op
+    children:
+      fauction.list: true
+      fauction.sell: true
+      fauction.expire: true
