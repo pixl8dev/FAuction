@@ -5,3 +5,4 @@
  *   [Spigot](https://www.spigotmc.org/resources/fauction-auction-plugin-with-full-bungeecord-support.108552/)
  *   [Hangar](https://hangar.papermc.io/Florianpal/FAuction)
  *   [Modrinth](https://modrinth.com/plugin/fauction)
+* [BStats](https://bstats.org/plugin/bukkit/FAuction/24018)
