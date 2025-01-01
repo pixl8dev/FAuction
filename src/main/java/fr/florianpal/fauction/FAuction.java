@@ -141,7 +141,7 @@ public class FAuction extends JavaPlugin {
     private void initChart() {
         metrics.addCustomChart(new AdvancedPie("player_per_country", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
-            valueMap.put(TimeZone.getDefault().getDisplayName(), Bukkit.getServer().getOnlinePlayers().size());
+            valueMap.put(TimeZone.getDefault().getID(), Bukkit.getServer().getOnlinePlayers().size());
             return valueMap;
         }));
     }
