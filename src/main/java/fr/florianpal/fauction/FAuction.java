@@ -25,6 +25,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.TimeZone;
 import java.util.concurrent.Callable;
 
 public class FAuction extends JavaPlugin {
@@ -140,7 +141,7 @@ public class FAuction extends JavaPlugin {
     private void initChart() {
         metrics.addCustomChart(new AdvancedPie("player_per_country", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
-            valueMap.put(Locale.getDefault().getCountry(), Bukkit.getServer().getOnlinePlayers().size());
+            valueMap.put(TimeZone.getDefault().getDisplayName(), Bukkit.getServer().getOnlinePlayers().size());
             return valueMap;
         }));
     }

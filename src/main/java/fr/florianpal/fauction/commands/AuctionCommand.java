@@ -51,7 +51,7 @@ public class AuctionCommand extends BaseCommand {
 
     @Default
     @Subcommand("list")
-    @CommandPermission("fauction.list")
+    @CommandPermission("  ")
     @Description("{@@fauction.auction_list_help_description}")
     public void onList(Player playerSender) {
 
