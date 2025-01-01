@@ -16,11 +16,16 @@ import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.FileUtil;
 import io.papermc.lib.PaperLib;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class FAuction extends JavaPlugin {
 
@@ -124,10 +129,20 @@ public class FAuction extends JavaPlugin {
         Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new CacheSchedule(this), configurationManager.getGlobalConfig().getUpdateCacheEvery(), configurationManager.getGlobalConfig().getUpdateCacheEvery());
 
         api = this;
+
+        initChart();
     }
 
     public static FAuction getApi() {
         return api;
+    }
+
+    private void initChart() {
+        metrics.addCustomChart(new AdvancedPie("player_per_country", () -> {
+            Map<String, Integer> valueMap = new HashMap<>();
+            valueMap.put(Locale.getDefault().getCountry(), Bukkit.getServer().getOnlinePlayers().size());
+            return valueMap;
+        }));
     }
 
     public void reloadConfiguration() {
