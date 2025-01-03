@@ -1,3 +1,4 @@
+version: 1
 gui:
   size: 27
   type: CHEST

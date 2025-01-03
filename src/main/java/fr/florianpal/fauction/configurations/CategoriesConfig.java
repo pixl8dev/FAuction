@@ -1,7 +1,7 @@
 package fr.florianpal.fauction.configurations;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.objects.Category;
-import org.bukkit.configuration.Configuration;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -11,14 +11,14 @@ public class CategoriesConfig {
 
     private LinkedHashMap<String, Category> categories;
 
-    public void load(Configuration config) {
+    public void load(YamlDocument config) {
 
         categories = new LinkedHashMap<>();
-        for (String id : config.getConfigurationSection("categories").getKeys(false)) {
+        for (Object id : config.getSection("categories").getKeys()) {
             String displayName = config.getString("categories." + id + ".displayName");
             List<String> materials = config.getStringList("categories." + id + ".materials");
 
-            categories.put(id, new Category(id, displayName, materials));
+            categories.put(id.toString(), new Category(id.toString(), displayName, materials));
         }
     }
 

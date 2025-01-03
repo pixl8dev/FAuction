@@ -1,10 +1,10 @@
 package fr.florianpal.fauction.configurations.gui;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
-    public void load(FAuction plugin, Configuration config) {
+    public void load(FAuction plugin, YamlDocument config) {
         titleTrue = config.getString("gui.title-true");
         titleFalse = config.getString("gui.title-false");
         nameGui = config.getString("gui.name");
@@ -42,8 +42,9 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
         barrierBlocks = new ArrayList<>();
         confirmBlocks = new HashMap<>();
 
-        for (String index : config.getConfigurationSection("block").getKeys(false)) {
+        for (Object indexObject : config.getSection("block").getKeys()) {
 
+            String index = indexObject.toString();
             String currentUtility = config.getString("block." + index + ".utility");
 
             if (BARRIER.equalsIgnoreCase(currentUtility)) {

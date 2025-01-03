@@ -1,7 +1,7 @@
 package fr.florianpal.fauction.configurations;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class GlobalConfig {
 
     private int updateCacheEvery;
 
-    public void load(Configuration config) {
+    public void load(YamlDocument config) {
         lang = config.getString("lang");
         orderBy = config.getString("orderBy");
         dateFormat = config.getString("dateFormat");
@@ -58,8 +58,8 @@ public class GlobalConfig {
 
         limitationsUseMetaLuckperms = config.getBoolean("limitations-use-meta-luckperms", false);
         limitations = new HashMap<>();
-        for (String limitationGroup : config.getConfigurationSection("limitations").getKeys(false)) {
-            limitations.put(limitationGroup, config.getInt("limitations." + limitationGroup));
+        for (Object limitationGroup : config.getSection("limitations").getKeys()) {
+            limitations.put(limitationGroup.toString(), config.getInt("limitations." + limitationGroup));
         }
 
         if (config.contains("min-price-default")) {
@@ -74,15 +74,15 @@ public class GlobalConfig {
 
         if (config.contains("min-price")) {
             minPrice = new HashMap<>();
-            for (String material : config.getConfigurationSection("min-price").getKeys(false)) {
-                minPrice.put(Material.valueOf(material), config.getDouble("min-price." + material));
+            for (Object material : config.getSection("min-price").getKeys()) {
+                minPrice.put(Material.valueOf(material.toString()), config.getDouble("min-price." + material));
             }
         }
 
         if (config.contains("max-price")) {
             maxPrice = new HashMap<>();
-            for (String material : config.getConfigurationSection("max-price").getKeys(false)) {
-                maxPrice.put(Material.valueOf(material), config.getDouble("max-price." + material));
+            for (Object material : config.getSection("max-price").getKeys()) {
+                maxPrice.put(Material.valueOf(material.toString()), config.getDouble("max-price." + material));
             }
         }
 

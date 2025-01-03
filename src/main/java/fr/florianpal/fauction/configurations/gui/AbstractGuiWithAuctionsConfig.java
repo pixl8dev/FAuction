@@ -1,9 +1,9 @@
 package fr.florianpal.fauction.configurations.gui;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Barrier;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
     protected int size;
 
 
-    public void load(FAuction plugin, Configuration config, String baseBlock) {
+    public void load(FAuction plugin, YamlDocument config, String baseBlock) {
         barrierBlocks = new ArrayList<>();
         previousBlocks = new ArrayList<>();
         nextBlocks = new ArrayList<>();
@@ -57,8 +57,9 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
         historicBlocks = new ArrayList<>();
         auctionGuiBlocks = new ArrayList<>();
 
-        for (String index : config.getConfigurationSection("block").getKeys(false)) {
+        for (Object indexObject : config.getSection("block").getKeys()) {
 
+            String index = indexObject.toString();
             String currentUtility = config.getString("block." + index + ".utility");
 
             if (PREVIOUS.equalsIgnoreCase(currentUtility)) {

@@ -1,8 +1,8 @@
 package fr.florianpal.fauction.configurations;
 
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.enums.SQLType;
-import org.bukkit.configuration.Configuration;
 
 public class DatabaseConfig {
 
@@ -14,7 +14,7 @@ public class DatabaseConfig {
 
     private String password;
 
-    public void load(Configuration config) {
+    public void load(YamlDocument config) {
         sqlType = SQLType.valueOf(config.getString("database.type"));
         url = config.getString("database.url");
         user = config.getString("database.user");

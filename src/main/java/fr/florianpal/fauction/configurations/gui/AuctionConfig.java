@@ -1,10 +1,10 @@
 package fr.florianpal.fauction.configurations.gui;
 
+import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
-import org.bukkit.configuration.Configuration;
 
 public class AuctionConfig extends AbstractGuiWithAuctionsConfig {
-    public void load(FAuction plugin, Configuration config) {
+    public void load(FAuction plugin, YamlDocument config) {
         super.load(plugin, config, "auction");
     }
 }
