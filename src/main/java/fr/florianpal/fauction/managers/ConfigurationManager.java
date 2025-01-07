@@ -46,11 +46,10 @@ public class ConfigurationManager {
     private YamlDocument categoriesConfiguration;
 
     public ConfigurationManager(FAuction plugin, File pluginFile) {
-        File databaseFile = new File(plugin.getDataFolder(), "database.yml");
-        FileUtil.createDefaultConfiguration(plugin, pluginFile, databaseFile, "database.yml");
+
         try {
             databaseConfig = YamlDocument.create(new File(plugin.getDataFolder(), "database.yml"),
-                    Objects.requireNonNull(getClass().getResourceAsStream("database.yml")),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/database.yml")),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(true).build(),
                     DumperSettings.DEFAULT,
@@ -72,7 +71,7 @@ public class ConfigurationManager {
         try {
 
         auctionConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auction.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("gui/auction.yml")),
+                Objects.requireNonNull(getClass().getResourceAsStream("/gui/auction.yml")),
                 GeneralSettings.DEFAULT,
                 LoaderSettings.builder().setAutoUpdate(false).build(),
                 DumperSettings.DEFAULT,
@@ -81,7 +80,7 @@ public class ConfigurationManager {
 
 
         historicConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/historic.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("gui/historic.yml")),
+                Objects.requireNonNull(getClass().getResourceAsStream("/gui/historic.yml")),
                 GeneralSettings.DEFAULT,
                 LoaderSettings.builder().setAutoUpdate(false).build(),
                 DumperSettings.DEFAULT,
@@ -89,7 +88,7 @@ public class ConfigurationManager {
         );
 
         playerViewConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/playerView.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("gui/playerView.yml")),
+                Objects.requireNonNull(getClass().getResourceAsStream("/gui/playerView.yml")),
                 GeneralSettings.DEFAULT,
                 LoaderSettings.builder().setAutoUpdate(false).build(),
                 DumperSettings.DEFAULT,
@@ -97,7 +96,7 @@ public class ConfigurationManager {
         );
 
         expireConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/expire.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("gui/expire.yml")),
+                Objects.requireNonNull(getClass().getResourceAsStream("/gui/expire.yml")),
                 GeneralSettings.DEFAULT,
                 LoaderSettings.builder().setAutoUpdate(false).build(),
                 DumperSettings.DEFAULT,
@@ -105,7 +104,7 @@ public class ConfigurationManager {
         );
 
             auctionConfirmConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auctionConfirm.yml"),
-                    Objects.requireNonNull(getClass().getResourceAsStream("gui/auctionConfirm.yml")),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/auctionConfirm.yml")),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(false).build(),
                     DumperSettings.DEFAULT,

@@ -54,7 +54,20 @@
                             <shadedPattern>fr.florianpal.fauction.bstats</shadedPattern>
                         </relocation>
                     </relocations>
-
+                    <artifactSet>
+                        <excludes>
+                            <exclude>module-info.java</exclude>
+                            <exclude>org.codehaus.plexus:*</exclude>
+                            <exclude>org.ow2.asm:*</exclude>
+                            <exclude>org.jdom:*</exclude>
+                            <exclude>org.apache.commons:*</exclude>
+                            <exclude>commons-io:*</exclude>
+                            <exclude>commons-codec:*</exclude>
+                            <exclude>org.vafer:*</exclude>
+                            <exclude>org.slf4j:*</exclude>
+                            <exclude>org.apache.maven.plugins:*</exclude>
+                        </excludes>
+                    </artifactSet>
                 </configuration>
 
                 <executions>
