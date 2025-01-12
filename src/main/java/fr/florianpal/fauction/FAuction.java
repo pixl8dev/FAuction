@@ -99,7 +99,8 @@ public class FAuction extends JavaPlugin {
         try {
             databaseManager = new DatabaseManager(this);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            getLogger().severe(e.getMessage());
+            Bukkit.getPluginManager().disablePlugin(this);
         }
         auctionQueries = new AuctionQueries(this);
         expireQueries = new ExpireQueries(this);
