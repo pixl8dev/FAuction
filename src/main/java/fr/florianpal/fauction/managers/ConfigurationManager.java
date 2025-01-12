@@ -11,9 +11,6 @@ import fr.florianpal.fauction.configurations.CategoriesConfig;
 import fr.florianpal.fauction.configurations.DatabaseConfig;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.*;
-import fr.florianpal.fauction.utils.FileUtil;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.IOException;
@@ -56,17 +53,18 @@ public class ConfigurationManager {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
             );
         } catch (IOException e) {
+            plugin.getLogger().severe("Error in database configuration load : " + e.getMessage());
             throw new RuntimeException(e);
         }
         database.load(databaseConfig);
-        loadAllConfiguration(plugin, pluginFile);
+        loadAllConfiguration(plugin);
     }
 
-    public void reload(FAuction plugin, File pluginFile) {
-        loadAllConfiguration(plugin, pluginFile);
+    public void reload(FAuction plugin) {
+        loadAllConfiguration(plugin);
     }
 
-    private void loadAllConfiguration(FAuction plugin, File pluginFile) {
+    private void loadAllConfiguration(FAuction plugin) {
 
         try {
 
@@ -127,6 +125,7 @@ public class ConfigurationManager {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
             );
         } catch (IOException e) {
+            plugin.getLogger().severe("Error in configuration load : " + e.getMessage());
             throw new RuntimeException(e);
         }
 

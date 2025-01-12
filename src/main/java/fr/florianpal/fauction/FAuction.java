@@ -80,7 +80,12 @@ public class FAuction extends JavaPlugin {
 
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
-        configurationManager = new ConfigurationManager(this, this.getFile());
+        try {
+            configurationManager = new ConfigurationManager(this, this.getFile());
+        } catch (RuntimeException e) {
+            getLogger().severe(e.getMessage());
+            Bukkit.getPluginManager().disablePlugin(this);
+        }
 
         if (configurationManager.getGlobalConfig().isLimitationsUseMetaLuckperms()) {
             luckPermsImplementation = new LuckPermsImplementation();
@@ -146,7 +151,7 @@ public class FAuction extends JavaPlugin {
     }
 
     public void reloadConfiguration() {
-        configurationManager.reload(this, this.getFile());
+        configurationManager.reload(this);
     }
 
     public ConfigurationManager getConfigurationManager() {
