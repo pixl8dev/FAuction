@@ -8,5 +8,5 @@ public abstract class AbstractGuiConfig {
 
     public InventoryType getType() {
         return inventoryType;
-    };
+    }
 }

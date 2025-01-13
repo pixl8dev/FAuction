@@ -9,7 +9,6 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
-
 public class HistoricCommandManager {
     private final HistoricQueries historicQueries;
 

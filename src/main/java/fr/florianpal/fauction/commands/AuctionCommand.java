@@ -94,32 +94,12 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        if(globalConfig.getMinPrice().containsKey(itemToSell.getType())) {
-            double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getMinPrice().get(itemToSell.getType());
-            if(minPrice > price) {
-                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
-                return;
-            }
-        } else if (globalConfig.isDefaultMinValueEnable()) {
-            double minPrice = itemToSell.getAmount() *  globalConfig.getDefaultMinValue();
-            if(minPrice > price) {
-                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
-                return;
-            }
+        if(!haveCorrectMinPrice(itemToSell, issuerTarget, playerSender, price)) {
+            return;
         }
 
-        if(globalConfig.getMaxPrice().containsKey(itemToSell.getType())) {
-            double maxPrice = itemToSell.getAmount() *  globalConfig.getMaxPrice().get(itemToSell.getType());
-            if(maxPrice < price) {
-                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
-                return;
-            }
-        } else if (globalConfig.isDefaultMaxValueEnable()) {
-            double maxPrice = itemToSell.getAmount() *  globalConfig.getDefaultMaxValue();
-            if(maxPrice < price) {
-                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
-                return;
-            }
+        if(!haveCorrectMaxPrice(itemToSell, issuerTarget, price)) {
+            return;
         }
 
         if(Tag.SHULKER_BOXES.getValues().contains(itemToSell.getType())) {
@@ -182,6 +162,43 @@ public class AuctionCommand extends BaseCommand {
             playerSender.getInventory().getItemInMainHand().setAmount(0);
             issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
         }).execute();
+    }
+
+    public boolean haveCorrectMinPrice(ItemStack itemToSell, CommandIssuer issuerTarget, Player playerSender, double price) {
+
+        if(globalConfig.getMinPrice().containsKey(itemToSell.getType())) {
+            double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() *  globalConfig.getMinPrice().get(itemToSell.getType());
+            if(minPrice > price) {
+                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                return false;
+            }
+        } else if (globalConfig.isDefaultMinValueEnable()) {
+            double minPrice = itemToSell.getAmount() *  globalConfig.getDefaultMinValue();
+            if(minPrice > price) {
+                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean haveCorrectMaxPrice(ItemStack itemToSell, CommandIssuer issuerTarget, double price) {
+
+        if(globalConfig.getMaxPrice().containsKey(itemToSell.getType())) {
+            double maxPrice = itemToSell.getAmount() *  globalConfig.getMaxPrice().get(itemToSell.getType());
+            if(maxPrice < price) {
+                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                return false;
+            }
+        } else if (globalConfig.isDefaultMaxValueEnable()) {
+            double maxPrice = itemToSell.getAmount() *  globalConfig.getDefaultMaxValue();
+            if(maxPrice < price) {
+                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                return false;
+            }
+        }
+        return true;
     }
 
     @Subcommand("expire")

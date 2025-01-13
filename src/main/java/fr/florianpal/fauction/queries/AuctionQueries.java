@@ -145,7 +145,6 @@ public class AuctionQueries implements IDatabaseTable {
 
     public List<Auction> getAuctions() {
 
-
         PreparedStatement statement = null;
         ResultSet result = null;
         ArrayList<Auction> auctions = new ArrayList<>();

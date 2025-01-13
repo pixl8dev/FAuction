@@ -10,8 +10,6 @@ import java.util.ArrayList;
 
 public class DatabaseManager {
 
-    private final HikariConfig config = new HikariConfig();
-
     private final HikariDataSource ds;
 
     private Connection connection;
@@ -22,13 +20,14 @@ public class DatabaseManager {
 
     public DatabaseManager(FAuction plugin) throws SQLException {
         this.plugin = plugin;
+        HikariConfig config = new HikariConfig();
         config.setJdbcUrl(  plugin.getConfigurationManager().getDatabase().getUrl() );
         config.setUsername( plugin.getConfigurationManager().getDatabase().getUser() );
         config.setPassword(  plugin.getConfigurationManager().getDatabase().getPassword() );
         config.addDataSourceProperty( "cachePrepStmts" , "true" );
         config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
         config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
-        ds = new HikariDataSource( config );
+        ds = new HikariDataSource(config);
         this.connection = ds.getConnection();
     }
 

@@ -1,12 +1,9 @@
 package fr.florianpal.fauction.managers.commandmanagers;
 
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.enums.CacheType;
-import fr.florianpal.fauction.events.CacheReloadEvent;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.queries.AuctionQueries;
 import fr.florianpal.fauction.utils.SerializationUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
