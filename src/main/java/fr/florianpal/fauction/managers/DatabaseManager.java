@@ -12,8 +12,6 @@ public class DatabaseManager {
 
     private final HikariDataSource ds;
 
-    private Connection connection;
-
     private final FAuction plugin;
 
     private final ArrayList<IDatabaseTable> repositories = new ArrayList<>();
@@ -28,7 +26,6 @@ public class DatabaseManager {
         config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
         config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
         ds = new HikariDataSource(config);
-        this.connection = ds.getConnection();
     }
 
     public Connection getConnection() throws SQLException {
