@@ -19,6 +19,8 @@ public class GlobalConfig {
 
     private String dateFormat;
 
+    private String remainingDateFormat;
+
     private String onBuyCommand;
 
     private boolean limitationsUseMetaLuckperms = false;
@@ -46,6 +48,7 @@ public class GlobalConfig {
         lang = config.getString("lang");
         orderBy = config.getString("orderBy");
         dateFormat = config.getString("dateFormat");
+        remainingDateFormat = config.getString("remainingDateFormat");
         onBuyCommandUse = config.getBoolean("onBuy.sendCommand.use");
         onBuyCommand = config.getString("onBuy.sendCommand.command");
         securityForSpammingPacket = config.getBoolean("securityForSpammingPacket", true);
@@ -161,5 +164,9 @@ public class GlobalConfig {
 
     public int getUpdateCacheEvery() {
         return updateCacheEvery;
+    }
+
+    public String getRemainingDateFormat() {
+        return remainingDateFormat;
     }
 }

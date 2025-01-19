@@ -25,9 +25,11 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
@@ -187,6 +189,9 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
             SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());
             desc = desc.replace("{ExpireTime}", formater.format(expireDate));
+
+            Duration duration = Duration.between(new Date().toInstant(), new Date(auction.getDate().getTime() + globalConfig.getTime() * 1000L).toInstant());
+            desc = desc.replace("{RemainingTime}", FormatUtil.durationFormat(globalConfig.getRemainingDateFormat(), duration));
             if (desc.contains("lore")) {
                 if (item.getItemMeta().getLore() != null) {
                     listDescription.addAll(item.getItemMeta().getLore());

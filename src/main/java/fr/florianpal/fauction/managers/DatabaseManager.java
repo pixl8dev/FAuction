@@ -14,6 +14,8 @@ public class DatabaseManager {
 
     private final FAuction plugin;
 
+    private Connection connection;
+
     private final ArrayList<IDatabaseTable> repositories = new ArrayList<>();
 
     public DatabaseManager(FAuction plugin) throws SQLException {
@@ -26,10 +28,14 @@ public class DatabaseManager {
         config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
         config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
         ds = new HikariDataSource(config);
+        connection = ds.getConnection();
     }
 
     public Connection getConnection() throws SQLException {
-        return ds.getConnection();
+        if (connection.isClosed()) {
+            connection = ds.getConnection();
+        }
+        return connection;
     }
 
     public void addRepository(IDatabaseTable repository) {
