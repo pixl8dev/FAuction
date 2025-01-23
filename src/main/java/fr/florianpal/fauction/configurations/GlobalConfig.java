@@ -44,8 +44,16 @@ public class GlobalConfig {
 
     private int updateCacheEvery;
 
+    private boolean featureFlippingExpiration;
+
+    private boolean featureFlippingCacheUpdate;
+
     public void load(YamlDocument config) {
         lang = config.getString("lang");
+
+        featureFlippingExpiration = config.getBoolean("feature-flipping.item-expiration", true);
+        featureFlippingCacheUpdate = config.getBoolean("feature-flipping.cache-update", true);
+
         orderBy = config.getString("orderBy");
         dateFormat = config.getString("dateFormat");
         remainingDateFormat = config.getString("remainingDateFormat");
@@ -168,5 +176,13 @@ public class GlobalConfig {
 
     public String getRemainingDateFormat() {
         return remainingDateFormat;
+    }
+
+    public boolean isFeatureFlippingExpiration() {
+        return featureFlippingExpiration;
+    }
+
+    public boolean isFeatureFlippingCacheUpdate() {
+        return featureFlippingCacheUpdate;
     }
 }
