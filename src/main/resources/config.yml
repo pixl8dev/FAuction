@@ -30,6 +30,6 @@ max-price-default:
   value: 100000000
 min-price: # Min price per item. Ex : 1 CobbleStone at 0.5. Set {} to disable it
   COBBLESTONE: 0.5
-max-price: # Man price per item. Ex : 1 CobbleStone at 0.5. Set {} to disable it
+max-price: # Max price per item. Ex : 1 CobbleStone at 0.5. Set {} to disable it
   COBBLESTONE: 5
 item-blacklist: []

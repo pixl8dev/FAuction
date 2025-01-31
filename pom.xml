@@ -72,7 +72,6 @@
 
                 <executions>
                     <execution>
-
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
@@ -80,7 +79,6 @@
                     </execution>
                 </executions>
             </plugin>
-
         </plugins>
     </build>
 

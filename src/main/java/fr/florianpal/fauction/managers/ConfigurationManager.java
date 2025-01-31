@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class ConfigurationManager {
+
     private final DatabaseConfig database = new DatabaseConfig();
     private final YamlDocument databaseConfig;
 

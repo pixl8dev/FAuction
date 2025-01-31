@@ -29,7 +29,6 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
@@ -289,7 +288,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             return true;
         }
 
-        boolean isCategory = abstractGuiWithAuctionsConfig.getCategoriesBlocks().stream().anyMatch(category -> e.getRawSlot() == category.getIndex());
+        boolean isCategory = abstractGuiWithAuctionsConfig.getCategoriesBlocks().stream().anyMatch(c -> e.getRawSlot() == c.getIndex());
         if (isCategory) {
 
             Category nextCategory = plugin.getConfigurationManager().getCategoriesConfig().getNext(category);
@@ -299,6 +298,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
         boolean isClose = abstractGuiWithAuctionsConfig.getCloseBlocks().stream().anyMatch(close -> e.getRawSlot() == close.getIndex());
         if (isClose) {
+
             player.closeInventory();
             return true;
         }

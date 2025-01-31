@@ -4,7 +4,6 @@ import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
 import fr.florianpal.fauction.enums.CancelReason;
-import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.events.AuctionCancelEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
