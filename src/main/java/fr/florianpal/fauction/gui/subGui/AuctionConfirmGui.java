@@ -79,8 +79,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             title = auctionConfirmConfig.getTitleFalse();
         }
 
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
         ItemStack itemStack = confirm.getAuction().getItemStack().clone();
         if (confirm.getAuction().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("")) {
             title = title.replace("{Item}", itemStack.getType().toString());

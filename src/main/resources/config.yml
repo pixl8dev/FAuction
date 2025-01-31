@@ -5,6 +5,8 @@ feature-flipping:
   item-expiration: true
   cache-update: true
 
+decimalFormat: "0.00"
+
 orderBy: "ASC" # ASC or DESC / ASC : More recent to older / DESC : Older to more recent
 dateFormat: "dd/MM/yyyy ':' HH:mm"
 remainingDateFormat: "MMM ddd HHh mmm sss"

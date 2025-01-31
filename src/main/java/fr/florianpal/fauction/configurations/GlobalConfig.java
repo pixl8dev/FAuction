@@ -48,8 +48,12 @@ public class GlobalConfig {
 
     private boolean featureFlippingCacheUpdate;
 
+    private String decimalFormat;
+
     public void load(YamlDocument config) {
         lang = config.getString("lang");
+
+        decimalFormat = config.getString("decimalFormat", "0.00");
 
         featureFlippingExpiration = config.getBoolean("feature-flipping.item-expiration", true);
         featureFlippingCacheUpdate = config.getBoolean("feature-flipping.cache-update", true);
@@ -184,5 +188,9 @@ public class GlobalConfig {
 
     public boolean isFeatureFlippingCacheUpdate() {
         return featureFlippingCacheUpdate;
+    }
+
+    public String getDecimalFormat() {
+        return decimalFormat;
     }
 }

@@ -32,6 +32,7 @@ import java.util.List;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
+
     protected List<Auction> auctions;
 
     protected Category category;
@@ -148,7 +149,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             title = title.replace("{ItemName}", item.getItemMeta().getDisplayName());
         }
         title = title.replace("{OwnerName}", auction.getPlayerName());
-        title = title.replace("{Price}", String.valueOf(auction.getPrice()));
+        title = title.replace("{Price}", df.format(auction.getPrice()));
 
         if (auction instanceof Historic) {
             Historic historic = (Historic) auction;
@@ -184,7 +185,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
                 desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, desc);
             }
 
-            desc = desc.replace("{Price}", String.valueOf(auction.getPrice()));
+            desc = desc.replace("{Price}", df.format(auction.getPrice()));
             Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
             SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());
             desc = desc.replace("{ExpireTime}", formater.format(expireDate));

@@ -22,6 +22,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,8 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
     protected AbstractGuiConfig abstractGuiConfig;
 
+    protected DecimalFormat df;
+
     protected AbstractGui(FAuction plugin, Player player, int page, AbstractGuiConfig abstractGuiConfig) {
         this.plugin = plugin;
         this.player = player;
@@ -61,6 +64,8 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.historicCommandManager = plugin.getHistoricCommandManager();
         this.spamManager = plugin.getSpamManager();
         this.abstractGuiConfig = abstractGuiConfig;
+
+        df = new DecimalFormat(plugin.getConfigurationManager().getGlobalConfig().getDecimalFormat());
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);
     }
