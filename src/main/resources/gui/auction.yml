@@ -169,7 +169,7 @@ block:
     title: "-"
     description: {}
   '48':
-    utility: next
+    utility: previous
     material: ARROW
     title: "&5Previous Page"
     description:
