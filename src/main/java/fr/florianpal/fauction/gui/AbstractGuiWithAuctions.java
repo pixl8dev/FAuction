@@ -23,7 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -31,7 +30,6 @@ import java.util.Date;
 import java.util.List;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
-
 
     protected List<Auction> auctions;
 
@@ -162,8 +160,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         }
 
         title = FormatUtil.format(title);
-        DecimalFormat df = new DecimalFormat();
-        df.setMaximumFractionDigits(2);
         List<String> listDescription = new ArrayList<>();
 
         for (String desc : abstractGuiWithAuctionsConfig.getDescription()) {

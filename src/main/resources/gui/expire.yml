@@ -4,7 +4,7 @@ gui:
   type: CHEST
   name: "Auction House: Expired Items"
   title: "&eItem : &6{ItemName}"
-  replaceTitle: true
+  replaceTitle: false
   description:
     - "&5Sales of : &6{OwnerName}"
     - "&5Price : &6{Price}"
