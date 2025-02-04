@@ -70,7 +70,7 @@ block:
     description: {}
   '10':
     utility: barrier
-    material: MAGENTA_STAINED_GLASS_PANE
+    material: GRAY_STAINED_GLASS_PANE
     title: "-"
     description: {}
   '11':
