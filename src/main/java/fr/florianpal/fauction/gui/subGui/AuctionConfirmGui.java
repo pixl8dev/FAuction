@@ -146,7 +146,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
                 Confirm confirm = confirmList.get(e.getRawSlot());
                 if (!confirm.isValue()) {
                     issuerTarget.sendInfo(MessageKeys.BUY_AUCTION_CANCELLED);
-                    player.getOpenInventory().close();
 
                     FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                         AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
