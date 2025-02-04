@@ -269,7 +269,6 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
                         plugin.getLogger().info("Player : " + player.getName() + " buy " + auctionGood.getItemStack().getItemMeta().getDisplayName() + " at " + auctionGood.getPlayerName());
 
-                        player.getOpenInventory().close();
                         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                             AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
                             gui.initializeItems();
