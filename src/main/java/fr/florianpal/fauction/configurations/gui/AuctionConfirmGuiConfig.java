@@ -27,7 +27,15 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
     private Integer size = 27;
 
+    private String auctionTitle = "";
+
+    private boolean replaceTitle = true;
+
+    private List<String> auctionDescription = new ArrayList<>();
+
     private List<Barrier> barrierBlocks = new ArrayList<>();
+
+    private List<Integer> auctionBlocks = new ArrayList<>();
 
     private Map<Integer, Confirm> confirmBlocks = new HashMap<>();
 
@@ -35,9 +43,13 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
         titleTrue = config.getString("gui.title-true");
         titleFalse = config.getString("gui.title-false");
         nameGui = config.getString("gui.name");
-        description = config.getStringList("gui.description");
+        description = config.getStringList("gui.description", new ArrayList<>());
         size = config.getInt("gui.size");
         inventoryType = InventoryType.valueOf(config.getString("gui.type", "CHEST"));
+
+        auctionTitle = config.getString("gui.auction.title");
+        replaceTitle = config.getBoolean("gui.auction.replaceTitle");
+        auctionDescription = config.getStringList("gui.auction.description");
 
         barrierBlocks = new ArrayList<>();
         confirmBlocks = new HashMap<>();
@@ -63,6 +75,8 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
                         config.getBoolean("block." + index + ".value"),
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)));
+            } else if ("auction".equalsIgnoreCase(currentUtility)) {
+                auctionBlocks.add(Integer.valueOf(index));
             } else {
                 plugin.getLogger().severe("Error : unknown block type " + currentUtility);
             }
@@ -95,5 +109,21 @@ public class AuctionConfirmGuiConfig extends AbstractGuiConfig {
 
     public String getTitleFalse() {
         return titleFalse;
+    }
+
+    public List<Integer> getAuctionBlocks() {
+        return auctionBlocks;
+    }
+
+    public String getAuctionTitle() {
+        return auctionTitle;
+    }
+
+    public boolean isReplaceTitle() {
+        return replaceTitle;
+    }
+
+    public List<String> getAuctionDescription() {
+        return auctionDescription;
     }
 }

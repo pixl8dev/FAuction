@@ -10,6 +10,7 @@ import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
+import fr.florianpal.fauction.objects.Historic;
 import fr.florianpal.fauction.utils.FormatUtil;
 import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
@@ -24,11 +25,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.util.*;
 
 import static org.bukkit.Bukkit.getServer;
 
@@ -53,6 +52,10 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             inv.setItem(barrier.getIndex(), getItemStack(barrier, false));
         }
 
+        for (Integer index : auctionConfirmConfig.getAuctionBlocks()) {
+            inv.setItem(index, createGuiItem(auction));
+        }
+
         int id = 0;
         for (Map.Entry<Integer, Confirm> entry : auctionConfirmConfig.getConfirmBlocks().entrySet()) {
             Confirm confirm = new Confirm(this.auction,
@@ -67,6 +70,72 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             if (id >= (auctionConfirmConfig.getConfirmBlocks().size())) break;
         }
         openInventory(player);
+    }
+
+    public ItemStack createGuiItem(Auction auction) {
+        ItemStack item = auction.getItemStack().clone();
+        ItemMeta meta = item.getItemMeta();
+        String title = auctionConfirmConfig.getAuctionTitle();
+        if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+            title = title.replace("{ItemName}", item.getType().name().replace('_', ' ').toLowerCase());
+        } else {
+            title = title.replace("{ItemName}", item.getItemMeta().getDisplayName());
+        }
+        title = title.replace("{OwnerName}", auction.getPlayerName());
+        title = title.replace("{Price}", df.format(auction.getPrice()));
+
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
+        if (offlinePlayer != null) {
+            title = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, title);
+        }
+
+        title = FormatUtil.format(title);
+        List<String> listDescription = new ArrayList<>();
+
+        for (String desc : auctionConfirmConfig.getAuctionDescription()) {
+            if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+                desc = desc.replace("{ItemName}", item.getType().name().replace('_', ' ').toLowerCase());
+            } else {
+                desc = desc.replace("{ItemName}", item.getItemMeta().getDisplayName());
+            }
+
+            desc = desc.replace("{OwnerName}", auction.getPlayerName());
+
+            if (auction instanceof Historic) {
+                Historic historic = (Historic) auction;
+                desc = desc.replace("{BuyerName}", historic.getPlayerBuyerName());
+            }
+
+            if (offlinePlayer != null) {
+                desc = PlaceholderUtil.parsePlaceholder(plugin.isPlaceholderAPIEnabled(), offlinePlayer, desc);
+            }
+
+            desc = desc.replace("{Price}", df.format(auction.getPrice()));
+            Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
+            SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());
+            desc = desc.replace("{ExpireTime}", formater.format(expireDate));
+
+            Duration duration = Duration.between(new Date().toInstant(), new Date(auction.getDate().getTime() + globalConfig.getTime() * 1000L).toInstant());
+            desc = desc.replace("{RemainingTime}", FormatUtil.durationFormat(globalConfig.getRemainingDateFormat(), duration));
+            if (desc.contains("lore")) {
+                if (item.getItemMeta().getLore() != null) {
+                    listDescription.addAll(item.getItemMeta().getLore());
+                } else {
+                    listDescription.add(desc.replace("{lore}", ""));
+                }
+            } else {
+                desc = FormatUtil.format(desc);
+                listDescription.add(desc);
+            }
+        }
+        if (meta != null) {
+            if (auctionConfirmConfig.isReplaceTitle()) {
+                meta.setDisplayName(title);
+            }
+            meta.setLore(listDescription);
+            item.setItemMeta(meta);
+        }
+        return item;
     }
 
     private ItemStack createGuiItem(Confirm confirm) {
