@@ -148,7 +148,7 @@ public class ExpireQueries implements IDatabaseTable {
                 byte[] item = result.getBytes(4);
                 auctions.put(id, item);
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get expired auction from database. Error {} ", e.getMessage()));
         } finally {
@@ -186,7 +186,7 @@ public class ExpireQueries implements IDatabaseTable {
 
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get expired auctions from database. Error {} ", e.getMessage()));
         } finally {
@@ -221,10 +221,9 @@ public class ExpireQueries implements IDatabaseTable {
                 double price = result.getDouble(5);
                 long date = result.getLong(6);
 
-
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get expired auctions by uuid from database. Error {} ", e.getMessage()));
         } finally {
@@ -245,6 +244,7 @@ public class ExpireQueries implements IDatabaseTable {
     public Auction getExpire(int id) {
         PreparedStatement statement = null;
         ResultSet result = null;
+        Auction auction = null;
         try (Connection connection = databaseManager.getConnection()) {
             statement = connection.prepareStatement(GET_EXPIRE_WITH_ID);
             statement.setInt(1, id);
@@ -258,7 +258,7 @@ public class ExpireQueries implements IDatabaseTable {
                 long date = result.getLong(6);
 
 
-                return new Auction(id, playerUuid, playerName, price, item, date);
+                auction = new Auction(id, playerUuid, playerName, price, item, date);
             }
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by id for database. Error {} ", e.getMessage()));
@@ -274,7 +274,7 @@ public class ExpireQueries implements IDatabaseTable {
                 plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
-        return null;
+        return auction;
     }
 
     @Override

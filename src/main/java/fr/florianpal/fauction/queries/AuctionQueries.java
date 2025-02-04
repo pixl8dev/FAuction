@@ -145,7 +145,7 @@ public class AuctionQueries implements IDatabaseTable {
                 byte[] item = result.getBytes(4);
                 auctions.put(id, item);
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auctions. Error {} ", e.getMessage()));
         } finally {
@@ -183,7 +183,7 @@ public class AuctionQueries implements IDatabaseTable {
 
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auction. Error {} ", e.getMessage()));
         } finally {
@@ -220,7 +220,7 @@ public class AuctionQueries implements IDatabaseTable {
 
                 auctions.add(new Auction(id, playerUuid, playerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by player uuid. Error {} ", e.getMessage()));
         } finally {
@@ -241,6 +241,7 @@ public class AuctionQueries implements IDatabaseTable {
     public Auction getAuction(int id) {
         PreparedStatement statement = null;
         ResultSet result = null;
+        Auction auction = null;
         try (Connection connection = databaseManager.getConnection()) {
             statement = connection.prepareStatement(GET_AUCTION_WITH_ID);
             statement.setInt(1, id);
@@ -254,7 +255,7 @@ public class AuctionQueries implements IDatabaseTable {
                 long date = result.getLong(6);
 
 
-                return new Auction(id, playerUuid, playerName, price, item, date);
+                auction = new Auction(id, playerUuid, playerName, price, item, date);
             }
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by id. Error {} ", e.getMessage()));
@@ -270,7 +271,7 @@ public class AuctionQueries implements IDatabaseTable {
                 plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
-        return null;
+        return auction;
     }
 
     @Override

@@ -96,7 +96,6 @@ public class HistoricQueries implements IDatabaseTable {
 
     public Map<Integer, byte[]> getHistoricBrut() {
 
-
         PreparedStatement statement = null;
         ResultSet result = null;
         Map<Integer, byte[]> auctions = new HashMap<>();
@@ -111,7 +110,7 @@ public class HistoricQueries implements IDatabaseTable {
                 byte[] item = result.getBytes(6);
                 auctions.put(id, item);
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auctions. Error {} ", e.getMessage()));
         } finally {
@@ -153,7 +152,7 @@ public class HistoricQueries implements IDatabaseTable {
 
                 auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auction. Error {} ", e.getMessage()));
         } finally {
@@ -195,7 +194,7 @@ public class HistoricQueries implements IDatabaseTable {
 
                 auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
             }
-            return auctions;
+
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by player uuid. Error {} ", e.getMessage()));
         } finally {
@@ -216,6 +215,7 @@ public class HistoricQueries implements IDatabaseTable {
     public Auction getHistoric(int id) {
         PreparedStatement statement = null;
         ResultSet result = null;
+        Auction auction = null;
         try (Connection connection = databaseManager.getConnection()) {
             statement = connection.prepareStatement(GET_HISTORIC_WITH_ID);
             statement.setInt(1, id);
@@ -232,7 +232,7 @@ public class HistoricQueries implements IDatabaseTable {
                 long date = result.getLong(8);
 
 
-                return new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date);
+                auction = new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date);
             }
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by id. Error {} ", e.getMessage()));
@@ -248,7 +248,7 @@ public class HistoricQueries implements IDatabaseTable {
                 plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
             }
         }
-        return null;
+        return auction;
     }
 
     public void deleteAll() {

@@ -3,6 +3,7 @@ package fr.florianpal.fauction.managers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.florianpal.fauction.FAuction;
+import fr.florianpal.fauction.enums.SQLType;
 import fr.florianpal.fauction.queries.IDatabaseTable;
 
 import java.sql.*;
@@ -24,15 +25,25 @@ public class DatabaseManager {
         config.setJdbcUrl(  plugin.getConfigurationManager().getDatabase().getUrl() );
         config.setUsername( plugin.getConfigurationManager().getDatabase().getUser() );
         config.setPassword(  plugin.getConfigurationManager().getDatabase().getPassword() );
-        config.addDataSourceProperty( "cachePrepStmts" , "true" );
-        config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
-        config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+
+        if (plugin.getConfigurationManager().getDatabase().getSqlType().equals(SQLType.SQLite)) {
+            config.setPoolName("FAuctionPool");
+            config.setDataSourceClassName("org.sqlite.SQLiteDataSource");
+            config.setMaximumPoolSize(50);
+            config.setMaxLifetime(60000);
+            config.setIdleTimeout(45000);
+        } else {
+            config.addDataSourceProperty( "cachePrepStmts" , "true" );
+            config.addDataSourceProperty( "prepStmtCacheSize" , "250" );
+            config.addDataSourceProperty( "prepStmtCacheSqlLimit" , "2048" );
+        }
+
         ds = new HikariDataSource(config);
         connection = ds.getConnection();
     }
 
     public Connection getConnection() throws SQLException {
-        if (connection.isClosed()) {
+        if (connection == null || connection.isClosed()) {
             connection = ds.getConnection();
         }
         return connection;
@@ -48,8 +59,7 @@ public class DatabaseManager {
                 String[] tableInformation = repository.getTable();
 
                 if (!tableExists(tableInformation[0])) {
-                    try {
-                        Statement statement = co.createStatement();
+                    try (Statement statement = co.createStatement()) {
                         statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + tableInformation[0] + "` (" + tableInformation[1] + ") " + tableInformation[2] + ";");
                         plugin.getLogger().info("The table " + tableInformation[0] + " did not exist and was created !");
                     } catch (SQLException e) {
