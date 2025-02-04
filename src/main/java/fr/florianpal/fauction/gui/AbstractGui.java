@@ -23,8 +23,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public abstract class AbstractGui implements InventoryHolder, Listener {
 
@@ -66,6 +68,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.abstractGuiConfig = abstractGuiConfig;
 
         df = new DecimalFormat(plugin.getConfigurationManager().getGlobalConfig().getDecimalFormat());
+        df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH));
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);
     }

@@ -32,6 +32,8 @@ public class ExpireQueries implements IDatabaseTable {
 
     private static final String DELETE_EXPIRE = "DELETE FROM expires WHERE id=?";
 
+    private static final String DELETE_ALL = "DELETE FROM expires";
+
     private String autoIncrement = "AUTO_INCREMENT";
 
     private String parameters = "DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci";
@@ -101,6 +103,24 @@ public class ExpireQueries implements IDatabaseTable {
             statement.executeUpdate();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete expired auction to database. Error {} ", e.getMessage()));
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
+                }
+            }
+        }
+    }
+
+    public void deleteAll() {
+        PreparedStatement statement = null;
+        try (Connection connection = databaseManager.getConnection()) {
+            statement = connection.prepareStatement(DELETE_ALL);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().severe(String.join("Error when delete all expired auction to database. Error {} ", e.getMessage()));
         } finally {
             if (statement != null) {
                 try {

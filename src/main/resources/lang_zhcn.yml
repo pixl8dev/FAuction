@@ -40,6 +40,9 @@ fauction:
   remove_bill_success: "已成功移除此次竞价."
   bill_add_help_description: "为拍卖出具新竞价."
   amount_less_than_bet: "你不能给出 {Offer} 的价格, 因为当前竞价已经是 {Bet}."
+  item_blacklist: "You cannot sell this item !"
+
+  auction_purge: "You have erased all data."
 acf-minecraft:
   invalid_world: "错误: 世界不存在."
   you_must_be_holding_item: "错误: 你必须在主手中持有物品."

@@ -158,6 +158,24 @@ public class FAuction extends JavaPlugin {
         configurationManager.reload(this);
     }
 
+    public void purgeAllData() {
+        auctionCommandManager.deleteAll();
+        expireCommandManager.deleteAll();
+        historicCommandManager.deleteAll();
+    }
+
+    public void purgeAllExpire() {
+        expireCommandManager.deleteAll();
+    }
+
+    public void purgeAllAuction() {
+        auctionCommandManager.deleteAll();
+    }
+
+    public void purgeAllHistoric() {
+        historicCommandManager.deleteAll();
+    }
+
     public ConfigurationManager getConfigurationManager() {
         return configurationManager;
     }

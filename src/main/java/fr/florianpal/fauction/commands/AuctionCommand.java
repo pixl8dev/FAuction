@@ -224,6 +224,46 @@ public class AuctionCommand extends BaseCommand {
         issuerTarget.sendInfo(MessageKeys.AUCTION_RELOAD);
     }
 
+    @Subcommand("admin purge all")
+    @CommandPermission("fauction.admin.purge.all")
+    @Description("{@@fauction.reload_help_description}")
+    public void onPurgeAll(Player playerSender) {
+
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.purgeAllData();
+        issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+    }
+
+    @Subcommand("admin purge historic")
+    @CommandPermission("fauction.admin.purge.hictoric")
+    @Description("{@@fauction.reload_help_description}")
+    public void onPurgeAllHistoric(Player playerSender) {
+
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.purgeAllHistoric();
+        issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+    }
+
+    @Subcommand("admin purge expire")
+    @CommandPermission("fauction.admin.purge.expire")
+    @Description("{@@fauction.reload_help_description}")
+    public void onPurgeAllExpire(Player playerSender) {
+
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.purgeAllExpire();
+        issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+    }
+
+    @Subcommand("admin purge auction")
+    @CommandPermission("fauction.admin.purge.auction")
+    @Description("{@@fauction.reload_help_description}")
+    public void onPurgeAllAucton(Player playerSender) {
+
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.purgeAllAuction();
+        issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+    }
+
     @Subcommand("admin transfertToPaper")
     @CommandPermission("fauction.admin.transfertBddToPaper")
     @Description("{@@fauction.transfert_bdd_help_description}")

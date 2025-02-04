@@ -34,6 +34,10 @@ public class ExpireCommandManager {
         expireQueries.deleteExpire(id);
     }
 
+    public void deleteAll() {
+        expireQueries.deleteAll();
+    }
+
     public Auction expireExist(int id) {
         return expireQueries.getExpire(id);
     }

@@ -32,6 +32,7 @@ fauction:
   item_blacklist: "You cannot sell this item !"
 
   transfert_bdd: "Transfert of the database finished."
+  auction_purge: "You have erased all data."
 acf-minecraft:
   invalid_world: "Error: That world does not exist."
   you_must_be_holding_item: "Error: You must be holding an item in your main hand."

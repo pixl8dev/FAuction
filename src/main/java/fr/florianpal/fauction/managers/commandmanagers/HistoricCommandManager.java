@@ -35,6 +35,10 @@ public class HistoricCommandManager {
         historicQueries.addHistoric(auction, playerBuyerUUID, playerBuyerName);
     }
 
+    public void deleteAll() {
+        historicQueries.deleteAll();
+    }
+
     public void updateCache() {
         List<Historic> historics = historicQueries.getHistorics();
 

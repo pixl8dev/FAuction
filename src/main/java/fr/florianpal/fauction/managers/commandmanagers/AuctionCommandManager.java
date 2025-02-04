@@ -33,9 +33,12 @@ public class AuctionCommandManager {
         auctionQueries.addAuction(player.getUniqueId(), player.getName(), SerializationUtil.serialize(item), price, Calendar.getInstance().getTime());
     }
 
-
     public void deleteAuction(int id) {
         auctionQueries.deleteAuctions(id);
+    }
+
+    public void deleteAll() {
+        auctionQueries.deleteAll();
     }
 
     public Auction auctionExist(int id) {

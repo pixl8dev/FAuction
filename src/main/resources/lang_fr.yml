@@ -32,6 +32,8 @@ fauction:
   item_blacklist: "Vous ne pouvez pas vendre cet item !"
 
   transfert_bdd: "Transfert de la base de données terminée."
+
+  auction_purge: "Vous avez effacé toutes les données."
 acf-minecraft:
   invalid_world: "Ce monde n'existe pas !"
   you_must_be_holding_item: "Vous devez avoir un item dans votre main !"

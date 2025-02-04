@@ -42,7 +42,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         this.auctions = auctions;
         this.abstractGuiWithAuctionsConfig = abstractGuiWithAuctionsConfig;
 
-          if (category == null) category = plugin.getConfigurationManager().getCategoriesConfig().getDefault();
+        if (category == null) category = plugin.getConfigurationManager().getCategoriesConfig().getDefault();
         this.category = category;
 
         this.auctions = ListUtil.getAuctionByCategory(auctions, category);

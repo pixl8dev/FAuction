@@ -35,6 +35,8 @@ public enum MessageKeys implements MessageKeyProvider {
 
     TRANSFERT_BDD,
 
+    AUCTION_PURGE,
+
     DATABASEERROR;
 
     private static final String PREFIX = "fauction";

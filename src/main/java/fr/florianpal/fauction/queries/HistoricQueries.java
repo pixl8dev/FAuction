@@ -26,6 +26,8 @@ public class HistoricQueries implements IDatabaseTable {
     private static final String GET_HISTORIC_WITH_ID = "SELECT * FROM fa_auctions_historic WHERE id=?";
     private static final String GET_HISTORICS_BY_UUID = "SELECT * FROM fa_auctions_historic WHERE playerUuid=?";
     private static final String ADD_HISTORIC = "INSERT INTO fa_auctions_historic (playerUuid, playerName, playerBuyerUuid, playerBuyerName, item, price, date) VALUES(?,?,?,?,?,?,?)";
+    private static final String DELETE_ALL = "DELETE FROM fa_auctions_historic";
+
 
     private String autoIncrement = "AUTO_INCREMENT";
 
@@ -247,6 +249,24 @@ public class HistoricQueries implements IDatabaseTable {
             }
         }
         return null;
+    }
+
+    public void deleteAll() {
+        PreparedStatement statement = null;
+        try (Connection connection = databaseManager.getConnection()) {
+            statement = connection.prepareStatement(DELETE_ALL);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            plugin.getLogger().severe(String.join("Error when delete all historic to database. Error {} ", e.getMessage()));
+        } finally {
+            if (statement != null) {
+                try {
+                    statement.close();
+                } catch (SQLException e) {
+                    plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
+                }
+            }
+        }
     }
 
     @Override
