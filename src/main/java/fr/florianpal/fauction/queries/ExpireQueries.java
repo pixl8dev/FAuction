@@ -58,7 +58,6 @@ public class ExpireQueries implements IDatabaseTable {
                 statement.setLong(5, date.getTime());
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add expired auction to database. Error {} ", e.getMessage()));
         }
@@ -72,7 +71,6 @@ public class ExpireQueries implements IDatabaseTable {
                 statement.setInt(2, id);
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when update expired auction to database. Error {} ", e.getMessage()));
         }
@@ -86,7 +84,6 @@ public class ExpireQueries implements IDatabaseTable {
                 statement.setInt(1, id);
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete expired auction to database. Error {} ", e.getMessage()));
         }
@@ -98,7 +95,6 @@ public class ExpireQueries implements IDatabaseTable {
             try (PreparedStatement statement = connection.prepareStatement(DELETE_ALL)) {
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete all expired auction to database. Error {} ", e.getMessage()));
         }

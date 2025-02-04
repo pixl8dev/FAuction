@@ -57,7 +57,6 @@ public class HistoricQueries implements IDatabaseTable {
                 statement.setLong(7, date.getTime());
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
         }
@@ -76,7 +75,6 @@ public class HistoricQueries implements IDatabaseTable {
                 statement.setLong(7, auction.getDate().getTime());
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
         }
@@ -200,7 +198,6 @@ public class HistoricQueries implements IDatabaseTable {
             try (PreparedStatement statement = connection.prepareStatement(DELETE_ALL)) {
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete all historic to database. Error {} ", e.getMessage()));
         }

@@ -61,7 +61,6 @@ public class AuctionQueries implements IDatabaseTable {
                 statement.setLong(5, date.getTime());
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
         }
@@ -77,7 +76,6 @@ public class AuctionQueries implements IDatabaseTable {
                 statement.setInt(2, id);
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when update auction. Error {} ", e.getMessage()));
         }
@@ -92,7 +90,6 @@ public class AuctionQueries implements IDatabaseTable {
                 statement.setInt(1, id);
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete auction. Error {} ", e.getMessage()));
         }
@@ -103,7 +100,6 @@ public class AuctionQueries implements IDatabaseTable {
             try (PreparedStatement statement = connection.prepareStatement(DELETE_ALL)) {
                 statement.executeUpdate();
             }
-            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete all auction to database. Error {} ", e.getMessage()));
         }
