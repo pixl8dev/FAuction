@@ -45,227 +45,164 @@ public class HistoricQueries implements IDatabaseTable {
     }
 
     public void addHistoric(UUID playerUUID, String playerName, UUID playerBuyerUUID, String playerBuyerName, byte[] item, double price, Date date) {
-        PreparedStatement statement = null;
+
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(ADD_HISTORIC);
-            statement.setString(1, playerUUID.toString());
-            statement.setString(2, playerName);
-            statement.setString(3, playerBuyerUUID.toString());
-            statement.setString(4, playerBuyerName);
-            statement.setBytes(5, item);
-            statement.setDouble(6, price);
-            statement.setLong(7, date.getTime());
-            statement.executeUpdate();
+            try (PreparedStatement statement = connection.prepareStatement(ADD_HISTORIC)) {
+                statement.setString(1, playerUUID.toString());
+                statement.setString(2, playerName);
+                statement.setString(3, playerBuyerUUID.toString());
+                statement.setString(4, playerBuyerName);
+                statement.setBytes(5, item);
+                statement.setDouble(6, price);
+                statement.setLong(7, date.getTime());
+                statement.executeUpdate();
+            }
+            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
     }
 
     public void addHistoric(Auction auction, UUID playerBuyerUUID, String playerBuyerName) {
-        PreparedStatement statement = null;
+
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(ADD_HISTORIC);
-            statement.setString(1, auction.getPlayerUUID().toString());
-            statement.setString(2, auction.getPlayerName());
-            statement.setString(3, playerBuyerUUID.toString());
-            statement.setString(4, playerBuyerName);
-            statement.setBytes(5, SerializationUtil.serialize(auction.getItemStack()));
-            statement.setDouble(6, auction.getPrice());
-            statement.setLong(7, auction.getDate().getTime());
-            statement.executeUpdate();
+            try (PreparedStatement statement = connection.prepareStatement(ADD_HISTORIC)) {
+                statement.setString(1, auction.getPlayerUUID().toString());
+                statement.setString(2, auction.getPlayerName());
+                statement.setString(3, playerBuyerUUID.toString());
+                statement.setString(4, playerBuyerName);
+                statement.setBytes(5, SerializationUtil.serialize(auction.getItemStack()));
+                statement.setDouble(6, auction.getPrice());
+                statement.setLong(7, auction.getDate().getTime());
+                statement.executeUpdate();
+            }
+            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when add auction. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
     }
 
     public Map<Integer, byte[]> getHistoricBrut() {
 
-        PreparedStatement statement = null;
-        ResultSet result = null;
         Map<Integer, byte[]> auctions = new HashMap<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_HISTORICS + this.globalConfig.getOrderBy());
+            try (PreparedStatement statement = connection.prepareStatement(GET_HISTORICS + this.globalConfig.getOrderBy())) {
 
-            result = statement.executeQuery();
+                try (ResultSet result = statement.executeQuery()) {
 
-            while (result.next()) {
-                int id = result.getInt(1);
+                    while (result.next()) {
+                        int id = result.getInt(1);
 
-                byte[] item = result.getBytes(6);
-                auctions.put(id, item);
+                        byte[] item = result.getBytes(6);
+                        auctions.put(id, item);
+                    }
+                }
             }
-
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auctions. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (result != null) {
-                    result.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
         return auctions;
     }
 
     public List<Historic> getHistorics() {
 
-
-        PreparedStatement statement = null;
-        ResultSet result = null;
         ArrayList<Historic> auctions = new ArrayList<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_HISTORICS + this.globalConfig.getOrderBy());
+            try (PreparedStatement statement = connection.prepareStatement(GET_HISTORICS + this.globalConfig.getOrderBy())) {
 
-            result = statement.executeQuery();
+                try (ResultSet result = statement.executeQuery()) {
 
-            while (result.next()) {
-                int id = result.getInt(1);
-                UUID playerUUID = UUID.fromString(result.getString(2));
-                String playerName = result.getString(3);
-                UUID playerBuyerUUID = UUID.fromString(result.getString(4));
-                String playerBuyerName = result.getString(5);
+                    while (result.next()) {
+                        int id = result.getInt(1);
+                        UUID playerUUID = UUID.fromString(result.getString(2));
+                        String playerName = result.getString(3);
+                        UUID playerBuyerUUID = UUID.fromString(result.getString(4));
+                        String playerBuyerName = result.getString(5);
 
-                byte[] item = result.getBytes(6);
-                double price = result.getDouble(7);
-                long date = result.getLong(8);
+                        byte[] item = result.getBytes(6);
+                        double price = result.getDouble(7);
+                        long date = result.getLong(8);
 
-                auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                    }
+                }
             }
 
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get all auction. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (result != null) {
-                    result.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
         return auctions;
     }
 
     public List<Historic> getHistorics(UUID playerUuid) {
 
-        PreparedStatement statement = null;
-        ResultSet result = null;
         ArrayList<Historic> auctions = new ArrayList<>();
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_HISTORICS_BY_UUID);
-            statement.setString(1, playerUuid.toString());
-            result = statement.executeQuery();
+            try (PreparedStatement statement = connection.prepareStatement(GET_HISTORICS_BY_UUID)) {
+                statement.setString(1, playerUuid.toString());
+                try (ResultSet result = statement.executeQuery()) {
 
-            while (result.next()) {
+                    while (result.next()) {
 
-                int id = result.getInt(1);
-                UUID playerUUID = UUID.fromString(result.getString(2));
-                String playerName = result.getString(3);
-                UUID playerBuyerUUID = UUID.fromString(result.getString(4));
-                String playerBuyerName = result.getString(5);
+                        int id = result.getInt(1);
+                        UUID playerUUID = UUID.fromString(result.getString(2));
+                        String playerName = result.getString(3);
+                        UUID playerBuyerUUID = UUID.fromString(result.getString(4));
+                        String playerBuyerName = result.getString(5);
 
-                byte[] item = result.getBytes(6);
-                double price = result.getDouble(7);
-                long date = result.getLong(8);
+                        byte[] item = result.getBytes(6);
+                        double price = result.getDouble(7);
+                        long date = result.getLong(8);
 
-                auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                    }
+                }
             }
 
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by player uuid. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (result != null) {
-                    result.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
         return auctions;
     }
 
     public Auction getHistoric(int id) {
-        PreparedStatement statement = null;
-        ResultSet result = null;
+
         Auction auction = null;
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(GET_HISTORIC_WITH_ID);
-            statement.setInt(1, id);
-            result = statement.executeQuery();
+            try (PreparedStatement statement = connection.prepareStatement(GET_HISTORIC_WITH_ID)) {
+                statement.setInt(1, id);
+                try (ResultSet result = statement.executeQuery()) {
 
-            if (result.next()) {
-                UUID playerUUID = UUID.fromString(result.getString(2));
-                String playerName = result.getString(3);
-                UUID playerBuyerUUID = UUID.fromString(result.getString(4));
-                String playerBuyerName = result.getString(5);
+                    if (result.next()) {
+                        UUID playerUUID = UUID.fromString(result.getString(2));
+                        String playerName = result.getString(3);
+                        UUID playerBuyerUUID = UUID.fromString(result.getString(4));
+                        String playerBuyerName = result.getString(5);
 
-                byte[] item = result.getBytes(6);
-                double price = result.getDouble(7);
-                long date = result.getLong(8);
+                        byte[] item = result.getBytes(6);
+                        double price = result.getDouble(7);
+                        long date = result.getLong(8);
 
 
-                auction = new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date);
+                        auction = new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date);
+                    }
+                }
             }
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when get auction by id. Error {} ", e.getMessage()));
-        } finally {
-            try {
-                if (result != null) {
-                    result.close();
-                }
-                if (statement != null) {
-                    statement.close();
-                }
-            } catch (SQLException e) {
-                plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-            }
         }
         return auction;
     }
 
     public void deleteAll() {
-        PreparedStatement statement = null;
+
         try (Connection connection = databaseManager.getConnection()) {
-            statement = connection.prepareStatement(DELETE_ALL);
-            statement.executeUpdate();
+            try (PreparedStatement statement = connection.prepareStatement(DELETE_ALL)) {
+                statement.executeUpdate();
+            }
+            connection.commit();
         } catch (SQLException e) {
             plugin.getLogger().severe(String.join("Error when delete all historic to database. Error {} ", e.getMessage()));
-        } finally {
-            if (statement != null) {
-                try {
-                    statement.close();
-                } catch (SQLException e) {
-                    plugin.getLogger().severe(String.join("Error when close statement. Error {} ", e.getMessage()));
-                }
-            }
         }
     }
 

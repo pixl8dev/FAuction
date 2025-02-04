@@ -19,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -155,12 +156,16 @@ public class AuctionCommand extends BaseCommand {
                 return;
             }
 
-            String itemName = itemToSell.getItemMeta().getDisplayName() == null || itemToSell.getItemMeta().getDisplayName().isEmpty() ? itemToSell.getType().toString() : itemToSell.getItemMeta().getDisplayName();
-            plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
-            auctionCommandManager.addAuction(playerSender, itemToSell, price);
-            Bukkit.getPluginManager().callEvent(new AuctionAddEvent(playerSender, itemToSell, price));
-            playerSender.getInventory().getItemInMainHand().setAmount(0);
-            issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
+            FAuction.newChain().async(() -> auctionCommandManager.addAuction(playerSender, itemToSell, price)).sync(() -> {
+
+                String itemName = itemToSell.getItemMeta().getDisplayName() == null || itemToSell.getItemMeta().getDisplayName().isEmpty() ? itemToSell.getType().toString() : itemToSell.getItemMeta().getDisplayName();
+                plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
+
+                Bukkit.getPluginManager().callEvent(new AuctionAddEvent(playerSender, itemToSell, price));
+                playerSender.getInventory().getItemInMainHand().setAmount(0);
+                issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
+            }).execute();
+
         }).execute();
     }
 
