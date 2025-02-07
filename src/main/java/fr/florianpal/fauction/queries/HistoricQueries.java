@@ -25,9 +25,9 @@ public class HistoricQueries implements IDatabaseTable {
     private static final String GET_HISTORICS = "SELECT * FROM fa_auctions_historic ORDER BY id ";
     private static final String GET_HISTORIC_WITH_ID = "SELECT * FROM fa_auctions_historic WHERE id=?";
     private static final String GET_HISTORICS_BY_UUID = "SELECT * FROM fa_auctions_historic WHERE playerUuid=?";
-    private static final String ADD_HISTORIC = "INSERT INTO fa_auctions_historic (playerUuid, playerName, playerBuyerUuid, playerBuyerName, item, price, date) VALUES(?,?,?,?,?,?,?)";
+    private static final String ADD_HISTORIC = "INSERT INTO fa_auctions_historic (playerUuid, playerName, playerBuyerUuid, playerBuyerName, item, price, date, buyDate) VALUES(?,?,?,?,?,?,?,?)";
     private static final String DELETE_ALL = "DELETE FROM fa_auctions_historic";
-
+    private static final String ALTER_BUY_DATE = "ALTER TABLE fa_auctions_historic ADD buyDate long;";
 
     private String autoIncrement = "AUTO_INCREMENT";
 
@@ -55,6 +55,7 @@ public class HistoricQueries implements IDatabaseTable {
                 statement.setBytes(5, item);
                 statement.setDouble(6, price);
                 statement.setLong(7, date.getTime());
+                statement.setLong(7, new Date().getTime());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -73,6 +74,7 @@ public class HistoricQueries implements IDatabaseTable {
                 statement.setBytes(5, SerializationUtil.serialize(auction.getItemStack()));
                 statement.setDouble(6, auction.getPrice());
                 statement.setLong(7, auction.getDate().getTime());
+                statement.setLong(8, new Date().getTime());
                 statement.executeUpdate();
             }
         } catch (SQLException e) {
@@ -120,8 +122,9 @@ public class HistoricQueries implements IDatabaseTable {
                         byte[] item = result.getBytes(6);
                         double price = result.getDouble(7);
                         long date = result.getLong(8);
+                        long buyDate = result.getLong(9);
 
-                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date, buyDate));
                     }
                 }
             }
@@ -151,8 +154,9 @@ public class HistoricQueries implements IDatabaseTable {
                         byte[] item = result.getBytes(6);
                         double price = result.getDouble(7);
                         long date = result.getLong(8);
+                        long buyDate = result.getLong(9);
 
-                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date));
+                        auctions.add(new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date, buyDate));
                     }
                 }
             }
@@ -180,9 +184,9 @@ public class HistoricQueries implements IDatabaseTable {
                         byte[] item = result.getBytes(6);
                         double price = result.getDouble(7);
                         long date = result.getLong(8);
+                        long buyDate = result.getLong(9);
 
-
-                        auction = new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date);
+                        auction = new Historic(id, playerUUID, playerName, playerBuyerUUID, playerBuyerName, price, item, date, buyDate);
                     }
                 }
             }
@@ -203,6 +207,16 @@ public class HistoricQueries implements IDatabaseTable {
         }
     }
 
+    public void addBuyDate() {
+        try (Connection connection = databaseManager.getConnection()) {
+            try (PreparedStatement statement = connection.prepareStatement(ALTER_BUY_DATE)) {
+                statement.executeUpdate();
+            }
+        } catch (SQLException e) {
+            plugin.getLogger().severe(String.join("Error when delete all historic to database. Error {} ", e.getMessage()));
+        }
+    }
+
     @Override
     public String[] getTable() {
         return new String[]{"fa_auctions_historic",
@@ -213,7 +227,8 @@ public class HistoricQueries implements IDatabaseTable {
                         "`playerBuyerName` VARCHAR(36) NOT NULL, " +
                         "`item` BLOB NOT NULL, " +
                         "`price` DOUBLE NOT NULL, " +
-                        "`date` LONG NOT NULL",
+                        "`date` LONG NOT NULL, " +
+                        "`buyDate` LONG",
                 parameters
         };
     }

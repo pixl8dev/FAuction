@@ -297,6 +297,16 @@ public class AuctionCommand extends BaseCommand {
         issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
     }
 
+    @Subcommand("admin migrate")
+    @CommandPermission("fauction.admin.migrate")
+    @Description("{@@fauction.migrate_help_description}")
+    public void onMigrate(Player playerSender, String migrateVersion) {
+
+        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
+        plugin.migrate(migrateVersion);
+        issuerTarget.sendInfo(MessageKeys.MIGRATE, "{version}", migrateVersion);
+    }
+
     @HelpCommand
     @Description("{@@fauction.help_description}")
     public void doHelp(CommandSender sender, CommandHelp help) {

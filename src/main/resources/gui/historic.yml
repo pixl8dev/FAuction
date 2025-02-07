@@ -9,6 +9,7 @@ gui:
     - "&5Sold by : &6{OwnerName}"
     - "&5Price : &6{Price}"
     - "&5Buy By : &6{BuyerName}"
+    - "&5Buy At : &6{BuyDate}"
     - "&5Lore :"
     - "{lore}"
 block:

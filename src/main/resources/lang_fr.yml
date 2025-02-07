@@ -7,6 +7,7 @@ fauction:
   reload_help_description: "Permet de recharger la configuration du plugin."
   transfert_bdd_help_description: "Transfert des données de la bdd vers spigot->paper ou paper->spigot"
   clear_cache_help_description: "Pour vider le cache"
+  migrate_help_description: "Faire une migration vers une autre version."
 
   buy_auction_success: "Vous venez d'acheter un item."
   no_auction: "Il n'y a actuellement aucune vente active."
@@ -32,6 +33,8 @@ fauction:
   item_blacklist: "Vous ne pouvez pas vendre cet item !"
 
   transfert_bdd: "Transfert de la base de données terminée."
+
+  migrate: "Vous avez effectué une migration vers la version {version}."
 
   auction_purge: "Vous avez effacé toutes les données."
 acf-minecraft:

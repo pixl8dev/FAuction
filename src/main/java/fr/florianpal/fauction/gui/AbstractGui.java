@@ -24,6 +24,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -54,6 +55,8 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
     protected DecimalFormat df;
 
+    protected SimpleDateFormat dateFormater;
+
     protected AbstractGui(FAuction plugin, Player player, int page, AbstractGuiConfig abstractGuiConfig) {
         this.plugin = plugin;
         this.player = player;
@@ -69,6 +72,8 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
         df = new DecimalFormat(plugin.getConfigurationManager().getGlobalConfig().getDecimalFormat());
         df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH));
+
+        dateFormater = new SimpleDateFormat(globalConfig.getDateFormat());
 
         Bukkit.getPluginManager().registerEvents(this, Bukkit.getPluginManager().getPlugins()[0]);
     }

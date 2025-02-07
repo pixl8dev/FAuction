@@ -25,7 +25,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.*;
 
@@ -112,8 +111,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
 
             desc = desc.replace("{Price}", df.format(auction.getPrice()));
             Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
-            SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());
-            desc = desc.replace("{ExpireTime}", formater.format(expireDate));
+            desc = desc.replace("{ExpireTime}", dateFormater.format(expireDate));
 
             Duration duration = Duration.between(new Date().toInstant(), new Date(auction.getDate().getTime() + globalConfig.getTime() * 1000L).toInstant());
             desc = desc.replace("{RemainingTime}", FormatUtil.durationFormat(globalConfig.getRemainingDateFormat(), duration));

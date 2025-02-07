@@ -235,4 +235,13 @@ public class FAuction extends JavaPlugin {
     public boolean isPlaceholderAPIEnabled() {
         return placeholderAPIEnabled;
     }
+
+    public void migrate(String migrateVersion) {
+
+        switch (migrateVersion) {
+            case "1.7.8":
+                historicQueries.addBuyDate();
+                break;
+        }
+    }
 }

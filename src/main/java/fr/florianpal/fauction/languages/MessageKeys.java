@@ -37,6 +37,8 @@ public enum MessageKeys implements MessageKeyProvider {
 
     AUCTION_PURGE,
 
+    MIGRATE,
+
     DATABASEERROR;
 
     private static final String PREFIX = "fauction";

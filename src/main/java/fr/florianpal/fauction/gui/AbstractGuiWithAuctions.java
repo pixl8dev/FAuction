@@ -23,7 +23,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Date;
@@ -152,6 +151,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         if (auction instanceof Historic) {
             Historic historic = (Historic) auction;
             title = title.replace("{BuyerName}", historic.getPlayerBuyerName());
+            title = title.replace("{BuyDate}", dateFormater.format(historic.getBuyDate()));
         }
 
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(auction.getPlayerUUID());
@@ -175,6 +175,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             if (auction instanceof Historic) {
                 Historic historic = (Historic) auction;
                 desc = desc.replace("{BuyerName}", historic.getPlayerBuyerName());
+                desc = desc.replace("{BuyDate}", dateFormater.format(historic.getBuyDate()));
             }
 
             if (offlinePlayer != null) {
@@ -183,8 +184,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
             desc = desc.replace("{Price}", df.format(auction.getPrice()));
             Date expireDate = new Date((auction.getDate().getTime() + globalConfig.getTime() * 1000L));
-            SimpleDateFormat formater = new SimpleDateFormat(globalConfig.getDateFormat());
-            desc = desc.replace("{ExpireTime}", formater.format(expireDate));
+            desc = desc.replace("{ExpireTime}", dateFormater.format(expireDate));
 
             Duration duration = Duration.between(new Date().toInstant(), new Date(auction.getDate().getTime() + globalConfig.getTime() * 1000L).toInstant());
             desc = desc.replace("{RemainingTime}", FormatUtil.durationFormat(globalConfig.getRemainingDateFormat(), duration));
