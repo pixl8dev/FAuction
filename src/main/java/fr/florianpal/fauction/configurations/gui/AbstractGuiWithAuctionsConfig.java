@@ -46,7 +46,6 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
 
     protected int size;
 
-
     public void load(FAuction plugin, YamlDocument config, String baseBlock) {
         barrierBlocks = new ArrayList<>();
         previousBlocks = new ArrayList<>();
