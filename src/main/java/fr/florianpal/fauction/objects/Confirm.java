@@ -4,6 +4,8 @@ import org.bukkit.Material;
 
 public class Confirm {
 
+    private final int index;
+
     private Auction auction;
 
     private Material material;
@@ -14,7 +16,8 @@ public class Confirm {
 
     private final boolean value;
 
-    public Confirm(Auction auction, Material material, boolean value, String texture, int customModelData) {
+    public Confirm(int index, Auction auction, Material material, boolean value, String texture, int customModelData) {
+        this.index = index;
         this.auction = auction;
         this.material = material;
         this.texture = texture;
@@ -48,5 +51,9 @@ public class Confirm {
 
     public int getCustomModelData() {
         return customModelData;
+    }
+
+    public int getIndex() {
+        return index;
     }
 }

@@ -3,6 +3,7 @@ package fr.florianpal.fauction.configurations.gui;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Barrier;
+import fr.florianpal.fauction.objects.Confirm;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -31,7 +32,9 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
 
     protected List<Barrier> playerBlocks = new ArrayList<>();
 
-    private List<Barrier> historicBlocks = new ArrayList<>();
+    protected List<Barrier> historicBlocks = new ArrayList<>();
+
+    protected List<Confirm> confirmBlocks = new ArrayList<>();
 
     protected String title = "";
 
@@ -56,6 +59,7 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
         categoriesBlocks = new ArrayList<>();
         historicBlocks = new ArrayList<>();
         auctionGuiBlocks = new ArrayList<>();
+        confirmBlocks = new ArrayList<>();
 
         for (Object indexObject : config.getSection("block").getKeys()) {
 
@@ -173,6 +177,12 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 auctionGuiBlocks.add(barrier);
+            } else if (CONFIRM.equalsIgnoreCase(currentUtility)) {
+                confirmBlocks.add(new Confirm(Integer.parseInt(index), null,
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
+                        config.getBoolean("block." + index + ".value"),
+                        config.getString("block." + index + ".texture", ""),
+                        config.getInt("block." + index + ".customModelData", 0)));
             } else {
                 plugin.getLogger().severe("Error : unknown block type " + currentUtility);
             }

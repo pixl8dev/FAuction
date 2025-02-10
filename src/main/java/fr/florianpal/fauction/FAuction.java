@@ -1,5 +1,6 @@
 package fr.florianpal.fauction;
 
+import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
@@ -18,13 +19,13 @@ import io.papermc.lib.PaperLib;
 import org.bstats.bukkit.Metrics;
 import org.bstats.charts.AdvancedPie;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class FAuction extends JavaPlugin {
 
@@ -149,7 +150,16 @@ public class FAuction extends JavaPlugin {
     private void initChart() {
         metrics.addCustomChart(new AdvancedPie("player_per_country", () -> {
             Map<String, Integer> valueMap = new HashMap<>();
-            valueMap.put(TimeZone.getDefault().getID(), Bukkit.getServer().getOnlinePlayers().size());
+            List<Player> onlinePlayers = new ArrayList<>(Bukkit.getServer().getOnlinePlayers());
+
+            int count = 0;
+            for (Player player : onlinePlayers) {
+                if (player.isValid() && player.isConnected()) {
+                    count = count + 1;
+                }
+            }
+
+            valueMap.put(TimeZone.getDefault().getID(), count);
             return valueMap;
         }));
     }

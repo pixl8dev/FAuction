@@ -9,6 +9,7 @@ gui:
     - "&5Sold by : &6{OwnerName}"
     - "&5Price : &6{Price}"
     - "&5Expires on : &6{ExpireTime}"
+    - "&5Remaining time : &6{RemainingTime}"
     - "&5Lore :"
     - "{lore}"
 block:

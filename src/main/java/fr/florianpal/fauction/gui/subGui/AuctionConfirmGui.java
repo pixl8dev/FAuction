@@ -4,13 +4,10 @@ import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
 import fr.florianpal.fauction.events.AuctionBuyEvent;
-import fr.florianpal.fauction.gui.AbstractGui;
+import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
-import fr.florianpal.fauction.objects.Auction;
-import fr.florianpal.fauction.objects.Barrier;
-import fr.florianpal.fauction.objects.Confirm;
-import fr.florianpal.fauction.objects.Historic;
+import fr.florianpal.fauction.objects.*;
 import fr.florianpal.fauction.utils.FormatUtil;
 import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
@@ -30,7 +27,7 @@ import java.util.*;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
+public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInterface {
 
     private final Auction auction;
 
@@ -39,7 +36,7 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
     private final Map<Integer, Confirm> confirmList = new HashMap<>();
 
     AuctionConfirmGui(FAuction plugin, Player player, int page, Auction auction) {
-        super(plugin, player, page, plugin.getConfigurationManager().getAuctionConfirmConfig());
+        super(plugin, player, page, Collections.singletonList(auction), null, plugin.getConfigurationManager().getAuctionConfirmConfig());
         this.auction = auction;
         this.auctionConfirmConfig = plugin.getConfigurationManager().getAuctionConfirmConfig();
         initGui(auctionConfirmConfig.getNameGui(), auctionConfirmConfig.getSize());
@@ -51,20 +48,20 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             inv.setItem(barrier.getIndex(), getItemStack(barrier, false));
         }
 
-        for (Integer index : auctionConfirmConfig.getAuctionBlocks()) {
+        for (Integer index : auctionConfirmConfig.getBaseBlocks()) {
             inv.setItem(index, createGuiItem(auction));
         }
 
         int id = 0;
-        for (Map.Entry<Integer, Confirm> entry : auctionConfirmConfig.getConfirmBlocks().entrySet()) {
-            Confirm confirm = new Confirm(this.auction,
-                    entry.getValue().getMaterial(),
-                    entry.getValue().isValue(),
-                    entry.getValue().getTexture(),
-                    entry.getValue().getCustomModelData()
+        for (Confirm entry : auctionConfirmConfig.getConfirmBlocks()) {
+            Confirm confirm = new Confirm(entry.getIndex(), this.auction,
+                    entry.getMaterial(),
+                    entry.isValue(),
+                    entry.getTexture(),
+                    entry.getCustomModelData()
             );
-            confirmList.put(entry.getKey(), confirm);
-            inv.setItem(entry.getKey(), createGuiItem(confirm));
+            confirmList.put(entry.getIndex(), confirm);
+            inv.setItem(entry.getIndex(), createGuiItem(confirm));
             id++;
             if (id >= (auctionConfirmConfig.getConfirmBlocks().size())) break;
         }
@@ -134,6 +131,21 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
             item.setItemMeta(meta);
         }
         return item;
+    }
+
+    @Override
+    protected void previousAction() {
+
+    }
+
+    @Override
+    protected void nextAction() {
+
+    }
+
+    @Override
+    protected void categoryAction(Category nextCategory) {
+
     }
 
     private ItemStack createGuiItem(Confirm confirm) {
@@ -207,8 +219,8 @@ public class AuctionConfirmGui extends AbstractGui implements GuiInterface {
         ItemStack clickedItem = e.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
 
-        for (Map.Entry<Integer, Confirm> entry : auctionConfirmConfig.getConfirmBlocks().entrySet()) {
-            if (entry.getKey() == e.getRawSlot()) {
+        for (Confirm entry : auctionConfirmConfig.getConfirmBlocks()) {
+            if (entry.getIndex() == e.getRawSlot()) {
                 CommandIssuer issuerTarget = commandManager.getCommandIssuer(player);
                 Confirm confirm = confirmList.get(e.getRawSlot());
                 if (!confirm.isValue()) {
