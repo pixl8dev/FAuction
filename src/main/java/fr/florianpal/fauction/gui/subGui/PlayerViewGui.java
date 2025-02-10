@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.gui.subGui;
 
-import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.PlayerViewConfig;
 import fr.florianpal.fauction.enums.CancelReason;
@@ -10,6 +9,7 @@ import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -120,8 +120,7 @@ public class PlayerViewGui extends AbstractGuiWithAuctions implements GuiInterfa
                         auctions.remove(a);
                         Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.PLAYER));
 
-                        CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                        issuerTarget.sendInfo(MessageKeys.REMOVE_AUCTION_SUCCESS);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_AUCTION_SUCCESS);
 
                         player.closeInventory();
 

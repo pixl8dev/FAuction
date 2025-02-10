@@ -2,7 +2,6 @@ package fr.florianpal.fauction.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
-import co.aikar.commands.CommandIssuer;
 import co.aikar.commands.annotation.*;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
@@ -12,14 +11,13 @@ import fr.florianpal.fauction.gui.subGui.ExpireGui;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
-import fr.florianpal.fauction.managers.commandmanagers.CommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
+import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -31,8 +29,6 @@ public class AuctionCommand extends BaseCommand {
 
     private final FAuction plugin;
 
-    private final CommandManager commandManager;
-
     private final AuctionCommandManager auctionCommandManager;
 
     private final ExpireCommandManager expireCommandManager;
@@ -43,7 +39,6 @@ public class AuctionCommand extends BaseCommand {
 
     public AuctionCommand(FAuction plugin) {
         this.plugin = plugin;
-        this.commandManager = plugin.getCommandManager();
         this.auctionCommandManager = plugin.getAuctionCommandManager();
         this.expireCommandManager = plugin.getExpireCommandManager();
         this.spamManager = plugin.getSpamManager();
@@ -63,8 +58,7 @@ public class AuctionCommand extends BaseCommand {
         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
             AuctionsGui gui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
             gui.initializeItems();
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-            issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
         }).execute();
     }
 
@@ -77,29 +71,28 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         ItemStack itemToSell = playerSender.getInventory().getItemInMainHand();
 
         if (price < 0) {
-            issuerTarget.sendInfo(MessageKeys.NEGATIVE_PRICE);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.NEGATIVE_PRICE);
             return;
         }
 
         if (itemToSell.getType().equals(Material.AIR)) {
-            issuerTarget.sendInfo(MessageKeys.ITEM_AIR);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.ITEM_AIR);
             return;
         }
 
         if (globalConfig.getBlacklistItem().contains(itemToSell.getType())) {
-            issuerTarget.sendInfo(MessageKeys.ITEM_BLACKLIST);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.ITEM_BLACKLIST);
             return;
         }
 
-        if (!haveCorrectMinPrice(itemToSell, issuerTarget, playerSender, price)) {
+        if (!haveCorrectMinPrice(itemToSell, playerSender, playerSender, price)) {
             return;
         }
 
-        if (!haveCorrectMaxPrice(itemToSell, issuerTarget, price)) {
+        if (!haveCorrectMaxPrice(itemToSell, playerSender, price)) {
             return;
         }
 
@@ -129,12 +122,12 @@ public class AuctionCommand extends BaseCommand {
                         }
                     }
                     if (minPrice != -1 && minPrice > price) {
-                        issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
                         return;
                     }
 
                     if (maxPrice != -1 && maxPrice < price) {
-                        issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
                         return;
                     }
                 }
@@ -152,7 +145,7 @@ public class AuctionCommand extends BaseCommand {
 
 
             if (limitations != -1 && limitations <= auctions.size()) {
-                issuerTarget.sendInfo(MessageKeys.MAX_AUCTION);
+                MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MAX_AUCTION);
                 return;
             }
 
@@ -163,24 +156,24 @@ public class AuctionCommand extends BaseCommand {
 
                 Bukkit.getPluginManager().callEvent(new AuctionAddEvent(playerSender, itemToSell, price));
                 playerSender.getInventory().getItemInMainHand().setAmount(0);
-                issuerTarget.sendInfo(MessageKeys.AUCTION_ADD_SUCCESS);
+                MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_ADD_SUCCESS);
             }).execute();
 
         }).execute();
     }
 
-    public boolean haveCorrectMinPrice(ItemStack itemToSell, CommandIssuer issuerTarget, Player playerSender, double price) {
+    public boolean haveCorrectMinPrice(ItemStack itemToSell, Player player, Player playerSender, double price) {
 
         if (globalConfig.getMinPrice().containsKey(itemToSell.getType())) {
             double minPrice = playerSender.getInventory().getItemInMainHand().getAmount() * globalConfig.getMinPrice().get(itemToSell.getType());
             if (minPrice > price) {
-                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                MessageUtil.sendMessage(plugin, player, MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
                 return false;
             }
         } else if (globalConfig.isDefaultMinValueEnable()) {
             double minPrice = itemToSell.getAmount() * globalConfig.getDefaultMinValue();
             if (minPrice > price) {
-                issuerTarget.sendInfo(MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                MessageUtil.sendMessage(plugin, player, MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
                 return false;
             }
         }
@@ -188,18 +181,18 @@ public class AuctionCommand extends BaseCommand {
         return true;
     }
 
-    public boolean haveCorrectMaxPrice(ItemStack itemToSell, CommandIssuer issuerTarget, double price) {
+    public boolean haveCorrectMaxPrice(ItemStack itemToSell, Player player, double price) {
 
         if (globalConfig.getMaxPrice().containsKey(itemToSell.getType())) {
             double maxPrice = itemToSell.getAmount() * globalConfig.getMaxPrice().get(itemToSell.getType());
             if (maxPrice < price) {
-                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                MessageUtil.sendMessage(plugin, player, MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
                 return false;
             }
         } else if (globalConfig.isDefaultMaxValueEnable()) {
             double maxPrice = itemToSell.getAmount() * globalConfig.getDefaultMaxValue();
             if (maxPrice < price) {
-                issuerTarget.sendInfo(MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                MessageUtil.sendMessage(plugin, player, MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
                 return false;
             }
         }
@@ -214,8 +207,7 @@ public class AuctionCommand extends BaseCommand {
         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(auctions -> {
             ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1, null);
             gui.initializeItems();
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
-            issuerTarget.sendInfo(MessageKeys.AUCTION_OPEN);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
         }).execute();
     }
 
@@ -224,9 +216,8 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.reload_help_description}")
     public void onReload(Player playerSender) {
 
-        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         plugin.reloadConfiguration();
-        issuerTarget.sendInfo(MessageKeys.AUCTION_RELOAD);
+        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_RELOAD);
     }
 
     @Subcommand("admin purge all")
@@ -235,9 +226,8 @@ public class AuctionCommand extends BaseCommand {
     public void onPurgeAll(Player playerSender) {
 
         FAuction.newChain().async(() -> {
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             plugin.purgeAllData();
-            issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_PURGE);
         }).execute();
     }
 
@@ -247,9 +237,8 @@ public class AuctionCommand extends BaseCommand {
     public void onPurgeAllHistoric(Player playerSender) {
 
         FAuction.newChain().async(() -> {
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             plugin.purgeAllHistoric();
-            issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_PURGE);
         }).execute();
     }
 
@@ -259,9 +248,8 @@ public class AuctionCommand extends BaseCommand {
     public void onPurgeAllExpire(Player playerSender) {
 
         FAuction.newChain().async(() -> {
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             plugin.purgeAllExpire();
-            issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_PURGE);
         }).execute();
     }
 
@@ -271,9 +259,8 @@ public class AuctionCommand extends BaseCommand {
     public void onPurgeAllAucton(Player playerSender) {
 
         FAuction.newChain().async(() -> {
-            CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
             plugin.purgeAllAuction();
-            issuerTarget.sendInfo(MessageKeys.AUCTION_PURGE);
+            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_PURGE);
         }).execute();
     }
 
@@ -282,9 +269,8 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.transfert_bdd_help_description}")
     public void onTransferBddPaper(Player playerSender) {
 
-        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         plugin.getTransfertManager().transfertBDD(true);
-        issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
+        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.TRANSFERT_BDD);
     }
 
     @Subcommand("admin transfertToBukkit")
@@ -292,9 +278,8 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.transfert_bdd_help_description}")
     public void onTransferBddSpigot(Player playerSender) {
 
-        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         plugin.getTransfertManager().transfertBDD(false);
-        issuerTarget.sendInfo(MessageKeys.TRANSFERT_BDD);
+        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.TRANSFERT_BDD);
     }
 
     @Subcommand("admin migrate")
@@ -302,9 +287,8 @@ public class AuctionCommand extends BaseCommand {
     @Description("{@@fauction.migrate_help_description}")
     public void onMigrate(Player playerSender, String migrateVersion) {
 
-        CommandIssuer issuerTarget = commandManager.getCommandIssuer(playerSender);
         plugin.migrate(migrateVersion);
-        issuerTarget.sendInfo(MessageKeys.MIGRATE, "{version}", migrateVersion);
+        MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MIGRATE, "{version}", migrateVersion);
     }
 
     @HelpCommand

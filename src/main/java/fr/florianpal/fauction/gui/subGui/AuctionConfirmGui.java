@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.gui.subGui;
 
-import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
 import fr.florianpal.fauction.events.AuctionBuyEvent;
@@ -9,6 +8,7 @@ import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.*;
 import fr.florianpal.fauction.utils.FormatUtil;
+import fr.florianpal.fauction.utils.MessageUtil;
 import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import net.milkbowl.vault.economy.EconomyResponse;
@@ -225,11 +225,10 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
 
         for (Confirm entry : auctionConfirmConfig.getConfirmBlocks()) {
             if (entry.getIndex() == e.getRawSlot()) {
-                CommandIssuer issuerTarget = commandManager.getCommandIssuer(player);
+
                 Confirm confirm = confirmList.get(e.getRawSlot());
                 if (!confirm.isValue()) {
-                    issuerTarget.sendInfo(MessageKeys.BUY_AUCTION_CANCELLED);
-
+                    MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_CANCELLED);
                     FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                         AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
                         gui.initializeItems();
@@ -239,13 +238,13 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
 
                 FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(a -> {
                     if (a == null) {
-                        issuerTarget.sendInfo(MessageKeys.NO_AUCTION);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.NO_AUCTION);
                         return;
                     }
 
                     FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(this.auction.getId())).syncLast(auctionGood -> {
                         if (auctionGood == null) {
-                            issuerTarget.sendInfo(MessageKeys.AUCTION_ALREADY_SELL);
+                            MessageUtil.sendMessage(plugin, player, MessageKeys.AUCTION_ALREADY_SELL);
                             return;
                         }
 
@@ -264,7 +263,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
                             return;
                         }
 
-                        issuerTarget.sendInfo(MessageKeys.BUY_AUCTION_SUCCESS);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_SUCCESS);
                         auctionCommandManager.deleteAuction(auctionGood.getId());
                         historicCommandManager.addHistoric(a, player.getUniqueId(), player.getName());
 

@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.gui.subGui;
 
-import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
 import fr.florianpal.fauction.enums.CancelReason;
@@ -12,6 +11,7 @@ import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.ItemUtil;
+import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Barrel;
@@ -130,9 +130,8 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                             Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.PLAYER));
                         }
                         auctions.remove(a);
-                        CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                        issuerTarget.sendInfo(MessageKeys.REMOVE_AUCTION_SUCCESS);
 
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_AUCTION_SUCCESS);
                         player.closeInventory();
 
                         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
@@ -141,13 +140,13 @@ public class AuctionsGui extends AbstractGuiWithAuctions implements GuiInterface
                         }).execute();
                     }).execute();
                 } else if (e.isLeftClick()) {
-                    CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
                     if (auction.getPlayerUUID().equals(player.getUniqueId())) {
-                        issuerTarget.sendInfo(MessageKeys.BUY_YOUR_ITEM);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_YOUR_ITEM);
                         return;
                     }
                     if (!plugin.getVaultIntegrationManager().getEconomy().has(player, auction.getPrice())) {
-                        issuerTarget.sendInfo(MessageKeys.NO_HAVE_MONEY);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.NO_HAVE_MONEY);
+
                         return;
                     }
 

@@ -1,6 +1,5 @@
 package fr.florianpal.fauction.gui.subGui;
 
-import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
 import fr.florianpal.fauction.events.ExpireRemoveEvent;
@@ -9,6 +8,7 @@ import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -104,8 +104,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
                         auctions.remove(a);
                         Bukkit.getPluginManager().callEvent(new ExpireRemoveEvent(player, a));
 
-                        CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
-                        issuerTarget.sendInfo(MessageKeys.REMOVE_EXPIRE_SUCCESS);
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_EXPIRE_SUCCESS);
 
                         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                             ExpireGui gui = new ExpireGui(plugin, player, auctions, 1, category);
