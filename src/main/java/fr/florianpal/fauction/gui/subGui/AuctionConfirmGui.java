@@ -212,12 +212,16 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
         }
         e.setCancelled(true);
 
+        ItemStack clickedItem = e.getCurrentItem();
+        if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
+
         if (spamManager.spamTest(player)) {
             return;
         }
 
-        ItemStack clickedItem = e.getCurrentItem();
-        if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
+        if(guiClick(e)) {
+            return;
+        }
 
         for (Confirm entry : auctionConfirmConfig.getConfirmBlocks()) {
             if (entry.getIndex() == e.getRawSlot()) {

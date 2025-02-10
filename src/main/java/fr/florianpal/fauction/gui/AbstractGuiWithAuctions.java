@@ -137,8 +137,10 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     }
 
     public ItemStack createGuiItem(Auction auction) {
+
         ItemStack item = auction.getItemStack().clone();
         ItemMeta meta = item.getItemMeta();
+
         String title = abstractGuiWithAuctionsConfig.getTitle();
         if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
             title = title.replace("{ItemName}", item.getType().name().replace('_', ' ').toLowerCase());
