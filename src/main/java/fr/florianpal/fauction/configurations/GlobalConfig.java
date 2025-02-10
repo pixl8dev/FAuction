@@ -72,6 +72,7 @@ public class GlobalConfig {
         minPrice = new HashMap<>();
         maxPrice = new HashMap<>();
         blacklistItem = new ArrayList<>();
+        messageSend = new HashMap<>();
 
         limitationsUseMetaLuckperms = config.getBoolean("limitations-use-meta-luckperms", false);
         limitations = new HashMap<>();
