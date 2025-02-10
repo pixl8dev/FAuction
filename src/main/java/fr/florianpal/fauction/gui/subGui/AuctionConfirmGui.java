@@ -215,11 +215,11 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
         ItemStack clickedItem = e.getCurrentItem();
         if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
 
-        if (spamManager.spamTest(player)) {
+        if(guiClick(e)) {
             return;
         }
 
-        if(guiClick(e)) {
+        if (spamManager.spamTest(player)) {
             return;
         }
 
