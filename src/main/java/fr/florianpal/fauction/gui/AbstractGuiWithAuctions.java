@@ -305,7 +305,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         boolean isPlayer = abstractGuiWithAuctionsConfig.getPlayerBlocks().stream().anyMatch(player -> e.getRawSlot() == player.getIndex());
         if (isPlayer) {
 
-            FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+            FAuction.newChain().asyncFirst(() ->  auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
                 PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, 1, category);
                 gui.initializeItems();
             }).execute();
@@ -315,7 +315,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         boolean isHistoric = abstractGuiWithAuctionsConfig.getHistoricBlocks().stream().anyMatch(player -> e.getRawSlot() == player.getIndex());
         if (isHistoric) {
 
-            FAuction.newChain().asyncFirst(historicCommandManager::getHistorics).syncLast(historics -> {
+            FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
                 HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1, category);
                 gui.initializeItems();
             }).execute();
