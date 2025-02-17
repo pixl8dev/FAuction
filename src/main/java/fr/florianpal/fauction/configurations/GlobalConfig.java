@@ -1,6 +1,7 @@
 package fr.florianpal.fauction.configurations;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import fr.florianpal.fauction.enums.Gui;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -50,10 +51,14 @@ public class GlobalConfig {
 
     private String decimalFormat;
 
+    private Gui defaultGui;
+
     private Map<String, Boolean> messageSend;
 
     public void load(YamlDocument config) {
         lang = config.getString("lang");
+
+        defaultGui = Gui.valueOf(config.getString("defaultGui", "MAIN"));
 
         decimalFormat = config.getString("decimalFormat", "0.00");
 
@@ -206,5 +211,9 @@ public class GlobalConfig {
 
     public Map<String, Boolean> getMessageSend() {
         return messageSend;
+    }
+
+    public Gui getDefaultGui() {
+        return defaultGui;
     }
 }

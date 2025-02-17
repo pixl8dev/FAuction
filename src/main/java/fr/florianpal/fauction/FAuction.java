@@ -83,6 +83,7 @@ public class FAuction extends JavaPlugin {
 
         try {
             configurationManager = new ConfigurationManager(this, this.getFile());
+            configurationManager.reload(this);
         } catch (RuntimeException e) {
             getLogger().severe(e.getMessage());
             Bukkit.getPluginManager().disablePlugin(this);

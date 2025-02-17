@@ -4,7 +4,6 @@ import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
 import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
-import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.*;
 import fr.florianpal.fauction.utils.FormatUtil;
@@ -27,7 +26,7 @@ import java.util.*;
 
 import static org.bukkit.Bukkit.getServer;
 
-public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInterface {
+public class AuctionConfirmGui extends AbstractGuiWithAuctions {
 
     private final Auction auction;
 
@@ -39,10 +38,9 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
         super(plugin, player, page, Collections.singletonList(auction), null, plugin.getConfigurationManager().getAuctionConfirmConfig());
         this.auction = auction;
         this.auctionConfirmConfig = plugin.getConfigurationManager().getAuctionConfirmConfig();
-        initGui(auctionConfirmConfig.getNameGui(), auctionConfirmConfig.getSize());
     }
 
-    public void initializeItems() {
+    public void initialize() {
 
         for (Barrier barrier : auctionConfirmConfig.getBarrierBlocks()) {
             inv.setItem(barrier.getIndex(), getItemStack(barrier, false));
@@ -231,7 +229,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
                     MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_CANCELLED);
                     FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                         AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
-                        gui.initializeItems();
+                        gui.initialize();
                     }).execute();
                     return;
                 }
@@ -284,7 +282,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions implements GuiInt
 
                         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                             AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
-                            gui.initializeItems();
+                            gui.initialize();
                         }).execute();
                     }).execute();
                 }).execute();

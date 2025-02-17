@@ -1,5 +1,7 @@
-version: 6
+version: 7
 lang: "en"
+
+defaultGui: MAIN # The default gui open with /ah command
 
 feature-flipping:
   item-expiration: true

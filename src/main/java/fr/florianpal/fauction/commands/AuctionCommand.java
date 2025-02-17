@@ -6,12 +6,13 @@ import co.aikar.commands.annotation.*;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.events.AuctionAddEvent;
-import fr.florianpal.fauction.gui.subGui.AuctionsGui;
-import fr.florianpal.fauction.gui.subGui.ExpireGui;
+import fr.florianpal.fauction.gui.subGui.*;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
+import fr.florianpal.fauction.managers.commandmanagers.HistoricCommandManager;
+import fr.florianpal.fauction.utils.ListUtil;
 import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -33,6 +34,8 @@ public class AuctionCommand extends BaseCommand {
 
     private final ExpireCommandManager expireCommandManager;
 
+    private final HistoricCommandManager historicCommandManager;
+
     private final SpamManager spamManager;
 
     private final GlobalConfig globalConfig;
@@ -43,6 +46,7 @@ public class AuctionCommand extends BaseCommand {
         this.expireCommandManager = plugin.getExpireCommandManager();
         this.spamManager = plugin.getSpamManager();
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
+        this.historicCommandManager = plugin.getHistoricCommandManager();
     }
 
     @Default
@@ -55,11 +59,42 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-            AuctionsGui gui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
-            gui.initializeItems();
-            MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
-        }).execute();
+        switch (globalConfig.getDefaultGui()) {
+            case MAIN:
+                    MainGui gui = new MainGui(plugin, playerSender, 1);
+                    gui.initialize();
+                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                break;
+            case AUCTION:
+                FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
+                    AuctionsGui auctionsGui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
+                    auctionsGui.initialize();
+                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                }).execute();
+                break;
+            case EXPIRE:
+                FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(expires -> {
+                    ExpireGui expireGui = new ExpireGui(plugin, playerSender, expires, 1, null);
+                    expireGui.initialize();
+                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                }).execute();
+                break;
+            case HISTORIC:
+                FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(playerSender.getUniqueId())).syncLast(historics -> {
+                    HistoricGui historicGui = new HistoricGui(plugin, playerSender, ListUtil.historicToAuction(historics), 1, null);
+                    historicGui.initialize();
+                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                }).execute();
+                break;
+            case PLAYER:
+                FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
+                    PlayerViewGui playerViewGui = new PlayerViewGui(plugin, playerSender, auctions, 1, null);
+                    playerViewGui.initialize();
+                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                }).execute();
+                break;
+        }
+
     }
 
     @Subcommand("sell")
@@ -206,7 +241,7 @@ public class AuctionCommand extends BaseCommand {
 
         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(auctions -> {
             ExpireGui gui = new ExpireGui(plugin, playerSender, auctions, 1, null);
-            gui.initializeItems();
+            gui.initialize();
             MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
         }).execute();
     }

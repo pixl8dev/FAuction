@@ -70,7 +70,7 @@ public class InventoryVisualization implements InventoryHolder, Listener {
 
         FAuction.newChain().asyncFirst(() -> plugin.getAuctionCommandManager().getAuctions()).syncLast(auctions -> {
             AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 }

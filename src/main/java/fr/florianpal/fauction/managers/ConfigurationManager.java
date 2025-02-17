@@ -43,6 +43,10 @@ public class ConfigurationManager {
     private final CategoriesConfig categoriesConfig = new CategoriesConfig();
     private YamlDocument categoriesConfiguration;
 
+
+    private final MainConfig mainConfig = new MainConfig();
+    private YamlDocument mainConfiguration;
+
     public ConfigurationManager(FAuction plugin, File pluginFile) {
 
         try {
@@ -58,7 +62,6 @@ public class ConfigurationManager {
             throw new RuntimeException(e);
         }
         database.load(databaseConfig);
-        loadAllConfiguration(plugin);
     }
 
     public void reload(FAuction plugin) {
@@ -69,41 +72,49 @@ public class ConfigurationManager {
 
         try {
 
-        auctionConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auction.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("/gui/auction.yml")),
-                GeneralSettings.DEFAULT,
-                LoaderSettings.builder().setAutoUpdate(false).build(),
-                DumperSettings.DEFAULT,
-                UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
-        );
+            auctionConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auction.yml"),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/auction.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(false).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
+            );
 
 
-        historicConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/historic.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("/gui/historic.yml")),
-                GeneralSettings.DEFAULT,
-                LoaderSettings.builder().setAutoUpdate(false).build(),
-                DumperSettings.DEFAULT,
-                UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
-        );
+            historicConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/historic.yml"),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/historic.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(false).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
+            );
 
-        playerViewConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/playerView.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("/gui/playerView.yml")),
-                GeneralSettings.DEFAULT,
-                LoaderSettings.builder().setAutoUpdate(false).build(),
-                DumperSettings.DEFAULT,
-                UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
-        );
+            playerViewConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/playerView.yml"),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/playerView.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(false).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
+            );
 
-        expireConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/expire.yml"),
-                Objects.requireNonNull(getClass().getResourceAsStream("/gui/expire.yml")),
-                GeneralSettings.DEFAULT,
-                LoaderSettings.builder().setAutoUpdate(false).build(),
-                DumperSettings.DEFAULT,
-                UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
-        );
+            expireConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/expire.yml"),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/expire.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(false).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
+            );
 
             auctionConfirmConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auctionConfirm.yml"),
                     Objects.requireNonNull(getClass().getResourceAsStream("/gui/auctionConfirm.yml")),
+                    GeneralSettings.DEFAULT,
+                    LoaderSettings.builder().setAutoUpdate(false).build(),
+                    DumperSettings.DEFAULT,
+                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
+            );
+
+            mainConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/main.yml"),
+                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/main.yml")),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(false).build(),
                     DumperSettings.DEFAULT,
@@ -130,13 +141,14 @@ public class ConfigurationManager {
             throw new RuntimeException(e);
         }
 
-        globalConfig.load(globalConfiguration);
         categoriesConfig.load(categoriesConfiguration);
+        globalConfig.load(globalConfiguration);
         auctionConfig.load(plugin, auctionConfiguration);
         historicConfig.load(plugin, historicConfiguration);
         auctionConfirmConfig.load(plugin, auctionConfirmConfiguration);
         expireConfig.load(plugin, expireConfiguration);
         playerViewConfig.load(plugin, playerViewConfiguration);
+        mainConfig.load(plugin, mainConfiguration);
     }
 
     public DatabaseConfig getDatabase() {
@@ -169,5 +181,9 @@ public class ConfigurationManager {
 
     public HistoricConfig getHistoricConfig() {
         return historicConfig;
+    }
+
+    public MainConfig getMainConfig() {
+        return mainConfig;
     }
 }
