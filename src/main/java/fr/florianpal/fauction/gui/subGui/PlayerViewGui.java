@@ -30,22 +30,6 @@ public class PlayerViewGui extends AbstractGuiWithAuctions {
     }
 
     @Override
-    public void initialize() {
-
-        initBarrier();
-
-        if (!auctions.isEmpty()) {
-            int id = (this.playerViewConfig.getBaseBlocks().size() * this.page) - this.playerViewConfig.getBaseBlocks().size();
-            for (int index : playerViewConfig.getBaseBlocks()) {
-                inv.setItem(index, createGuiItem(auctions.get(id)));
-                id++;
-                if (id >= (auctions.size())) break;
-            }
-        }
-        openInventory(player);
-    }
-
-    @Override
     protected void previousAction() {
         FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
             PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, this.page - 1, category);

@@ -46,11 +46,10 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     @Override
     protected void initGui(String title, int size) {
 
+        title = title.replace("{Page}", String.valueOf(this.page));
         if (this.auctions != null) {
-            title = title.replace("{Page}", String.valueOf(this.page));
             title = title.replace("{TotalPage}", String.valueOf(((this.auctions.size() - 1) / abstractGuiWithAuctionsConfig.getBaseBlocks().size()) + 1));
         } else {
-            title = title.replace("{Page}", String.valueOf(this.page));
             title = title.replace("{TotalPage}", "1");
         }
         this.inv = Bukkit.createInventory(this, abstractGuiWithAuctionsConfig.getSize(), FormatUtil.format(title));
@@ -77,6 +76,8 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         for (Barrier categoryBlock : abstractGuiWithAuctionsConfig.getCategoriesBlocks()) {
             inv.setItem(categoryBlock.getIndex(), createGuiItem(getItemStack(categoryBlock, false)));
         }
+
+        super.initBarrier();
     }
 
     @Override
