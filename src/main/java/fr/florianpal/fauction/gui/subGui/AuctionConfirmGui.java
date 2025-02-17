@@ -42,6 +42,9 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
 
     public void initialize() {
 
+        initGui(abstractGuiConfig.getNameGui(), abstractGuiConfig.getSize());
+        initBarrier();
+
         for (Barrier barrier : auctionConfirmConfig.getBarrierBlocks()) {
             inv.setItem(barrier.getIndex(), getItemStack(barrier, false));
         }

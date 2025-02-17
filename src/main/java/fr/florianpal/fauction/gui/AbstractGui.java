@@ -188,9 +188,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         if (auctionGuiBarrierOptional.isPresent()) {
 
             FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                System.out.println("Auctions : " + auctions);
                 AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, auctionGuiBarrierOptional.get().getCategory());
-                System.out.println("Auctions : " + auctions);
                 gui.initialize();
             }).execute();
             return true;

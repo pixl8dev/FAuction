@@ -47,7 +47,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     protected void initGui(String title, int size) {
 
         title = title.replace("{Page}", String.valueOf(this.page));
-        if (this.auctions != null) {
+        if (this.auctions != null && ! abstractGuiWithAuctionsConfig.getBaseBlocks().isEmpty()) {
             title = title.replace("{TotalPage}", String.valueOf(((this.auctions.size() - 1) / abstractGuiWithAuctionsConfig.getBaseBlocks().size()) + 1));
         } else {
             title = title.replace("{TotalPage}", "1");
