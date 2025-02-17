@@ -49,9 +49,14 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
     @Override
     protected void initGui(String title, int size) {
-        title = title.replace("{Page}", String.valueOf(this.page));
-        title = title.replace("{TotalPage}", String.valueOf(((this.auctions.size() - 1) / abstractGuiWithAuctionsConfig.getBaseBlocks().size()) + 1));
 
+        title = title.replace("{Page}", String.valueOf(this.page));
+
+        if (this.auctions != null) {
+            title = title.replace("{TotalPage}", String.valueOf(((this.auctions.size() - 1) / abstractGuiWithAuctionsConfig.getBaseBlocks().size()) + 1));
+        } else {
+            title = title.replace("{TotalPage}", "1");
+        }
         this.inv = Bukkit.createInventory(this, abstractGuiWithAuctionsConfig.getSize(), FormatUtil.format(title));
     }
 
@@ -126,7 +131,12 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         List<String> descriptions = new ArrayList<>();
         for (String desc : meta.getLore()) {
 
-            desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
+            if (this.auctions != null) {
+                desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
+            } else {
+                desc = desc.replace("{TotalSale}", "0");
+            }
+
             desc = FormatUtil.format(desc);
             descriptions.add(desc);
         }
