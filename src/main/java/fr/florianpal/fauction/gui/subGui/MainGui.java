@@ -10,8 +10,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class MainGui extends AbstractGui {
 
-    public MainGui(FAuction plugin, Player player, int page) {
-        super(plugin, player, page, plugin.getConfigurationManager().getMainConfig());
+    public MainGui(FAuction plugin, String id, Player player, int page) {
+        super(plugin, player, page, plugin.getConfigurationManager().getMenuConfig().getMenus().getOrDefault(id, null));
     }
 
     @EventHandler

@@ -43,9 +43,7 @@ public class ConfigurationManager {
     private final CategoriesConfig categoriesConfig = new CategoriesConfig();
     private YamlDocument categoriesConfiguration;
 
-
-    private final MainConfig mainConfig = new MainConfig();
-    private YamlDocument mainConfiguration;
+    private final MenuConfig menuConfig = new MenuConfig();
 
     public ConfigurationManager(FAuction plugin, File pluginFile) {
 
@@ -80,7 +78,6 @@ public class ConfigurationManager {
                     UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
             );
 
-
             historicConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/historic.yml"),
                     Objects.requireNonNull(getClass().getResourceAsStream("/gui/historic.yml")),
                     GeneralSettings.DEFAULT,
@@ -107,14 +104,6 @@ public class ConfigurationManager {
 
             auctionConfirmConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/auctionConfirm.yml"),
                     Objects.requireNonNull(getClass().getResourceAsStream("/gui/auctionConfirm.yml")),
-                    GeneralSettings.DEFAULT,
-                    LoaderSettings.builder().setAutoUpdate(false).build(),
-                    DumperSettings.DEFAULT,
-                    UpdaterSettings.builder().setVersioning(new BasicVersioning("version")).setOptionSorting(UpdaterSettings.DEFAULT_OPTION_SORTING).build()
-            );
-
-            mainConfiguration = YamlDocument.create(new File(plugin.getDataFolder(), "gui/main.yml"),
-                    Objects.requireNonNull(getClass().getResourceAsStream("/gui/main.yml")),
                     GeneralSettings.DEFAULT,
                     LoaderSettings.builder().setAutoUpdate(false).build(),
                     DumperSettings.DEFAULT,
@@ -148,7 +137,7 @@ public class ConfigurationManager {
         auctionConfirmConfig.load(plugin, auctionConfirmConfiguration);
         expireConfig.load(plugin, expireConfiguration);
         playerViewConfig.load(plugin, playerViewConfiguration);
-        mainConfig.load(plugin, mainConfiguration);
+        menuConfig.load(plugin);
     }
 
     public DatabaseConfig getDatabase() {
@@ -183,7 +172,7 @@ public class ConfigurationManager {
         return historicConfig;
     }
 
-    public MainConfig getMainConfig() {
-        return mainConfig;
+    public MenuConfig getMenuConfig() {
+        return menuConfig;
     }
 }

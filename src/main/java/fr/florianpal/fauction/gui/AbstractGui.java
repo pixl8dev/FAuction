@@ -3,16 +3,15 @@ package fr.florianpal.fauction.gui;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.AbstractGuiConfig;
-import fr.florianpal.fauction.gui.subGui.AuctionsGui;
-import fr.florianpal.fauction.gui.subGui.ExpireGui;
-import fr.florianpal.fauction.gui.subGui.HistoricGui;
-import fr.florianpal.fauction.gui.subGui.PlayerViewGui;
+import fr.florianpal.fauction.configurations.gui.MenuConfig;
+import fr.florianpal.fauction.gui.subGui.*;
 import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.CommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.ExpireCommandManager;
 import fr.florianpal.fauction.managers.commandmanagers.HistoricCommandManager;
 import fr.florianpal.fauction.objects.Barrier;
+import fr.florianpal.fauction.objects.BarrierMenu;
 import fr.florianpal.fauction.objects.BarrierWithCategory;
 import fr.florianpal.fauction.utils.FormatUtil;
 import fr.florianpal.fauction.utils.ListUtil;
@@ -66,6 +65,7 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
     protected SimpleDateFormat dateFormater;
 
     protected AbstractGui(FAuction plugin, Player player, int page, AbstractGuiConfig abstractGuiConfig) {
+
         this.plugin = plugin;
         this.player = player;
         this.page = page;
@@ -77,6 +77,11 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         this.historicCommandManager = plugin.getHistoricCommandManager();
         this.spamManager = plugin.getSpamManager();
         this.abstractGuiConfig = abstractGuiConfig;
+
+        if (abstractGuiConfig == null) {
+            plugin.getLogger().severe("Error when load custom menu. Cannot found config");
+            return;
+        }
 
         df = new DecimalFormat(plugin.getConfigurationManager().getGlobalConfig().getDecimalFormat());
         df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH));
@@ -129,6 +134,10 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
         for (Barrier historic : abstractGuiConfig.getHistoricBlocks()) {
             inv.setItem(historic.getIndex(), createGuiItem(getItemStack(historic, false)));
+        }
+
+        for (Barrier menu : abstractGuiConfig.getMenuBlocks()) {
+            inv.setItem(menu.getIndex(), createGuiItem(getItemStack(menu, false)));
         }
     }
 
@@ -228,6 +237,14 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
                 HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1, historicGuiBarrierOptional.get().getCategory());
                 gui.initialize();
             }).execute();
+            return true;
+        }
+
+        Optional<BarrierMenu> menuGuiBarrierOptional = abstractGuiConfig.getMenuBlocks().stream().filter(p -> e.getRawSlot() == p.getIndex()).findFirst();
+        if (menuGuiBarrierOptional.isPresent()) {
+            System.out.println(plugin.getConfigurationManager().getMenuConfig().getMenus());
+            MainGui gui = new MainGui(plugin, menuGuiBarrierOptional.get().getId(), player, 1);
+            gui.initialize();
             return true;
         }
 

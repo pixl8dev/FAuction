@@ -159,10 +159,10 @@ block:
     title: "&cReturn to the auction house."
     description: {}
   '46':
-    utility: barrier
-    material: AIR
-    title: " "
-    description: {}
+    utility: historicGui
+    material: WRITABLE_BOOK
+    title: "&cSee our item historic"
+    description: { }
   '47':
     utility: barrier
     material: AIR
@@ -198,17 +198,20 @@ block:
       title: " "
       description: {}
   '51':
-    utility: barrier
-    material: AIR
-    title: " "
-    description: {}
+    utility: category
+    material: BOOK
+    title: "&5Filter."
+    description:
+      - "&eClick here to change filter"
+      - "&eCurrent filter : {categoryDisplayName}"
   '52':
-    utility: barrier
-    material: AIR
-    title: " "
-    description: {}
+    utility: player
+    material: NETHER_STAR
+    title: "&5My Items"
+    description:
+      - "&eClick here to see your items for sale"
   '53':
-    utility: barrier
-    material: AIR
-    title: " "
+    utility: close
+    material: BARRIER
+    title: "Close"
     description: {}

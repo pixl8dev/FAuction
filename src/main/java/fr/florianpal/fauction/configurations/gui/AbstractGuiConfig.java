@@ -4,6 +4,7 @@ import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.enums.BlockType;
 import fr.florianpal.fauction.objects.Barrier;
+import fr.florianpal.fauction.objects.BarrierMenu;
 import fr.florianpal.fauction.objects.BarrierWithCategory;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryType;
@@ -25,6 +26,8 @@ public abstract class AbstractGuiConfig {
     private List<BarrierWithCategory> auctionGuiBlocks = new ArrayList<>();
 
     private List<Barrier> closeBlocks = new ArrayList<>();
+
+    private List<BarrierMenu> menuBlocks = new ArrayList<>();
 
     private List<BarrierWithCategory> playerBlocks = new ArrayList<>();
 
@@ -110,6 +113,17 @@ public abstract class AbstractGuiConfig {
                         config.getInt("block." + index + ".customModelData", 0)
                 );
                 closeBlocks.add(barrier);
+            } else if (MENU.equalsIgnoreCase(currentUtility)) {
+                BarrierMenu barrier = new BarrierMenu(
+                        Integer.parseInt(index),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
+                        config.getString("block." + index + ".title"),
+                        config.getStringList("block." + index + ".description"),
+                        config.getString("block." + index + ".texture", ""),
+                        config.getInt("block." + index + ".customModelData", 0),
+                        config.getString("block." + index + ".id", "main")
+                );
+                menuBlocks.add(barrier);
             } else if (AUCTIONGUI.equalsIgnoreCase(currentUtility)) {
                 BarrierWithCategory barrier = new BarrierWithCategory(
                         Integer.parseInt(index),
@@ -147,6 +161,10 @@ public abstract class AbstractGuiConfig {
 
     public List<BarrierWithCategory> getExpireBlocks() {
         return expireBlocks;
+    }
+
+    public List<BarrierMenu> getMenuBlocks() {
+        return menuBlocks;
     }
 
     public String getNameGui() {

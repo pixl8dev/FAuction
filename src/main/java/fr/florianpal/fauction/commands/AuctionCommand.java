@@ -60,39 +60,46 @@ public class AuctionCommand extends BaseCommand {
         }
 
         switch (globalConfig.getDefaultGui()) {
-            case MAIN:
-                    MainGui gui = new MainGui(plugin, playerSender, 1);
-                    gui.initialize();
-                    MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
-                break;
-            case AUCTION:
+            case "AUCTION":
                 FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
                     AuctionsGui auctionsGui = new AuctionsGui(plugin, playerSender, auctions, 1, null);
                     auctionsGui.initialize();
                     MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
                 }).execute();
                 break;
-            case EXPIRE:
+            case "EXPIRE":
                 FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(playerSender.getUniqueId())).syncLast(expires -> {
                     ExpireGui expireGui = new ExpireGui(plugin, playerSender, expires, 1, null);
                     expireGui.initialize();
                     MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
                 }).execute();
                 break;
-            case HISTORIC:
+            case "HISTORIC":
                 FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(playerSender.getUniqueId())).syncLast(historics -> {
                     HistoricGui historicGui = new HistoricGui(plugin, playerSender, ListUtil.historicToAuction(historics), 1, null);
                     historicGui.initialize();
                     MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
                 }).execute();
                 break;
-            case PLAYER:
+            case "PLAYER":
                 FAuction.newChain().asyncFirst(() -> auctionCommandManager.getAuctions(playerSender.getUniqueId())).syncLast(auctions -> {
                     PlayerViewGui playerViewGui = new PlayerViewGui(plugin, playerSender, auctions, 1, null);
                     playerViewGui.initialize();
                     MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
                 }).execute();
                 break;
+            default:
+                String[] id = globalConfig.getDefaultGui().split(":");
+
+                if (!"MENU".equals(id[0])) {
+                    return;
+                }
+
+                MainGui gui = new MainGui(plugin, id[1], playerSender, 1);
+                gui.initialize();
+                MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_OPEN);
+                break;
+
         }
 
     }

@@ -51,14 +51,14 @@ public class GlobalConfig {
 
     private String decimalFormat;
 
-    private Gui defaultGui;
+    private String defaultGui;
 
     private Map<String, Boolean> messageSend;
 
     public void load(YamlDocument config) {
         lang = config.getString("lang");
 
-        defaultGui = Gui.valueOf(config.getString("defaultGui", "MAIN"));
+        defaultGui = config.getString("defaultGui", "AUCTION");
 
         decimalFormat = config.getString("decimalFormat", "0.00");
 
@@ -213,7 +213,7 @@ public class GlobalConfig {
         return messageSend;
     }
 
-    public Gui getDefaultGui() {
+    public String getDefaultGui() {
         return defaultGui;
     }
 }
