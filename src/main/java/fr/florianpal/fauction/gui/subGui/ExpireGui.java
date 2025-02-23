@@ -4,7 +4,6 @@ import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.ExpireGuiConfig;
 import fr.florianpal.fauction.events.ExpireRemoveEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
-import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
@@ -18,21 +17,20 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
+public class ExpireGui extends AbstractGuiWithAuctions {
 
     private final ExpireGuiConfig expireGuiConfig;
 
     public ExpireGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
         super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getExpireConfig());
         this.expireGuiConfig = plugin.getConfigurationManager().getExpireConfig();
-        initGui(expireGuiConfig.getNameGui(), expireGuiConfig.getSize());
     }
 
     @Override
     protected void previousAction() {
         FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
             ExpireGui gui = new ExpireGui(plugin, player, expires, this.page - 1, category);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
@@ -40,7 +38,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
     protected void nextAction() {
         FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
             ExpireGui gui = new ExpireGui(plugin, player, expires, this.page + 1, category);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
@@ -48,7 +46,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
     protected void categoryAction(Category nextCategory) {
         FAuction.newChain().asyncFirst(expireCommandManager::getExpires).syncLast(expires -> {
             ExpireGui gui = new ExpireGui(plugin, player, auctions,1 , nextCategory);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
@@ -108,7 +106,7 @@ public class ExpireGui extends AbstractGuiWithAuctions implements GuiInterface {
 
                         FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
                             ExpireGui gui = new ExpireGui(plugin, player, auctions, 1, category);
-                            gui.initializeItems();
+                            gui.initialize();
                         }).execute();
                     }).execute();
                 }

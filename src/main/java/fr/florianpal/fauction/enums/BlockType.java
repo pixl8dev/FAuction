@@ -8,6 +8,8 @@ public enum BlockType {
 
     CLOSE("close"),
 
+    MENU("menu"),
+
     AUCTIONGUI("auctionGui"),
 
     CATEGORY("category"),

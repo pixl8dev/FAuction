@@ -2,10 +2,6 @@ package fr.florianpal.fauction.gui;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AbstractGuiWithAuctionsConfig;
-import fr.florianpal.fauction.gui.subGui.AuctionsGui;
-import fr.florianpal.fauction.gui.subGui.ExpireGui;
-import fr.florianpal.fauction.gui.subGui.HistoricGui;
-import fr.florianpal.fauction.gui.subGui.PlayerViewGui;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Category;
@@ -51,7 +47,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     protected void initGui(String title, int size) {
 
         title = title.replace("{Page}", String.valueOf(this.page));
-
         if (this.auctions != null && !abstractGuiWithAuctionsConfig.getBaseBlocks().isEmpty()) {
             title = title.replace("{TotalPage}", String.valueOf(((this.auctions.size() - 1) / abstractGuiWithAuctionsConfig.getBaseBlocks().size()) + 1));
         } else {
@@ -61,14 +56,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     }
 
     protected void initBarrier() {
-
-        for (Barrier barrier : abstractGuiWithAuctionsConfig.getBarrierBlocks()) {
-            inv.setItem(barrier.getIndex(), createGuiItem(getItemStack(barrier, false)));
-        }
-
-        for (Barrier barrier : abstractGuiWithAuctionsConfig.getExpireBlocks()) {
-            inv.setItem(barrier.getIndex(), createGuiItem(getItemStack(barrier, false)));
-        }
 
         for (Barrier previous : abstractGuiWithAuctionsConfig.getPreviousBlocks()) {
             if (page > 1) {
@@ -86,29 +73,17 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             }
         }
 
-        for (Barrier player : abstractGuiWithAuctionsConfig.getPlayerBlocks()) {
-            inv.setItem(player.getIndex(), createGuiItem(getItemStack(player, false)));
-        }
-
-        for (Barrier auctionGui : abstractGuiWithAuctionsConfig.getAuctionGuiBlocks()) {
-            inv.setItem(auctionGui.getIndex(), createGuiItem(getItemStack(auctionGui, false)));
-        }
-
-        for (Barrier close : abstractGuiWithAuctionsConfig.getCloseBlocks()) {
-            inv.setItem(close.getIndex(), createGuiItem(getItemStack(close, false)));
-        }
-
         for (Barrier categoryBlock : abstractGuiWithAuctionsConfig.getCategoriesBlocks()) {
             inv.setItem(categoryBlock.getIndex(), createGuiItem(getItemStack(categoryBlock, false)));
         }
 
-        for (Barrier historic : abstractGuiWithAuctionsConfig.getHistoricBlocks()) {
-            inv.setItem(historic.getIndex(), createGuiItem(getItemStack(historic, false)));
-        }
+        super.initBarrier();
     }
 
-    public void initializeItems() {
+    @Override
+    public void initialize() {
 
+        initGui(abstractGuiConfig.getNameGui(), abstractGuiConfig.getSize());
         initBarrier();
 
         if (!auctions.isEmpty()) {
@@ -122,6 +97,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         openInventory(player);
     }
 
+    @Override
     public ItemStack createGuiItem(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null || meta.getDisplayName() == null || meta.getLore() == null) {
@@ -277,26 +253,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             return true;
         }
 
-        boolean isAuctionGui = abstractGuiWithAuctionsConfig.getAuctionGuiBlocks().stream().anyMatch(auctionGui -> e.getRawSlot() == auctionGui.getIndex());
-        if (isAuctionGui) {
-
-            FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, null);
-                gui.initializeItems();
-            }).execute();
-            return true;
-        }
-
-        boolean isExpire = abstractGuiWithAuctionsConfig.getExpireBlocks().stream().anyMatch(expire -> e.getRawSlot() == expire.getIndex());
-        if (isExpire) {
-
-            FAuction.newChain().asyncFirst(() -> expireCommandManager.getExpires(player.getUniqueId())).syncLast(auctions -> {
-                ExpireGui gui = new ExpireGui(plugin, player, auctions, 1, category);
-                gui.initializeItems();
-            }).execute();
-            return true;
-        }
-
         boolean isCategory = abstractGuiWithAuctionsConfig.getCategoriesBlocks().stream().anyMatch(c -> e.getRawSlot() == c.getIndex());
         if (isCategory) {
 
@@ -305,34 +261,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             return true;
         }
 
-        boolean isClose = abstractGuiWithAuctionsConfig.getCloseBlocks().stream().anyMatch(close -> e.getRawSlot() == close.getIndex());
-        if (isClose) {
-
-            player.closeInventory();
-            return true;
-        }
-
-        boolean isPlayer = abstractGuiWithAuctionsConfig.getPlayerBlocks().stream().anyMatch(player -> e.getRawSlot() == player.getIndex());
-        if (isPlayer) {
-
-            FAuction.newChain().asyncFirst(() ->  auctionCommandManager.getAuctions(player.getUniqueId())).syncLast(auctions -> {
-                PlayerViewGui gui = new PlayerViewGui(plugin, player, auctions, 1, category);
-                gui.initializeItems();
-            }).execute();
-            return true;
-        }
-
-        boolean isHistoric = abstractGuiWithAuctionsConfig.getHistoricBlocks().stream().anyMatch(player -> e.getRawSlot() == player.getIndex());
-        if (isHistoric) {
-
-            FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
-                HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1, category);
-                gui.initializeItems();
-            }).execute();
-            return true;
-        }
-
-        return false;
+        return super.guiClick(e);
     }
 
     protected abstract void previousAction();
@@ -344,9 +273,5 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     @Override
     public Inventory getInventory() {
         return inv;
-    }
-
-    protected void openInventory(Player p) {
-        p.openInventory(this.inv);
     }
 }

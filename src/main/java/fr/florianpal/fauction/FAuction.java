@@ -23,6 +23,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -82,7 +87,14 @@ public class FAuction extends JavaPlugin {
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         try {
+            Files.createDirectories(Paths.get(this.getDataFolder().getPath() + "\\gui\\menus"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+        try {
             configurationManager = new ConfigurationManager(this, this.getFile());
+            configurationManager.reload(this);
         } catch (RuntimeException e) {
             getLogger().severe(e.getMessage());
             Bukkit.getPluginManager().disablePlugin(this);

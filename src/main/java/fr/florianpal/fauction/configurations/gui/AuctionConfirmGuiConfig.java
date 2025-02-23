@@ -3,14 +3,9 @@ package fr.florianpal.fauction.configurations.gui;
 import dev.dejvokep.boostedyaml.YamlDocument;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.objects.Confirm;
-import org.bukkit.Material;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import static fr.florianpal.fauction.enums.BlockType.CONFIRM;
 
 public class AuctionConfirmGuiConfig extends AbstractGuiWithAuctionsConfig {
 

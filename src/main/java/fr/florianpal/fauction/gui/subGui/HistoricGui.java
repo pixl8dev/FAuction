@@ -1,9 +1,7 @@
 package fr.florianpal.fauction.gui.subGui;
 
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.configurations.gui.HistoricConfig;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
-import fr.florianpal.fauction.gui.GuiInterface;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.ListUtil;
@@ -15,19 +13,17 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
-public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface {
+public class HistoricGui extends AbstractGuiWithAuctions {
 
     public HistoricGui(FAuction plugin, Player player, List<Auction> auctions, int page, Category category) {
         super(plugin, player, page, auctions, category, plugin.getConfigurationManager().getHistoricConfig());
-        HistoricConfig historicConfig = plugin.getConfigurationManager().getHistoricConfig();
-        initGui(historicConfig.getNameGui(), historicConfig.getSize());
     }
 
     @Override
     protected void previousAction() {
         FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
             HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page - 1, category);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
@@ -35,7 +31,7 @@ public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface
     protected void nextAction() {
         FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
             HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), this.page + 1, category);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
@@ -43,7 +39,7 @@ public class HistoricGui extends AbstractGuiWithAuctions implements GuiInterface
     protected void categoryAction(Category nextCategory) {
         FAuction.newChain().asyncFirst(() -> historicCommandManager.getHistorics(player.getUniqueId())).syncLast(historics -> {
             HistoricGui gui = new HistoricGui(plugin, player, ListUtil.historicToAuction(historics), 1 , nextCategory);
-            gui.initializeItems();
+            gui.initialize();
         }).execute();
     }
 
