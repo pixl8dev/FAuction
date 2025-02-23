@@ -242,7 +242,6 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
 
         Optional<BarrierMenu> menuGuiBarrierOptional = abstractGuiConfig.getMenuBlocks().stream().filter(p -> e.getRawSlot() == p.getIndex()).findFirst();
         if (menuGuiBarrierOptional.isPresent()) {
-            System.out.println(plugin.getConfigurationManager().getMenuConfig().getMenus());
             MainGui gui = new MainGui(plugin, menuGuiBarrierOptional.get().getId(), player, 1);
             gui.initialize();
             return true;

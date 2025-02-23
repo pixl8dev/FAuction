@@ -28,10 +28,7 @@ public class MenuConfig {
         try (Stream<Path> paths = Files.walk(Paths.get(plugin.getDataFolder().getPath() + "/gui/menus"))) {
             List<Path> pathsFiltered = paths.filter(Files::isRegularFile).collect(Collectors.toList());
 
-            System.out.println("Path " + pathsFiltered);
             for (Path path : pathsFiltered) {
-
-                System.out.println("Path " + path);
 
                 YamlDocument configuration = YamlDocument.create(path.toFile(),
                         Objects.requireNonNull(getClass().getResourceAsStream("/gui/menus/" + path.getFileName().toString())),
@@ -44,7 +41,6 @@ public class MenuConfig {
                 CustomMenuConfig config = new CustomMenuConfig();
                 config.load(plugin, configuration);
                 menus.put(configuration.getString("id"), config);
-                System.out.println(menus);
             }
         } catch (Exception e) {
             e.printStackTrace();
