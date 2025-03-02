@@ -305,7 +305,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
             command = command.replace("{ItemName}", auctionGood.getItemStack().getType().name().replace('_', ' ').toLowerCase());
         }
         command = command.replace("{BuyerName}", player.getName());
-        command = command.replace("{ItemPrice}", String.valueOf(auctionGood.getPrice()));
+        command = command.replace("{ItemPrice}", df.format(auctionGood.getPrice()));
         return command;
     }
 }
