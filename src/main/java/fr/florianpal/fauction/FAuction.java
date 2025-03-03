@@ -87,12 +87,6 @@ public class FAuction extends JavaPlugin {
         taskChainFactory = BukkitTaskChainFactory.create(this);
 
         try {
-            Files.createDirectories(Paths.get(this.getDataFolder().getPath() + "\\gui\\menus"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-
-        try {
             configurationManager = new ConfigurationManager(this, this.getFile());
             configurationManager.reload(this);
         } catch (RuntimeException e) {
