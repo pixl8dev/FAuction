@@ -137,6 +137,12 @@ public class ConfigurationManager {
         auctionConfirmConfig.load(plugin, auctionConfirmConfiguration);
         expireConfig.load(plugin, expireConfiguration);
         playerViewConfig.load(plugin, playerViewConfiguration);
+
+        File menusDir = new File(plugin.getDataFolder().getPath() + "/gui/menus");
+        if (!menusDir.exists()){
+            menusDir.mkdirs();
+        }
+
         menuConfig.load(plugin);
     }
 
