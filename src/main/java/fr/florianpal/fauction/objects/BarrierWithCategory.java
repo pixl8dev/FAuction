@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BarrierWithCategory extends Barrier {
 
-    private Category category;
+    private final Category category;
 
     public BarrierWithCategory(int index, Material material, String title, List<String> description, String texture, int customModelData, Category category) {
         super(index, material, title, description, texture, customModelData);

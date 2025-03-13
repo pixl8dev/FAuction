@@ -1,7 +1,6 @@
 package fr.florianpal.fauction.configurations;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
-import fr.florianpal.fauction.enums.Gui;
 import org.bukkit.Material;
 
 import java.util.ArrayList;

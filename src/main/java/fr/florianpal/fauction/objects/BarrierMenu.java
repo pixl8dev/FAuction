@@ -6,7 +6,7 @@ import java.util.List;
 
 public class BarrierMenu extends Barrier {
 
-    private String id;
+    private final String id;
 
     public BarrierMenu(int index, Material material, String title, List<String> description, String texture, int customModelData, String id) {
         super(index, material, title, description, texture, customModelData);

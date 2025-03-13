@@ -136,8 +136,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         title = title.replace("{OwnerName}", auction.getPlayerName());
         title = title.replace("{Price}", df.format(auction.getPrice()));
 
-        if (auction instanceof Historic) {
-            Historic historic = (Historic) auction;
+        if (auction instanceof Historic historic) {
             title = title.replace("{BuyerName}", historic.getPlayerBuyerName());
             title = title.replace("{BuyDate}", dateFormater.format(historic.getBuyDate()));
         }
@@ -160,8 +159,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
             desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
             desc = desc.replace("{OwnerName}", auction.getPlayerName());
 
-            if (auction instanceof Historic) {
-                Historic historic = (Historic) auction;
+            if (auction instanceof Historic historic) {
                 desc = desc.replace("{BuyerName}", historic.getPlayerBuyerName());
                 desc = desc.replace("{BuyDate}", dateFormater.format(historic.getBuyDate()));
             }
