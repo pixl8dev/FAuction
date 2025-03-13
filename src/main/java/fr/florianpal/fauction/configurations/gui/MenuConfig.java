@@ -42,6 +42,7 @@ public class MenuConfig {
                 menus.put(configuration.getString("id"), config);
             }
         } catch (Exception e) {
+
             e.printStackTrace();
         }
 
