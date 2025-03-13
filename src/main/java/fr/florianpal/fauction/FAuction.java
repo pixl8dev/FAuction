@@ -1,6 +1,5 @@
 package fr.florianpal.fauction;
 
-import co.aikar.commands.bukkit.contexts.OnlinePlayer;
 import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
@@ -24,13 +23,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FAuction extends JavaPlugin {
 

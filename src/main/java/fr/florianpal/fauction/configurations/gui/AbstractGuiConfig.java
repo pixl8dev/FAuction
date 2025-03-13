@@ -45,6 +45,7 @@ public abstract class AbstractGuiConfig {
         playerBlocks = new ArrayList<>();
         historicBlocks = new ArrayList<>();
         auctionGuiBlocks = new ArrayList<>();
+        menuBlocks = new ArrayList<>();
 
         size = config.getInt("gui.size");
         nameGui = config.getString("gui.name");

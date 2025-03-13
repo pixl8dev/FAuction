@@ -140,14 +140,12 @@ public class AuctionCommand extends BaseCommand {
 
         if (Tag.SHULKER_BOXES.getValues().contains(itemToSell.getType())) {
             ItemStack item = playerSender.getInventory().getItemInMainHand();
-            if (item.getItemMeta() instanceof BlockStateMeta) {
+            if (item.getItemMeta() instanceof BlockStateMeta im) {
 
-                BlockStateMeta im = (BlockStateMeta) item.getItemMeta();
                 double minPrice = -1;
                 double maxPrice = -1;
-                if (im.getBlockState() instanceof ShulkerBox) {
+                if (im.getBlockState() instanceof ShulkerBox shulker) {
 
-                    ShulkerBox shulker = (ShulkerBox) im.getBlockState();
                     for (ItemStack itemIn : shulker.getInventory().getContents()) {
                         if (itemIn != null && (itemIn.getType() != Material.AIR)) {
                             if (plugin.getConfigurationManager().getGlobalConfig().getMinPrice().containsKey(itemIn.getType())) {

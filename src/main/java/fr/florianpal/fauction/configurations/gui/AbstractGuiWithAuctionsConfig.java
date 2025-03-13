@@ -6,7 +6,6 @@ import fr.florianpal.fauction.enums.BlockType;
 import fr.florianpal.fauction.objects.Barrier;
 import fr.florianpal.fauction.objects.Confirm;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.InventoryType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
