@@ -2,7 +2,6 @@ package fr.florianpal.fauction.utils;
 
 import co.aikar.commands.CommandIssuer;
 import fr.florianpal.fauction.FAuction;
-import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.languages.MessageKeys;
 import org.bukkit.entity.Player;
 
@@ -10,9 +9,9 @@ public class MessageUtil {
 
     public static void sendMessage(FAuction plugin, Player player, MessageKeys messageKeys, String... replacements) {
 
-        GlobalConfig globalConfig = plugin.getConfigurationManager().getGlobalConfig();
-        if (!globalConfig.getMessageSend().containsKey(messageKeys.name()) || Boolean.TRUE.equals(globalConfig.getMessageSend().get(messageKeys.name()))) {
-            CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
+        CommandIssuer issuerTarget = plugin.getCommandManager().getCommandIssuer(player);
+        System.out.println(plugin.getCommandManager().getLocales().getOptionalMessage(issuerTarget, messageKeys.getMessageKey()));
+        if (plugin.getCommandManager().getLocales().getOptionalMessage(issuerTarget, messageKeys.getMessageKey()) != null) {
             issuerTarget.sendInfo(messageKeys, replacements);
         }
     }

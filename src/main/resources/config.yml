@@ -9,9 +9,6 @@ feature-flipping:
 
 decimalFormat: "0.00"
 
-message-send:
-  AUCTION_OPEN: true
-
 orderBy: "ASC" # ASC or DESC / ASC : More recent to older / DESC : Older to more recent
 dateFormat: "dd/MM/yyyy ':' HH:mm"
 remainingDateFormat: "MMM ddd HHh mmm sss"
