@@ -52,8 +52,6 @@ public class GlobalConfig {
 
     private String defaultGui;
 
-    private Map<String, Boolean> messageSend;
-
     public void load(YamlDocument config) {
         lang = config.getString("lang");
 
@@ -76,7 +74,6 @@ public class GlobalConfig {
         minPrice = new HashMap<>();
         maxPrice = new HashMap<>();
         blacklistItem = new ArrayList<>();
-        messageSend = new HashMap<>();
 
         limitationsUseMetaLuckperms = config.getBoolean("limitations-use-meta-luckperms", false);
         limitations = new HashMap<>();
@@ -110,13 +107,6 @@ public class GlobalConfig {
 
         if (config.contains("item-blacklist")) {
             blacklistItem = config.getStringList("item-blacklist").stream().map(Material::valueOf).collect(Collectors.toList());
-        }
-
-        if (config.contains("message-send")) {
-            maxPrice = new HashMap<>();
-            for (Object message : config.getSection("message-send").getKeys()) {
-                messageSend.put(message.toString(), config.getBoolean("message-send." + message));
-            }
         }
     }
 
@@ -206,10 +196,6 @@ public class GlobalConfig {
 
     public String getDecimalFormat() {
         return decimalFormat;
-    }
-
-    public Map<String, Boolean> getMessageSend() {
-        return messageSend;
     }
 
     public String getDefaultGui() {

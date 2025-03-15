@@ -20,12 +20,12 @@ public class CommandManager extends PaperCommandManager {
         this.setFormat(MessageType.HELP, ChatColor.YELLOW, ChatColor.GOLD, ChatColor.RED);
         this.setFormat(MessageType.ERROR, ChatColor.RED, ChatColor.GOLD);
         try {
-            this.getLocales().loadYamlLanguageFile("lang_" + plugin.getConfigurationManager().getGlobalConfig().getLang() + ".yml", Locale.FRENCH);
+            this.getLocales().loadYamlLanguageFile("lang_" + plugin.getConfigurationManager().getGlobalConfig().getLang() + ".yml", Locale.ENGLISH);
         } catch (IOException | InvalidConfigurationException e) {
             plugin.getLogger().severe("Failed to load ACF core language file");
             e.printStackTrace();
         }
 
-        this.getLocales().setDefaultLocale(Locale.FRENCH);
+        this.getLocales().setDefaultLocale(Locale.ENGLISH);
     }
 }
