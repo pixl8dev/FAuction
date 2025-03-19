@@ -51,7 +51,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
     @Override
     protected void categoryAction(Category nextCategory) {
         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-            AuctionsGui gui = new AuctionsGui(plugin, player, auctions,1, nextCategory);
+            AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, nextCategory);
             gui.initialize();
         }).execute();
     }
@@ -110,26 +110,32 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                             return;
                         }
 
-                        if (!isModCanCancel) {
-                            if (player.getInventory().firstEmpty() == -1) {
-                                player.getWorld().dropItem(player.getLocation(), a.getItemStack());
-                            } else {
-                                player.getInventory().addItem(a.getItemStack());
+                        try {
+                            auctionCommandManager.deleteAuction(a.getId());
+
+                            if (!isModCanCancel) {
+                                if (player.getInventory().firstEmpty() == -1) {
+                                    player.getWorld().dropItem(player.getLocation(), a.getItemStack());
+                                } else {
+                                    player.getInventory().addItem(a.getItemStack());
+                                }
                             }
+
+                            if (isModCanCancel) {
+                                plugin.getExpireCommandManager().addExpire(a);
+                                plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
+                                Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.MODERATOR));
+                            } else {
+                                plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
+                                Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.PLAYER));
+                            }
+                            auctions.remove(a);
+
+                            MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_AUCTION_SUCCESS);
+                        } catch (Exception exception) {
+                            plugin.getLogger().severe(exception.toString());
                         }
 
-                        auctionCommandManager.deleteAuction(a.getId());
-                        if (isModCanCancel) {
-                            plugin.getExpireCommandManager().addExpire(a);
-                            plugin.getLogger().info("Modo delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                            Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.MODERATOR));
-                        } else {
-                            plugin.getLogger().info("Player delete from ah auction : " + a.getId() + ", Item : " + a.getItemStack().getItemMeta().getDisplayName() + " of " + a.getPlayerName() + ", by" + player.getName());
-                            Bukkit.getPluginManager().callEvent(new AuctionCancelEvent(player, a, CancelReason.PLAYER));
-                        }
-                        auctions.remove(a);
-
-                        MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_AUCTION_SUCCESS);
                         player.closeInventory();
 
                         FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
