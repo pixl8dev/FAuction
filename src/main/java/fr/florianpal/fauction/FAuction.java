@@ -145,6 +145,11 @@ public class FAuction extends JavaPlugin {
         initChart();
     }
 
+    @Override
+    public void onDisable() {
+        databaseManager.close();
+    }
+
     public static FAuction getApi() {
         return api;
     }

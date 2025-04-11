@@ -27,13 +27,17 @@ public class DatabaseManager {
         config.setUsername(plugin.getConfigurationManager().getDatabase().getUser());
         config.setPassword(plugin.getConfigurationManager().getDatabase().getPassword());
 
-        config.setMaximumPoolSize(50);
+        config.setMaximumPoolSize(plugin.getConfigurationManager().getDatabase().getMaximumPoolSize());
 
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         ds = new HikariDataSource(config);
+    }
+
+    public void close() {
+        ds.close();
     }
 
     public Connection getConnection() throws SQLException {
@@ -53,7 +57,7 @@ public class DatabaseManager {
             for (IDatabaseTable repository : repositories) {
                 String[] tableInformation = repository.getTable();
 
-                if (!tableExists(tableInformation[0])) {
+                if (!tableExists(co, tableInformation[0])) {
                     try {
                         Statement statement = co.createStatement();
                         statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + tableInformation[0] + "` (" + tableInformation[1] + ") " + tableInformation[2] + ";");
@@ -71,10 +75,11 @@ public class DatabaseManager {
         }
     }
 
-    private boolean tableExists(String tableName) throws SQLException {
-        Connection co = getConnection();
+    private boolean tableExists(Connection co, String tableName) throws SQLException {
         DatabaseMetaData dbm = co.getMetaData();
         ResultSet tables = dbm.getTables(null, null, tableName, null);
+
         return tables.next();
+
     }
 }

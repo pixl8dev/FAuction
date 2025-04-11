@@ -4,3 +4,4 @@ database:
   url: "jdbc:sqlite:plugins/FAuction/database.db"
   user: "root"
   password: ""
+  maximumPoolSize: 50
