@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.queries.IDatabaseTable;
-import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -58,7 +57,7 @@ public class DatabaseManager {
             for (IDatabaseTable repository : repositories) {
                 String[] tableInformation = repository.getTable();
 
-                if (!tableExists(tableInformation[0])) {
+                if (!tableExists(co, tableInformation[0])) {
                     try {
                         Statement statement = co.createStatement();
                         statement.executeUpdate("CREATE TABLE IF NOT EXISTS `" + tableInformation[0] + "` (" + tableInformation[1] + ") " + tableInformation[2] + ";");
@@ -76,15 +75,11 @@ public class DatabaseManager {
         }
     }
 
-    private boolean tableExists(String tableName) throws SQLException {
-        try (Connection co = getConnection()) {
-            DatabaseMetaData dbm = co.getMetaData();
-            ResultSet tables = dbm.getTables(null, null, tableName, null);
+    private boolean tableExists(Connection co, String tableName) throws SQLException {
+        DatabaseMetaData dbm = co.getMetaData();
+        ResultSet tables = dbm.getTables(null, null, tableName, null);
 
-            return tables.next();
-        } catch (SQLException ex) {
-            throw ex;
-        }
+        return tables.next();
 
     }
 }
