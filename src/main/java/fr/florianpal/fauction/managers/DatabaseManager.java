@@ -4,6 +4,7 @@ import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.queries.IDatabaseTable;
+import org.bukkit.Bukkit;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -27,13 +28,17 @@ public class DatabaseManager {
         config.setUsername(plugin.getConfigurationManager().getDatabase().getUser());
         config.setPassword(plugin.getConfigurationManager().getDatabase().getPassword());
 
-        config.setMaximumPoolSize(50);
+        config.setMaximumPoolSize(plugin.getConfigurationManager().getDatabase().getMaximumPoolSize());
 
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
 
         ds = new HikariDataSource(config);
+    }
+
+    public void close() {
+        ds.close();
     }
 
     public Connection getConnection() throws SQLException {
@@ -72,9 +77,14 @@ public class DatabaseManager {
     }
 
     private boolean tableExists(String tableName) throws SQLException {
-        Connection co = getConnection();
-        DatabaseMetaData dbm = co.getMetaData();
-        ResultSet tables = dbm.getTables(null, null, tableName, null);
-        return tables.next();
+        try (Connection co = getConnection()) {
+            DatabaseMetaData dbm = co.getMetaData();
+            ResultSet tables = dbm.getTables(null, null, tableName, null);
+
+            return tables.next();
+        } catch (SQLException ex) {
+            throw ex;
+        }
+
     }
 }
