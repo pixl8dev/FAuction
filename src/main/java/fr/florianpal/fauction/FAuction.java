@@ -9,9 +9,11 @@ import fr.florianpal.fauction.managers.commandmanagers.*;
 import fr.florianpal.fauction.managers.implementations.LuckPermsImplementation;
 import fr.florianpal.fauction.placeholders.FPlaceholderExpansion;
 import fr.florianpal.fauction.queries.AuctionQueries;
+import fr.florianpal.fauction.queries.CurrencyPendingQueries;
 import fr.florianpal.fauction.queries.ExpireQueries;
 import fr.florianpal.fauction.queries.HistoricQueries;
 import fr.florianpal.fauction.schedules.CacheSchedule;
+import fr.florianpal.fauction.schedules.CurrencyScheduler;
 import fr.florianpal.fauction.schedules.ExpireSchedule;
 import fr.florianpal.fauction.utils.FileUtil;
 import io.papermc.lib.PaperLib;
@@ -22,9 +24,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -41,6 +40,8 @@ public class FAuction extends JavaPlugin {
     private ExpireQueries expireQueries;
 
     private HistoricQueries historicQueries;
+
+    private CurrencyPendingQueries currencyPendingQueries;
 
     private CommandManager commandManager;
 
@@ -113,10 +114,12 @@ public class FAuction extends JavaPlugin {
         auctionQueries = new AuctionQueries(this);
         expireQueries = new ExpireQueries(this);
         historicQueries = new HistoricQueries(this);
+        currencyPendingQueries = new CurrencyPendingQueries(this);
 
         databaseManager.addRepository(expireQueries);
         databaseManager.addRepository(auctionQueries);
         databaseManager.addRepository(historicQueries);
+        databaseManager.addRepository(currencyPendingQueries);
         databaseManager.initializeTables();
 
         auctionCommandManager = new AuctionCommandManager(this);
@@ -139,6 +142,8 @@ public class FAuction extends JavaPlugin {
         if (configurationManager.getGlobalConfig().isFeatureFlippingCacheUpdate()) {
             Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new CacheSchedule(this), configurationManager.getGlobalConfig().getUpdateCacheEvery(), configurationManager.getGlobalConfig().getUpdateCacheEvery());
         }
+
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(this, new CurrencyScheduler(this), configurationManager.getGlobalConfig().getCheckEveryCurrency(), configurationManager.getGlobalConfig().getCheckEveryCurrency());
 
         api = this;
 
@@ -260,5 +265,9 @@ public class FAuction extends JavaPlugin {
                 historicQueries.addBuyDate();
                 break;
         }
+    }
+
+    public CurrencyPendingQueries getCurrencyPendingQueries() {
+        return currencyPendingQueries;
     }
 }

@@ -1,6 +1,7 @@
 package fr.florianpal.fauction.configurations;
 
 import dev.dejvokep.boostedyaml.YamlDocument;
+import fr.florianpal.fauction.enums.CurrencyType;
 import org.bukkit.Material;
 
 import java.util.ArrayList;
@@ -42,6 +43,9 @@ public class GlobalConfig {
     private int time;
     private int checkEvery;
 
+    private int timeCurrency;
+    private int checkEveryCurrency;
+
     private int updateCacheEvery;
 
     private boolean featureFlippingExpiration;
@@ -52,10 +56,14 @@ public class GlobalConfig {
 
     private String defaultGui;
 
+    private CurrencyType currencyType;
+
     public void load(YamlDocument config) {
         lang = config.getString("lang");
 
         defaultGui = config.getString("defaultGui", "AUCTION");
+
+        currencyType = CurrencyType.valueOf(config.getString("currencyUse", "VAULT"));
 
         decimalFormat = config.getString("decimalFormat", "0.00");
 
@@ -67,10 +75,16 @@ public class GlobalConfig {
         remainingDateFormat = config.getString("remainingDateFormat");
         onBuyCommandUse = config.getBoolean("onBuy.sendCommand.use");
         onBuyCommand = config.getString("onBuy.sendCommand.command");
+
         securityForSpammingPacket = config.getBoolean("securityForSpammingPacket", true);
+
         time = config.getInt("expiration.time");
         checkEvery = config.getInt("expiration.checkEvery");
         updateCacheEvery = config.getInt("cacheUpdate", 72000);
+
+        timeCurrency = config.getInt("currency.time");
+        checkEveryCurrency = config.getInt("currency.checkEvery");
+
         minPrice = new HashMap<>();
         maxPrice = new HashMap<>();
         blacklistItem = new ArrayList<>();
@@ -200,5 +214,17 @@ public class GlobalConfig {
 
     public String getDefaultGui() {
         return defaultGui;
+    }
+
+    public CurrencyType getCurrencyType() {
+        return currencyType;
+    }
+
+    public int getTimeCurrency() {
+        return timeCurrency;
+    }
+
+    public int getCheckEveryCurrency() {
+        return checkEveryCurrency;
     }
 }

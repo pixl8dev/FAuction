@@ -1,5 +1,7 @@
-version: 7
+version: 8
 lang: "en"
+
+currencyUse: VAULT # VAULT, EXPERIENCE, LEVEL
 
 defaultGui: AUCTION # The default gui open with /ah command
 
@@ -18,6 +20,9 @@ onBuy:
     use: false
     command: ""
 expiration:
+  time: 3600 #In seconds 3600 seconds == 1 Hour
+  checkEvery: 72000 #In ticks 72000 ticks == 1 Hour
+currencyCheck:
   time: 3600 #In seconds 3600 seconds == 1 Hour
   checkEvery: 72000 #In ticks 72000 ticks == 1 Hour
 

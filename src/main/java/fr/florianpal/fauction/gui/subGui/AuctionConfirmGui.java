@@ -6,11 +6,7 @@ import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.*;
-import fr.florianpal.fauction.utils.FormatUtil;
-import fr.florianpal.fauction.utils.MessageUtil;
-import fr.florianpal.fauction.utils.PlaceholderUtil;
-import fr.florianpal.fauction.utils.PlayerHeadUtil;
-import net.milkbowl.vault.economy.EconomyResponse;
+import fr.florianpal.fauction.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -254,13 +250,16 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
                             return;
                         }
 
-                        EconomyResponse economyResponse4 = plugin.getVaultIntegrationManager().getEconomy().depositPlayer(offlinePlayer, auctionGood.getPrice());
-                        if (!economyResponse4.transactionSuccess()) {
+                        if (!CurrencyUtil.haveCurrency(plugin, player, globalConfig.getCurrencyType(), auctionGood.getPrice())) {
+                            MessageUtil.sendMessage(plugin, player, MessageKeys.NO_HAVE_MONEY);
                             return;
                         }
 
-                        EconomyResponse economyResponse5 = plugin.getVaultIntegrationManager().getEconomy().withdrawPlayer(player, auctionGood.getPrice());
-                        if (!economyResponse5.transactionSuccess()) {
+                        if (!CurrencyUtil.getCurrency(plugin, player, globalConfig.getCurrencyType(), auctionGood.getPrice())) {
+                            return;
+                        }
+
+                        if (!CurrencyUtil.giveCurrency(plugin, offlinePlayer, globalConfig.getCurrencyType(), auctionGood.getPrice())) {
                             return;
                         }
 

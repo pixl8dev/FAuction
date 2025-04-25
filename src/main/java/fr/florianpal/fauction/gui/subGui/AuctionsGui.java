@@ -9,6 +9,7 @@ import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.Auction;
 import fr.florianpal.fauction.objects.Category;
+import fr.florianpal.fauction.utils.CurrencyUtil;
 import fr.florianpal.fauction.utils.ItemUtil;
 import fr.florianpal.fauction.utils.MessageUtil;
 import org.bukkit.Bukkit;
@@ -148,9 +149,9 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                         MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_YOUR_ITEM);
                         return;
                     }
-                    if (!plugin.getVaultIntegrationManager().getEconomy().has(player, auction.getPrice())) {
-                        MessageUtil.sendMessage(plugin, player, MessageKeys.NO_HAVE_MONEY);
 
+                    if (!CurrencyUtil.haveCurrency(plugin, player, globalConfig.getCurrencyType(), auction.getPrice())) {
+                        MessageUtil.sendMessage(plugin, player, MessageKeys.NO_HAVE_MONEY);
                         return;
                     }
 
