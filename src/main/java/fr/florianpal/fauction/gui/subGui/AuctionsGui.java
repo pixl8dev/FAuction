@@ -139,8 +139,8 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
 
                         player.closeInventory();
 
-                        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
-                            AuctionsGui gui = new AuctionsGui(plugin, player, auctions, 1, category);
+                        FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctionsNew -> {
+                            AuctionsGui gui = new AuctionsGui(plugin, player, auctionsNew, 1, category);
                             gui.initialize();
                         }).execute();
                     }).execute();

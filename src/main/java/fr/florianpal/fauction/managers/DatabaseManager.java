@@ -3,6 +3,7 @@ package fr.florianpal.fauction.managers;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import fr.florianpal.fauction.FAuction;
+import fr.florianpal.fauction.enums.SQLType;
 import fr.florianpal.fauction.queries.IDatabaseTable;
 
 import java.sql.*;
@@ -32,6 +33,10 @@ public class DatabaseManager {
         config.addDataSourceProperty("cachePrepStmts", "true");
         config.addDataSourceProperty("prepStmtCacheSize", "250");
         config.addDataSourceProperty("prepStmtCacheSqlLimit", "2048");
+
+        if (plugin.getConfigurationManager().getDatabase().getSqlType().equals(SQLType.SQLite)) {
+            config.addDataSourceProperty("dataSource.journal_mode", "WAL");
+        }
 
         ds = new HikariDataSource(config);
     }

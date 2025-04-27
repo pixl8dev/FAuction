@@ -6,7 +6,7 @@
 
     <groupId>fr.florianpal</groupId>
     <artifactId>fauction</artifactId>
-    <version>1.8.6</version>
+    <version>1.8.7</version>
     <properties>
         <project.build.sourceEncoding>UTF8</project.build.sourceEncoding>
         <maven.compiler.source>16</maven.compiler.source>
@@ -138,21 +138,21 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.6.11.Final</version>
+            <version>6.6.13.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--Hibernate HikariCP-->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
-            <version>6.6.11.Final</version>
+            <version>6.6.13.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--HikariCP-->
         <dependency>
             <groupId>com.zaxxer</groupId>
             <artifactId>HikariCP</artifactId>
-            <version>6.2.1</version>
+            <version>6.3.0</version>
             <scope>compile</scope>
         </dependency>
         <!--TaskChain-->
