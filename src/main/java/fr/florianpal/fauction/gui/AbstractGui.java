@@ -19,6 +19,7 @@ import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -35,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 public abstract class AbstractGui implements InventoryHolder, Listener {
 
@@ -217,6 +219,13 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         if (isClose) {
 
             player.closeInventory();
+            return true;
+        }
+
+        Optional<Barrier> commandBarrierOptional = abstractGuiConfig.getCommandBlocks().stream().filter(close -> e.getRawSlot() == close.getIndex()).findFirst();
+        if (commandBarrierOptional.isPresent()) {
+
+            Bukkit.dispatchCommand(plugin.getServer().getConsoleSender(), commandBarrierOptional.get().getValue());
             return true;
         }
 

@@ -27,6 +27,8 @@ public abstract class AbstractGuiConfig {
 
     private List<Barrier> closeBlocks = new ArrayList<>();
 
+    private List<Barrier> commandBlocks = new ArrayList<>();
+
     private List<BarrierMenu> menuBlocks = new ArrayList<>();
 
     private List<BarrierWithCategory> playerBlocks = new ArrayList<>();
@@ -46,6 +48,7 @@ public abstract class AbstractGuiConfig {
         historicBlocks = new ArrayList<>();
         auctionGuiBlocks = new ArrayList<>();
         menuBlocks = new ArrayList<>();
+        commandBlocks = new ArrayList<>();
 
         size = config.getInt("gui.size");
         nameGui = config.getString("gui.name");
@@ -100,6 +103,7 @@ public abstract class AbstractGuiConfig {
                         Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
+                        null,
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
@@ -110,6 +114,7 @@ public abstract class AbstractGuiConfig {
                         Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
+                        null,
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
@@ -136,6 +141,17 @@ public abstract class AbstractGuiConfig {
                         plugin.getConfigurationManager().getCategoriesConfig().getCategories().getOrDefault(config.getString("block." + index + ".category", null), null)
                 );
                 auctionGuiBlocks.add(barrier);
+            } else if (COMMAND.equalsIgnoreCase(currentUtility)) {
+                Barrier barrier = new Barrier(
+                        Integer.parseInt(index),
+                        Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
+                        config.getString("block." + index + ".title"),
+                        config.getStringList("block." + index + ".description"),
+                        config.getString("block." + index + ".value"),
+                        config.getString("block." + index + ".texture", ""),
+                        config.getInt("block." + index + ".customModelData", 0)
+                );
+                commandBlocks.add(barrier);
             }
         }
     }
@@ -178,5 +194,9 @@ public abstract class AbstractGuiConfig {
 
     public InventoryType getType() {
         return inventoryType;
+    }
+
+    public List<Barrier> getCommandBlocks() {
+        return commandBlocks;
     }
 }

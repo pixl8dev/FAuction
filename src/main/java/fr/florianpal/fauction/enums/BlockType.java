@@ -22,6 +22,8 @@ public enum BlockType {
 
     NEXT("next"),
 
+    COMMAND("command"),
+
     PREVIOUS("previous");
 
     private final String text;

@@ -59,11 +59,13 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
+                        null,
                         new Barrier(
                                 Integer.parseInt(index),
                                 Material.getMaterial(config.getString("block." + index + ".replacement.material", Material.BARRIER.toString())),
                                 config.getString("block." + index + ".replacement.title"),
                                 config.getStringList("block." + index + ".replacement.description"),
+                                null,
                                 config.getString("block." + index + ".replacement.texture", ""),
                                 config.getInt("block." + index + ".replacement.customModelData", 0)
                         ),
@@ -77,11 +79,13 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
+                        null,
                         new Barrier(
                                 Integer.parseInt(index),
                                 Material.getMaterial(config.getString("block." + index + ".replacement.material", Material.BARRIER.toString())),
                                 config.getString("block." + index + ".replacement.title"),
                                 config.getStringList("block." + index + ".replacement.description"),
+                                null,
                                 config.getString("block." + index + ".replacement.texture", ""),
                                 config.getInt("block." + index + ".replacement.customModelData", 0)
                         ),
@@ -95,6 +99,7 @@ public abstract class AbstractGuiWithAuctionsConfig extends AbstractGuiConfig {
                         Material.getMaterial(config.getString("block." + index + ".material", Material.BARRIER.toString())),
                         config.getString("block." + index + ".title"),
                         config.getStringList("block." + index + ".description"),
+                        null,
                         config.getString("block." + index + ".texture", ""),
                         config.getInt("block." + index + ".customModelData", 0)
                 );
