@@ -3,7 +3,6 @@ package fr.florianpal.fauction.gui;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.GlobalConfig;
 import fr.florianpal.fauction.configurations.gui.AbstractGuiConfig;
-import fr.florianpal.fauction.configurations.gui.MenuConfig;
 import fr.florianpal.fauction.gui.subGui.*;
 import fr.florianpal.fauction.managers.SpamManager;
 import fr.florianpal.fauction.managers.commandmanagers.AuctionCommandManager;
@@ -19,7 +18,6 @@ import fr.florianpal.fauction.utils.PlaceholderUtil;
 import fr.florianpal.fauction.utils.PlayerHeadUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -36,7 +34,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 public abstract class AbstractGui implements InventoryHolder, Listener {
 
