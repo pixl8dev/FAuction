@@ -1,6 +1,7 @@
 package fr.florianpal.fauction.utils;
 
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.inventory.ItemStack;
 
 import java.time.Duration;
 import java.util.regex.Matcher;
@@ -30,5 +31,19 @@ public class FormatUtil {
         format = format.replace("ss", "" + Math.abs(duration.getSeconds() % 60));
 
         return format;
+    }
+
+    public static String titleItemFormat(ItemStack item, String replacement, String title) {
+        if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+            return title.replace(replacement, item.getType().name().replace('_', ' ').toLowerCase());
+        }
+        return title.replace(replacement, item.getItemMeta().getDisplayName());
+    }
+
+    public static String titleItemFormat(ItemStack item) {
+        if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
+            return item.getType().name().replace('_', ' ').toLowerCase();
+        }
+        return item.getItemMeta().getDisplayName();
     }
 }

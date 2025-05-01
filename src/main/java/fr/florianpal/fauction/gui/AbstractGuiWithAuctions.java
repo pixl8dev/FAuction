@@ -128,11 +128,8 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         ItemMeta meta = item.getItemMeta();
 
         String title = abstractGuiWithAuctionsConfig.getTitle();
-        if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
-            title = title.replace("{ItemName}", item.getType().name().replace('_', ' ').toLowerCase());
-        } else {
-            title = title.replace("{ItemName}", item.getItemMeta().getDisplayName());
-        }
+        title = FormatUtil.titleItemFormat(item, "{Item}", title);
+
         title = title.replace("{OwnerName}", auction.getPlayerName());
         title = title.replace("{Price}", df.format(auction.getPrice()));
 
@@ -150,11 +147,7 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
         List<String> listDescription = new ArrayList<>();
 
         for (String desc : abstractGuiWithAuctionsConfig.getDescription()) {
-            if (item.getItemMeta().getDisplayName().equalsIgnoreCase("")) {
-                desc = desc.replace("{ItemName}", item.getType().name().replace('_', ' ').toLowerCase());
-            } else {
-                desc = desc.replace("{ItemName}", item.getItemMeta().getDisplayName());
-            }
+            desc = FormatUtil.titleItemFormat(item, "{Item}", desc);
 
             desc = desc.replace("{TotalSale}", String.valueOf(this.auctions.size()));
             desc = desc.replace("{OwnerName}", auction.getPlayerName());

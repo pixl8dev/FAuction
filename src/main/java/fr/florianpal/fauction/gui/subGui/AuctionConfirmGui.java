@@ -156,11 +156,8 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
         }
 
         ItemStack itemStack = confirm.getAuction().getItemStack().clone();
-        if (confirm.getAuction().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("")) {
-            title = title.replace("{Item}", itemStack.getType().toString());
-        } else {
-            title = title.replace("{Item}", itemStack.getItemMeta().getDisplayName());
-        }
+        title = FormatUtil.titleItemFormat(confirm.getAuction().getItemStack(), "{Item}", title);
+
         title = title.replace("{Price}", df.format(confirm.getAuction().getPrice()));
         title = title.replace("{OwnerName}", confirm.getAuction().getPlayerName());
 
@@ -173,11 +170,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
         List<String> listDescription = new ArrayList<>();
         for (String desc : auctionConfirmConfig.getDescription()) {
             desc = desc.replace("{Price}", df.format(confirm.getAuction().getPrice()));
-            if (confirm.getAuction().getItemStack().getItemMeta().getDisplayName().equalsIgnoreCase("")) {
-                desc = desc.replace("{Item}", confirm.getAuction().getItemStack().getType().toString());
-            } else {
-                desc = desc.replace("{Item}", confirm.getAuction().getItemStack().getItemMeta().getDisplayName());
-            }
+            desc = FormatUtil.titleItemFormat(confirm.getAuction().getItemStack(), "{Item}", desc);
             desc = desc.replace("{OwnerName}", confirm.getAuction().getPlayerName());
 
             if (offlinePlayer != null) {
@@ -264,6 +257,11 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
                         }
 
                         MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_SUCCESS);
+
+                        if (offlinePlayer.isOnline() && offlinePlayer.isConnected()) {
+                            MessageUtil.sendMessage(plugin, offlinePlayer.getPlayer(), MessageKeys.BUY_AUCTION_TARGET_SUCCESS, "{player}", player.getName(), "{item}", FormatUtil.titleItemFormat(auctionGood.getItemStack()), "{price}", String.valueOf(auctionGood.getPrice()));
+                        }
+
                         auctionCommandManager.deleteAuction(auctionGood.getId());
                         historicCommandManager.addHistoric(a, player.getUniqueId(), player.getName());
 
