@@ -4,6 +4,7 @@ import co.aikar.taskchain.BukkitTaskChainFactory;
 import co.aikar.taskchain.TaskChain;
 import co.aikar.taskchain.TaskChainFactory;
 import fr.florianpal.fauction.commands.AuctionCommand;
+import fr.florianpal.fauction.enums.SQLType;
 import fr.florianpal.fauction.managers.*;
 import fr.florianpal.fauction.managers.commandmanagers.*;
 import fr.florianpal.fauction.managers.implementations.LuckPermsImplementation;
@@ -152,6 +153,12 @@ public class FAuction extends JavaPlugin {
 
     @Override
     public void onDisable() {
+
+        if (configurationManager.getDatabase().getSqlType().equals(SQLType.SQLite)) {
+            auctionCommandManager.deleteAll();
+            auctionCommandManager.saveAllAuctionInBddFromSQLiteCache();
+        }
+
         databaseManager.close();
     }
 

@@ -56,6 +56,12 @@ public class AuctionCommandManager {
         auctionQueries.addAuction(player.getUniqueId(), player.getName(), SerializationUtil.serialize(item), price, Calendar.getInstance().getTime());
     }
 
+    public void saveAllAuctionInBddFromSQLiteCache()  {
+        for (Auction auction : sqliteCache) {
+            auctionQueries.addAuction(auction.getPlayerUUID(), auction.getPlayerName(), SerializationUtil.serialize(auction.getItemStack()), auction.getPrice(), auction.getDate());
+        }
+    }
+
     public void deleteAuction(int id) {
         if (SQLType.SQLite.equals(sqlType)) {
             sqliteCache.removeAll(sqliteCache.stream().filter(a -> a.getId() == id).collect(Collectors.toList()));
