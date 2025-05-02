@@ -8,6 +8,7 @@ fauction:
   transfert_bdd_help_description: "将 bdd 数据在 Paper 与 Spigot 之间互转"
 
   buy_auction_success: "你购买了一个物品."
+  buy_auction_target_success: "The player {player} bought your item {item} at the price of {price}."
   no_auction: "当前无物品正在出售."
   auction_open: "你打开了拍卖市场."
   auction_add_success: "你上架了一件新物品."

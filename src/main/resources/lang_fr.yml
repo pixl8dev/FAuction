@@ -10,6 +10,7 @@ fauction:
   migrate_help_description: "Faire une migration vers une autre version."
 
   buy_auction_success: "Vous venez d'acheter un item."
+  buy_auction_target_success: "Le joueur {player} a acheté l'item {item} au prix de {price}."
   no_auction: "Il n'y a actuellement aucune vente active."
   auction_open: "Vous avez ouvert l'hotel des ventes."
   auction_add_success: "Vous venez d'ajouter une nouvelle vente."
