@@ -155,7 +155,7 @@ public class FAuction extends JavaPlugin {
     public void onDisable() {
 
         if (configurationManager.getDatabase().getSqlType().equals(SQLType.SQLite)) {
-            auctionCommandManager.deleteAll();
+            auctionCommandManager.deleteAllOnlyOnDB();
             auctionCommandManager.saveAllAuctionInBddFromSQLiteCache();
         }
 

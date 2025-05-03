@@ -76,6 +76,10 @@ public class AuctionCommandManager {
         auctionQueries.deleteAll();
     }
 
+    public void deleteAllOnlyOnDB() {
+        auctionQueries.deleteAll();
+    }
+
     public Auction auctionExist(int id) {
         if (SQLType.SQLite.equals(sqlType)) {
             Optional<Auction> auction = sqliteCache.stream().filter(a -> a.getId() == id).findFirst();
