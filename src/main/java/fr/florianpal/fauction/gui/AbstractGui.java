@@ -138,6 +138,10 @@ public abstract class AbstractGui implements InventoryHolder, Listener {
         for (Barrier menu : abstractGuiConfig.getMenuBlocks()) {
             inv.setItem(menu.getIndex(), createGuiItem(getItemStack(menu, false)));
         }
+
+        for (Barrier comamnd : abstractGuiConfig.getCommandBlocks()) {
+            inv.setItem(comamnd.getIndex(), createGuiItem(getItemStack(comamnd, false)));
+        }
     }
 
     public ItemStack createGuiItem(ItemStack itemStack) {
