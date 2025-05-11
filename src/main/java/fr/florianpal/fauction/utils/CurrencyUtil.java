@@ -18,7 +18,7 @@ public class CurrencyUtil {
                 }
             }
             case EXPERIENCE -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;
@@ -29,7 +29,7 @@ public class CurrencyUtil {
                 }
             }
             case LEVEL -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;
@@ -55,7 +55,7 @@ public class CurrencyUtil {
                 }
             }
             case EXPERIENCE -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;
@@ -65,7 +65,7 @@ public class CurrencyUtil {
                 }
             }
             case LEVEL -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;
@@ -88,7 +88,7 @@ public class CurrencyUtil {
                 }
             }
             case EXPERIENCE -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;
@@ -100,7 +100,7 @@ public class CurrencyUtil {
                 return true;
             }
             case LEVEL -> {
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     Player player = offlinePlayer.getPlayer();
 
                     if (player == null) return false;

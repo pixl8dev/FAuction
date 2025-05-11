@@ -173,7 +173,7 @@ public class FAuction extends JavaPlugin {
 
             int count = 0;
             for (Player player : onlinePlayers) {
-                if (player.isValid() && player.isConnected()) {
+                if (player.isValid() && player.isOnline()) {
                     count = count + 1;
                 }
             }

@@ -4,7 +4,7 @@ gui:
   type: CHEST
   name: "Auction House {Page}/{TotalPage}"
   title: "&eItem : &6{ItemName}"
-  replaceTitle: true
+  replaceTitle: false
   description:
     - "&5Sold by : &6{OwnerName}"
     - "&5Price : &6{Price}"

@@ -26,7 +26,7 @@ public class CurrencyScheduler implements Runnable {
 
                 OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(currencyPending.getPlayerUUID());
 
-                if (offlinePlayer.isConnected() && offlinePlayer.isOnline()) {
+                if (offlinePlayer.isOnline()) {
                     CurrencyUtil.giveCurrency(plugin, offlinePlayer, currencyPending.getCurrencyType(), currencyPending.getAmount());
                     currencyPendingQueries.deleteCurrencyPending(currencyPending.getId());
                 }

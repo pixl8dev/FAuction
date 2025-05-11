@@ -258,7 +258,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
 
                         MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_SUCCESS);
 
-                        if (offlinePlayer.isOnline() && offlinePlayer.isConnected()) {
+                        if (offlinePlayer.isOnline()) {
                             MessageUtil.sendMessage(plugin, offlinePlayer.getPlayer(), MessageKeys.BUY_AUCTION_TARGET_SUCCESS, "{player}", player.getName(), "{item}", FormatUtil.titleItemFormat(auctionGood.getItemStack()), "{price}", String.valueOf(auctionGood.getPrice()));
                         }
 
