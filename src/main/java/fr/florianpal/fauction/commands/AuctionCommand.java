@@ -23,6 +23,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static java.lang.Math.ceil;
 
 @CommandAlias("ah|hdv")
@@ -39,6 +42,8 @@ public class AuctionCommand extends BaseCommand {
     private final SpamManager spamManager;
 
     private final GlobalConfig globalConfig;
+
+    private List<Integer> itemHash = new ArrayList<>();
 
     public AuctionCommand(FAuction plugin) {
         this.plugin = plugin;
@@ -113,28 +118,40 @@ public class AuctionCommand extends BaseCommand {
             return;
         }
 
-        ItemStack itemToSell = playerSender.getInventory().getItemInMainHand();
+        ItemStack itemToSell = playerSender.getInventory().getItemInMainHand().clone();
+
+        if (itemHash.contains((Integer)itemToSell.hashCode())) {
+            return;
+        }
+        itemHash.add((Integer)itemToSell.hashCode());
+
+        playerSender.getInventory().getItemInMainHand().setAmount(0);
 
         if (price < 0) {
+            resetItem(playerSender, itemToSell);
             MessageUtil.sendMessage(plugin, playerSender, MessageKeys.NEGATIVE_PRICE);
             return;
         }
 
         if (itemToSell.getType().equals(Material.AIR)) {
+            resetItem(playerSender, itemToSell);
             MessageUtil.sendMessage(plugin, playerSender, MessageKeys.ITEM_AIR);
             return;
         }
 
         if (globalConfig.getBlacklistItem().contains(itemToSell.getType())) {
+            resetItem(playerSender, itemToSell);
             MessageUtil.sendMessage(plugin, playerSender, MessageKeys.ITEM_BLACKLIST);
             return;
         }
 
         if (!haveCorrectMinPrice(itemToSell, playerSender, playerSender, price)) {
+            resetItem(playerSender, itemToSell);
             return;
         }
 
         if (!haveCorrectMaxPrice(itemToSell, playerSender, price)) {
+            resetItem(playerSender, itemToSell);
             return;
         }
 
@@ -163,11 +180,13 @@ public class AuctionCommand extends BaseCommand {
                     }
                     if (minPrice != -1 && minPrice > price) {
                         MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MIN_PRICE, "{minPrice}", String.valueOf(ceil(minPrice)));
+                        resetItem(playerSender, itemToSell);
                         return;
                     }
 
                     if (maxPrice != -1 && maxPrice < price) {
                         MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MAX_PRICE, "{maxPrice}", String.valueOf(ceil(maxPrice)));
+                        resetItem(playerSender, itemToSell);
                         return;
                     }
                 }
@@ -185,6 +204,7 @@ public class AuctionCommand extends BaseCommand {
 
 
             if (limitations != -1 && limitations <= auctions.size()) {
+                resetItem(playerSender, itemToSell);
                 MessageUtil.sendMessage(plugin, playerSender, MessageKeys.MAX_AUCTION);
                 return;
             }
@@ -195,7 +215,7 @@ public class AuctionCommand extends BaseCommand {
                 plugin.getLogger().info("Player " + playerSender.getName() + " add item to ah Item : " + itemName + ", At Price : " + price);
 
                 Bukkit.getPluginManager().callEvent(new AuctionAddEvent(playerSender, itemToSell, price));
-                playerSender.getInventory().getItemInMainHand().setAmount(0);
+
                 MessageUtil.sendMessage(plugin, playerSender, MessageKeys.AUCTION_ADD_SUCCESS);
             }).execute();
 
@@ -219,6 +239,11 @@ public class AuctionCommand extends BaseCommand {
         }
 
         return true;
+    }
+
+    public void resetItem(Player playerSender, ItemStack item) {
+        playerSender.getInventory().setItemInMainHand(item);
+        itemHash.remove((Integer)item.hashCode());
     }
 
     public boolean haveCorrectMaxPrice(ItemStack itemToSell, Player player, double price) {
