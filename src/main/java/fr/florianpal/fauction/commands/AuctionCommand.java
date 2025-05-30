@@ -120,7 +120,7 @@ public class AuctionCommand extends BaseCommand {
     @Subcommand("sell")
     @CommandPermission("fauction.sell")
     @Description("{@@fauction.auction_add_help_description}")
-    public void onAdd(Player playerSender, double price) {
+    public void onAdd(Player playerSender, double priceEntry) {
 
         if (spamManager.spamTest(playerSender)) {
             return;
@@ -135,8 +135,11 @@ public class AuctionCommand extends BaseCommand {
 
         playerSender.getInventory().getItemInMainHand().setAmount(0);
 
+        double price;
         if (globalConfig.isFeatureFlippingMoneyFormat()) {
-            price = Double.parseDouble(df.format(price));
+            price = Double.parseDouble(df.format(priceEntry));
+        } else {
+            price = priceEntry;
         }
 
         if (price < 0) {
