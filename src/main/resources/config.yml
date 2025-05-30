@@ -1,4 +1,4 @@
-version: 8
+version: 9
 lang: "en"
 
 currencyUse: VAULT # VAULT, EXPERIENCE, LEVEL
@@ -8,6 +8,7 @@ defaultGui: AUCTION # The default gui open with /ah command
 feature-flipping:
   item-expiration: true
   cache-update: true
+  money-format: false
 
 decimalFormat: "0.00"
 

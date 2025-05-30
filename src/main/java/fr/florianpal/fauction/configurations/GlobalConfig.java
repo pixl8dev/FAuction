@@ -52,6 +52,8 @@ public class GlobalConfig {
 
     private boolean featureFlippingCacheUpdate;
 
+    private boolean featureFlippingMoneyFormat;
+
     private String decimalFormat;
 
     private String defaultGui;
@@ -69,6 +71,7 @@ public class GlobalConfig {
 
         featureFlippingExpiration = config.getBoolean("feature-flipping.item-expiration", true);
         featureFlippingCacheUpdate = config.getBoolean("feature-flipping.cache-update", true);
+        featureFlippingMoneyFormat = config.getBoolean("feature-flipping.money-format", false);
 
         orderBy = config.getString("orderBy");
         dateFormat = config.getString("dateFormat");
@@ -226,5 +229,9 @@ public class GlobalConfig {
 
     public int getCheckEveryCurrency() {
         return checkEveryCurrency;
+    }
+
+    public boolean isFeatureFlippingMoneyFormat() {
+        return featureFlippingMoneyFormat;
     }
 }

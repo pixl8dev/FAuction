@@ -23,8 +23,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static java.lang.Math.ceil;
 
@@ -45,6 +48,8 @@ public class AuctionCommand extends BaseCommand {
 
     private List<Integer> itemHash = new ArrayList<>();
 
+    protected DecimalFormat df;
+
     public AuctionCommand(FAuction plugin) {
         this.plugin = plugin;
         this.auctionCommandManager = plugin.getAuctionCommandManager();
@@ -52,6 +57,9 @@ public class AuctionCommand extends BaseCommand {
         this.spamManager = plugin.getSpamManager();
         this.globalConfig = plugin.getConfigurationManager().getGlobalConfig();
         this.historicCommandManager = plugin.getHistoricCommandManager();
+
+        df = new DecimalFormat(plugin.getConfigurationManager().getGlobalConfig().getDecimalFormat());
+        df.setDecimalFormatSymbols(DecimalFormatSymbols.getInstance(Locale.ENGLISH));
     }
 
     @Default
@@ -126,6 +134,10 @@ public class AuctionCommand extends BaseCommand {
         itemHash.add((Integer)itemToSell.hashCode());
 
         playerSender.getInventory().getItemInMainHand().setAmount(0);
+
+        if (globalConfig.isFeatureFlippingMoneyFormat()) {
+            price = Double.parseDouble(df.format(price));
+        }
 
         if (price < 0) {
             resetItem(playerSender, itemToSell);
