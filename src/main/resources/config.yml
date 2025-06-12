@@ -9,6 +9,7 @@ feature-flipping:
   item-expiration: true
   cache-update: true
   money-format: false
+  duplication-hashcode-control: false
 
 decimalFormat: "0.00"
 

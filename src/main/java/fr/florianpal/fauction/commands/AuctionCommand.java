@@ -128,10 +128,12 @@ public class AuctionCommand extends BaseCommand {
 
         ItemStack itemToSell = playerSender.getInventory().getItemInMainHand().clone();
 
-        if (itemHash.contains((Integer)itemToSell.hashCode())) {
-            return;
+        if (globalConfig.isFeatureDuplicationHashCodeControl()) {
+            if (itemHash.contains((Integer) itemToSell.hashCode())) {
+                return;
+            }
+            itemHash.add((Integer) itemToSell.hashCode());
         }
-        itemHash.add((Integer)itemToSell.hashCode());
 
         playerSender.getInventory().getItemInMainHand().setAmount(0);
 
