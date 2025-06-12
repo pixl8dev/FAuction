@@ -1,4 +1,4 @@
-version: 9
+version: 10
 lang: "en"
 
 currencyUse: VAULT # VAULT, EXPERIENCE, LEVEL
