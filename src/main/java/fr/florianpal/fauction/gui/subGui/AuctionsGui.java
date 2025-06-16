@@ -12,6 +12,7 @@ import fr.florianpal.fauction.objects.Category;
 import fr.florianpal.fauction.utils.CurrencyUtil;
 import fr.florianpal.fauction.utils.ItemUtil;
 import fr.florianpal.fauction.utils.MessageUtil;
+import fr.florianpal.fauction.utils.VisualizationUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Barrel;
@@ -91,23 +92,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                         boolean isModCanCancel = (e.isShiftClick() && player.hasPermission("fauction.mod.cancel"));
                         if (!a.getPlayerUUID().equals(player.getUniqueId()) && !isModCanCancel) {
 
-                            InventoryVisualization inventoryVisualization = null;
-                            if (ItemUtil.isShulker(a.getItemStack())) {
-
-                                BlockStateMeta blockStateMeta = (BlockStateMeta) a.getItemStack().getItemMeta();
-                                ShulkerBox shulkerBox = (ShulkerBox) blockStateMeta.getBlockState();
-                                inventoryVisualization = new InventoryVisualization(plugin, player, shulkerBox);
-                            } else if (ItemUtil.isBarrel(a.getItemStack())) {
-
-                                BlockStateMeta blockStateMeta = (BlockStateMeta) a.getItemStack().getItemMeta();
-                                Barrel barrel = (Barrel) blockStateMeta.getBlockState();
-                                inventoryVisualization = new InventoryVisualization(plugin, player, barrel);
-                            }
-
-                            if (inventoryVisualization != null) {
-                                Bukkit.getPluginManager().registerEvents(inventoryVisualization, plugin);
-                                inventoryVisualization.open();
-                            }
+                            VisualizationUtils.createVizualisation(plugin, a, player);
                             return;
                         }
 

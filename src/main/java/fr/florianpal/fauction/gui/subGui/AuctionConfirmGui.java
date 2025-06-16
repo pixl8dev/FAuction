@@ -4,16 +4,20 @@ import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
 import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
+import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
 import fr.florianpal.fauction.languages.MessageKeys;
 import fr.florianpal.fauction.objects.*;
 import fr.florianpal.fauction.utils.*;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.block.Barrel;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -210,6 +214,13 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
         }
 
         if (spamManager.spamTest(player)) {
+            return;
+        }
+
+        boolean isBaseBlock = abstractGuiWithAuctionsConfig.getBaseBlocks().stream().anyMatch(b -> b == e.getRawSlot());
+        if (isBaseBlock) {
+
+            VisualizationUtils.createVizualisation(plugin, auction, player);
             return;
         }
 
