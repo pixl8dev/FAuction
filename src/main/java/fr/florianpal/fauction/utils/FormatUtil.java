@@ -23,12 +23,36 @@ public class FormatUtil {
     }
 
     public static String durationFormat(String format, Duration duration) {
-        format = format.replace("yyyy", "" + Math.abs(duration.getSeconds() / 31557600));
-        format = format.replace("MM", "" + Math.abs(duration.getSeconds() / 2629800));
-        format = format.replace("dd", "" + Math.abs(duration.getSeconds() / 86400));
-        format = format.replace("HH", "" + Math.abs(duration.getSeconds() / 3600));
-        format = format.replace("mm", "" + Math.abs(duration.getSeconds() % 3600 / 60));
-        format = format.replace("ss", "" + Math.abs(duration.getSeconds() % 60));
+
+        var year = 0;
+        var month = 0;
+        var day = 0;
+        var hour = 0;
+        var minute = 0;
+        var seconde = 0;
+
+        if (!duration.isNegative()) {
+
+            long baseSecond = duration.getSeconds();
+            year = (int) Math.floor((double) duration.getSeconds() / 31557600);
+            baseSecond = baseSecond - year * 31557600L;
+            month = (int) Math.floor((double) baseSecond / 2629800);
+            baseSecond = baseSecond - month * 2629800L;
+            day = (int) Math.floor((double) baseSecond / 86400);
+            baseSecond = baseSecond - day * 86400L;
+            hour = (int) Math.floor((double) baseSecond / 3600);
+            baseSecond = baseSecond - hour * 3600L;
+            minute = (int) Math.floor((double) baseSecond / 60);
+            baseSecond = baseSecond - minute * 60L;
+            seconde = (int) baseSecond;
+        }
+
+        format = format.replace("yyyy", "" + year);
+        format = format.replace("MM", "" + month);
+        format = format.replace("dd", "" + day);
+        format = format.replace("HH", "" + hour);
+        format = format.replace("mm", "" + minute);
+        format = format.replace("ss", "" + seconde);
 
         return format;
     }
