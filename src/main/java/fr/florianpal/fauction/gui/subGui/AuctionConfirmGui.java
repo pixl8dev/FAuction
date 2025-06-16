@@ -2,6 +2,7 @@ package fr.florianpal.fauction.gui.subGui;
 
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfirmGuiConfig;
+import fr.florianpal.fauction.enums.Gui;
 import fr.florianpal.fauction.events.AuctionBuyEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
@@ -34,7 +35,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
 
     private final Map<Integer, Confirm> confirmList = new HashMap<>();
 
-    AuctionConfirmGui(FAuction plugin, Player player, int page, Auction auction) {
+    public AuctionConfirmGui(FAuction plugin, Player player, int page, Auction auction) {
         super(plugin, player, page, Collections.singletonList(auction), null, plugin.getConfigurationManager().getAuctionConfirmConfig());
         this.auction = auction;
         this.auctionConfirmConfig = plugin.getConfigurationManager().getAuctionConfirmConfig();
@@ -220,7 +221,7 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
         boolean isBaseBlock = abstractGuiWithAuctionsConfig.getBaseBlocks().stream().anyMatch(b -> b == e.getRawSlot());
         if (isBaseBlock) {
 
-            VisualizationUtils.createVizualisation(plugin, auction, player);
+            VisualizationUtils.createVizualisation(plugin, auction, player, Gui.CONFIRM);
             return;
         }
 

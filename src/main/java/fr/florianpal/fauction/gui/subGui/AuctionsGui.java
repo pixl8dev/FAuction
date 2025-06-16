@@ -3,6 +3,7 @@ package fr.florianpal.fauction.gui.subGui;
 import fr.florianpal.fauction.FAuction;
 import fr.florianpal.fauction.configurations.gui.AuctionConfig;
 import fr.florianpal.fauction.enums.CancelReason;
+import fr.florianpal.fauction.enums.Gui;
 import fr.florianpal.fauction.events.AuctionCancelEvent;
 import fr.florianpal.fauction.gui.AbstractGuiWithAuctions;
 import fr.florianpal.fauction.gui.visualization.InventoryVisualization;
@@ -92,7 +93,7 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                         boolean isModCanCancel = (e.isShiftClick() && player.hasPermission("fauction.mod.cancel"));
                         if (!a.getPlayerUUID().equals(player.getUniqueId()) && !isModCanCancel) {
 
-                            VisualizationUtils.createVizualisation(plugin, a, player);
+                            VisualizationUtils.createVizualisation(plugin, a, player, Gui.AUCTION);
                             return;
                         }
 
