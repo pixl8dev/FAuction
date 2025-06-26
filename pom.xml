@@ -138,14 +138,14 @@
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-core</artifactId>
-            <version>6.6.13.Final</version>
+            <version>7.0.3.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--Hibernate HikariCP-->
         <dependency>
             <groupId>org.hibernate.orm</groupId>
             <artifactId>hibernate-hikaricp</artifactId>
-            <version>6.6.13.Final</version>
+            <version>7.0.3.Final</version>
             <scope>provided</scope>
         </dependency>
         <!--HikariCP-->
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.2</version>
+            <version>3.1.0</version>
             <scope>compile</scope>
         </dependency>
         <!--Maven Shade-->
