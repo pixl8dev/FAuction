@@ -13,13 +13,11 @@ categories:
         - ACACIA_LOG
         - DARK_OAK_LOG
     'ore':
-      displayName: "Log"
+      displayName: "Raw Ore"
       materials:
-        - OAK_LOG
-        - SPRUCE_LOG
-        - JUNGLE_LOG
-        - ACACIA_LOG
-        - DARK_OAK_LOG
+        - RAW_IRON
+        - RAW_COPPER
+        - RAW_GOLD
     'shulker':
       displayName: "Shulker"
       materials:
