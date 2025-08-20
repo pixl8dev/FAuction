@@ -30,6 +30,8 @@ import static org.bukkit.Bukkit.getServer;
 public class AuctionConfirmGui extends AbstractGuiWithAuctions {
 
     private final Auction auction;
+    private static final Map<UUID, Long> cooldowns = new HashMap<>();
+    private static final long COOLDOWN_MS = 1000; // 1 second cooldown
 
     protected final AuctionConfirmGuiConfig auctionConfirmConfig;
 
@@ -229,6 +231,14 @@ public class AuctionConfirmGui extends AbstractGuiWithAuctions {
             if (entry.getIndex() == e.getRawSlot()) {
 
                 Confirm confirm = confirmList.get(e.getRawSlot());
+                // Check cooldown to prevent duplicate purchases
+                long currentTime = System.currentTimeMillis();
+                Long lastClick = cooldowns.get(player.getUniqueId());
+                if (lastClick != null && (currentTime - lastClick) <= COOLDOWN_MS) {
+                    return; // Ignore duplicate click
+                }
+                cooldowns.put(player.getUniqueId(), currentTime);
+
                 if (!confirm.isValue()) {
                     MessageUtil.sendMessage(plugin, player, MessageKeys.BUY_AUCTION_CANCELLED);
                     FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctions -> {
