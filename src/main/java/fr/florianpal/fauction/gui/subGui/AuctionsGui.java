@@ -59,6 +59,8 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
         }).execute();
     }
 
+    private final java.util.Set<Integer> processingAuctions = new java.util.HashSet<>();
+
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         if (e.getInventory() != inv || inv.getHolder() != this || player != e.getWhoClicked()) {
@@ -84,6 +86,12 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                 Auction auction = auctions.get((e.getRawSlot() - nb0) + ((this.auctionConfig.getBaseBlocks().size() * this.page) - this.auctionConfig.getBaseBlocks().size()) - nb * 2);
 
                 if (e.isRightClick()) {
+                    // Prevent processing the same auction multiple times
+                    if (processingAuctions.contains(auction.getId())) {
+                        return;
+                    }
+                    processingAuctions.add(auction.getId());
+                    
                     FAuction.newChain().asyncFirst(() -> auctionCommandManager.auctionExist(auction.getId())).syncLast(a -> {
 
                         if (a == null) {
@@ -121,6 +129,13 @@ public class AuctionsGui extends AbstractGuiWithAuctions {
                             MessageUtil.sendMessage(plugin, player, MessageKeys.REMOVE_AUCTION_SUCCESS);
                         } catch (Exception exception) {
                             plugin.getLogger().severe(exception.toString());
+                            player.closeInventory();
+                            processingAuctions.remove(auction.getId());
+
+                            FAuction.newChain().asyncFirst(auctionCommandManager::getAuctions).syncLast(auctionsNew -> {
+                                AuctionsGui gui = new AuctionsGui(plugin, player, auctionsNew, 1, category);
+                                gui.initialize();
+                            }).execute();
                         }
 
                         player.closeInventory();
