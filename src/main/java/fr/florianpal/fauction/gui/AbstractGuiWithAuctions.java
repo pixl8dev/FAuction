@@ -26,8 +26,6 @@ import java.util.List;
 
 public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
-    private final java.util.Set<Integer> currentlyProcessingSlots = new java.util.HashSet<>();
-
     protected List<Auction> auctions;
 
     protected Category category;
@@ -226,11 +224,6 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
     }
 
     public boolean guiClick(InventoryClickEvent e) {
-        e.setCancelled(true); // Prevent taking/moving items
-        int slot = e.getRawSlot();
-        if (currentlyProcessingSlots.contains(slot)) {
-            return true; // Already being processed, ignore duplicate click
-        }
 
         boolean isBarrier = abstractGuiWithAuctionsConfig.getBarrierBlocks().stream().anyMatch(b -> b.getIndex() == e.getRawSlot());
         if (isBarrier) {
@@ -239,30 +232,26 @@ public abstract class AbstractGuiWithAuctions extends AbstractGui  {
 
         boolean isPrevious = abstractGuiWithAuctionsConfig.getPreviousBlocks().stream().anyMatch(b -> b.getIndex() == e.getRawSlot() && this.page > 1);
         if (isPrevious) {
-            currentlyProcessingSlots.add(e.getRawSlot());
+
             previousAction();
-            currentlyProcessingSlots.remove(e.getRawSlot());
             return true;
         }
 
         boolean isNext = abstractGuiWithAuctionsConfig.getNextBlocks().stream().anyMatch(next -> e.getRawSlot() == next.getIndex() && ((this.abstractGuiWithAuctionsConfig.getBaseBlocks().size() * this.page) - this.abstractGuiWithAuctionsConfig.getBaseBlocks().size() < auctions.size() - this.abstractGuiWithAuctionsConfig.getBaseBlocks().size()));
         if (isNext) {
-            currentlyProcessingSlots.add(e.getRawSlot());
+
             nextAction();
-            currentlyProcessingSlots.remove(e.getRawSlot());
             return true;
         }
 
         boolean isCategory = abstractGuiWithAuctionsConfig.getCategoriesBlocks().stream().anyMatch(c -> e.getRawSlot() == c.getIndex());
         if (isCategory) {
-            currentlyProcessingSlots.add(e.getRawSlot());
+
             Category nextCategory = plugin.getConfigurationManager().getCategoriesConfig().getNext(category);
             categoryAction(nextCategory);
-            currentlyProcessingSlots.remove(e.getRawSlot());
             return true;
         }
 
-        currentlyProcessingSlots.remove(e.getRawSlot());
         return super.guiClick(e);
     }
 
